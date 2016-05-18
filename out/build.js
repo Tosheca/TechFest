@@ -10261,7 +10261,7 @@
 
 
 	// module
-	exports.push([module.id, "\n", ""]);
+	exports.push([module.id, "\n#app{\n\ttext-align: center;\n}\n\n", ""]);
 
 	// exports
 

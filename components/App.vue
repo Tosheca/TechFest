@@ -7,6 +7,7 @@
 
 </template>
 
+
 <script>
 
 export default {
@@ -19,4 +20,8 @@ export default {
 </script>
 
 <style>
+	#app{
+		text-align: center;
+	}
+
 </style>
