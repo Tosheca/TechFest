@@ -17,24 +17,39 @@ var User = mongoose.model("User", {
 })
 
 router.post('/api/register', function *() {
-	let {username, password} = this.request.body
+	let {username, password, confirmPassword} = this.request.body
 
-	let user = new User({
-		name: username,
-		password: crypto.createHash('sha256').update(password).digest("base64")
-	})
+	if (confirmPassword == password) {
+		let user = new User({
+			name: username,
+			password: crypto.createHash('sha256').update(password).digest("base64")
+		})
 
-	try {
-		yield user.save()
-		this.body = "Success"
+		try {
+			yield user.save()
+			this.body = "Success"
+		}
+		catch(error) {
+			this.body = error.message
+		}
 	}
-	catch(error) {
-		this.body = error.message
+	else {
+		this.body = "These passwords do not match!"
 	}
 })
 
-router.post('/', function *() {
+router.post('/api/login', function *() {
 	let {username, password} = this.request.body
+
+	var Users = yield User.find( { name: username, password: crypto.createHash('sha256').update(password).digest("base64") } ).exec()
+
+	if (Users.length == 0) {
+		this.body = "Your username and/or password is incorrect!"
+	}
+	else {
+		this.body = "You are logged in successfully."
+	}
+	
 })
 
 router.get('/api/hello', function *() {
