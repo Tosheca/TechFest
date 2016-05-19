@@ -45,15 +45,9 @@ export default {
 		return {
 			newUsername: "", 
 			newPassword: "",
-			users: [],
-			
-		    
+			users: [],   
 		}
-
 	}
-	
-	
-	
 }
 </script>
 
