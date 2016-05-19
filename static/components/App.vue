@@ -90,12 +90,16 @@ export default {
 	}
 
 	nav div > a {
+		color: white;
+
 		padding: 10px;
 		display: inline-block;
+		width: 80px;
+		text-decoration: none;
 	}
 
 	nav div > a:hover {
-		background-color: red;
+		background-color: #4077bf;
 	}
 
 	ul li {
