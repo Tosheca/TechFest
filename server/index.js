@@ -1,6 +1,7 @@
 var mongoose = require("mongoose")
 var koa = require("koa")
 var router = require('koa-router')();
+var serve = require('koa-static');
 
 mongoose.connect('mongodb://localhost/test');
 
@@ -10,7 +11,7 @@ var User = mongoose.model("User", {
 	name: String, password: String
 })
 
-router.get('/', function *() {
+router.post('/api/register', function *() {
 	var a = new User({
 		name: "Ivan",
 		password: "123"
@@ -35,5 +36,14 @@ router.get('/', function *() {
 	this.body = "Hello world"
 })
 
+router.get('/api/hello', function *() {
+	this.body = "Hello world"
+})
+
+
+
 app.use(router.routes())
+
+app.use(serve("../static/out"))
+
 app.listen(3000)
