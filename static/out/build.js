@@ -54,19 +54,41 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
+	var _Login = __webpack_require__(10);
+
+	var _Login2 = _interopRequireDefault(_Login);
+
+	var _Register = __webpack_require__(15);
+
+	var _Register2 = _interopRequireDefault(_Register);
+
+	var _vueRouter = __webpack_require__(20);
+
+	var _vueRouter2 = _interopRequireDefault(_vueRouter);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	new _vue2.default({
-		el: 'body',
-		components: { App: _App2.default }
+	_vue2.default.use(_vueRouter2.default);
+
+	var router = new _vueRouter2.default();
+
+	router.map({
+	    '/login': {
+	        component: _Login2.default
+	    },
+	    '/register': {
+	        component: _Register2.default
+	    }
 	});
+
+	router.start(_App2.default, '#app');
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, process) {/*!
-	 * Vue.js v1.0.24-csp
+	/* WEBPACK VAR INJECTION */(function(global, process) {/*!
+	 * Vue.js v1.0.24
 	 * (c) 2016 Evan You
 	 * Released under the MIT License.
 	 */
@@ -2526,4690 +2548,6 @@
 	  };
 	}
 
-	var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
-	var primitives = (function (module, global) {
-	var exports = module.exports;
-	var names = ['Object', 'String', 'Boolean', 'Number', 'RegExp', 'Date', 'Array']
-	var immutable = {string: 'String', boolean: 'Boolean', number: 'Number' }
-
-	var primitives = names.map(getGlobal)
-	var protos = primitives.map(getProto)
-
-	var protoReplacements = {}
-
-	module.exports = Primitives
-
-	function Primitives(context){
-	  if (this instanceof Primitives){
-	    this.context = context
-	    for (var i=0;i<names.length;i++){
-	      if (!this.context[names[i]]){
-	        this.context[names[i]] = wrap(primitives[i])
-	      }
-	    }
-	  } else {
-	    return new Primitives(context)
-	  }
-	}
-
-	Primitives.prototype.replace = function(value){
-	  var primIndex = primitives.indexOf(value)
-	  var protoIndex = protos.indexOf(value)
-
-	  if (~primIndex){
-	    var name = names[primIndex]
-	    return this.context[name]
-	  } else if (~protoIndex) {
-	    var name = names[protoIndex]
-	    return this.context[name].prototype
-	  } else  {
-	    return value
-	  }
-	}
-
-	Primitives.prototype.getPropertyObject = function(object, property){
-	  if (immutable[typeof object]){
-	    return this.getPrototypeOf(object)
-	  }
-	  return object
-	}
-
-	Primitives.prototype.isPrimitive = function(value){
-	  return !!~primitives.indexOf(value) || !!~protos.indexOf(value)
-	}
-
-	Primitives.prototype.getPrototypeOf = function(value){
-	  if (value == null){ // handle null and undefined
-	    return value
-	  }
-
-	  var immutableType = immutable[typeof value]
-	  if (immutableType){
-	    var proto = this.context[immutableType].prototype
-	  } else {
-	    var proto = Object.getPrototypeOf(value)
-	  }
-
-	  if (!proto || proto === Object.prototype){
-	    return null
-	  } else {
-	    var replacement = this.replace(proto)
-	    if (replacement === value){
-	      replacement = this.replace(Object.prototype)
-	    }
-	    return replacement
-	  }
-	}
-
-	Primitives.prototype.applyNew = function(func, args){
-	  if (func.wrapped){
-	    var prim = Object.getPrototypeOf(func)
-	    var instance = new (Function.prototype.bind.apply(prim, arguments))
-	    setProto(instance, func.prototype)
-	    return instance
-	  } else {
-	    return new (Function.prototype.bind.apply(func, arguments))
-	  }
-	}
-
-	function getProto(func){
-	  return func.prototype
-	}
-
-	function getGlobal(str){
-	  return global[str]
-	}
-
-	function setProto(obj, proto){
-	  obj.__proto__ = proto
-	}
-
-	function wrap(prim){
-	  var proto = Object.create(prim.prototype)
-
-	  var result = function() {
-	    if (this instanceof result){
-	      prim.apply(this, arguments)
-	    } else {
-	      var instance = prim.apply(null, arguments)
-	      setProto(instance, proto)
-	      return instance
-	    }
-	  }
-	  setProto(result, prim)
-	  result.prototype = proto
-	  result.wrapped = true
-	  return result
-	}
-	return module.exports;
-	})({exports:{}}, __commonjs_global);
-
-	var infiniteChecker = (function (module) {
-	var exports = module.exports;
-	module.exports = InfiniteChecker
-
-	function InfiniteChecker(maxIterations){
-	  if (this instanceof InfiniteChecker){
-	    this.maxIterations = maxIterations
-	    this.count = 0
-	  } else {
-	    return new InfiniteChecker(maxIterations)
-	  }
-	}
-
-	InfiniteChecker.prototype.check = function(){
-	  this.count += 1
-	  if (this.count > this.maxIterations){
-	    throw new Error('Infinite loop detected - reached max iterations')
-	  }
-	}
-	return module.exports;
-	})({exports:{}});
-
-	var index$1 = (function (module) {
-	var exports = module.exports;
-	module.exports = hoist
-
-	function hoist(ast){
-
-	  var parentStack = []
-	  var variables = []
-	  var functions = []
-
-	  if (Array.isArray(ast)){
-
-	    walkAll(ast)
-	    prependScope(ast, variables, functions)
-
-	  } else {
-	    walk(ast)
-	  }
-
-	  return ast
-
-	  // walk through each node of a program of block statement
-	  function walkAll(nodes){
-	    var result = null
-	    for (var i=0;i<nodes.length;i++){
-	      var childNode = nodes[i]
-	      if (childNode.type === 'EmptyStatement') continue
-	      var result = walk(childNode)
-	      if (result === 'remove'){
-	        nodes.splice(i--, 1)
-	      }
-	    }
-	  }
-
-	  function walk(node){
-	    var parent = parentStack[parentStack.length-1]
-	    var remove = false
-	    parentStack.push(node)
-
-	    var excludeBody = false
-	    if (shouldScope(node, parent)){
-	      hoist(node.body)
-	      excludeBody = true
-	    }
-
-	    if (node.type === 'VariableDeclarator'){
-	      variables.push(node)
-	    }
-
-	    if (node.type === 'FunctionDeclaration'){
-	      functions.push(node)
-	      remove = true
-	    }
-
-	    for (var key in node){
-	      if (key === 'type' || (excludeBody && key === 'body')) continue
-	      if (key in node && node[key] && typeof node[key] == 'object'){
-	        if (node[key].type){
-	          walk(node[key])
-	        } else if (Array.isArray(node[key])){
-	          walkAll(node[key])
-	        }
-	      }
-	    }
-
-	    parentStack.pop()
-	    if (remove){
-	      return 'remove'
-	    }
-	  }
-	}
-
-	function shouldScope(node, parent){
-	  if (node.type === 'Program'){
-	    return true
-	  } else if (node.type === 'BlockStatement'){
-	    if (parent && (parent.type === 'FunctionExpression' || parent.type === 'FunctionDeclaration')){
-	      return true
-	    }
-	  }
-	}
-
-	function prependScope(nodes, variables, functions){
-	  if (variables && variables.length){
-	    var declarations = []
-	    for (var i=0;i<variables.length;i++){
-	      declarations.push({
-	        type: 'VariableDeclarator',
-	        id: variables[i].id,
-	        init: null
-	      })
-	    }
-
-	    nodes.unshift({
-	      type: 'VariableDeclaration',
-	      kind: 'var',
-	      declarations: declarations
-	    })
-
-	  }
-
-	  if (functions && functions.length){
-	    for (var i=0;i<functions.length;i++){
-	      nodes.unshift(functions[i])
-	    }
-	  }
-	}
-	return module.exports;
-	})({exports:{}});
-
-	var esprima = (function (module) {
-	var exports = module.exports;
-	/*
-	  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
-	  Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
-	  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
-	  Copyright (C) 2012 Kris Kowal <kris.kowal@cixar.com>
-	  Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
-	  Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
-	  Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
-
-	  Redistribution and use in source and binary forms, with or without
-	  modification, are permitted provided that the following conditions are met:
-
-	    * Redistributions of source code must retain the above copyright
-	      notice, this list of conditions and the following disclaimer.
-	    * Redistributions in binary form must reproduce the above copyright
-	      notice, this list of conditions and the following disclaimer in the
-	      documentation and/or other materials provided with the distribution.
-
-	  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-	  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-	  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-	  ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-	  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-	  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-	  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-	  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	*/
-
-	/*jslint bitwise:true plusplus:true */
-	/*global esprima:true, define:true, exports:true, window: true,
-	throwError: true, createLiteral: true, generateStatement: true,
-	parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
-	parseFunctionDeclaration: true, parseFunctionExpression: true,
-	parseFunctionSourceElements: true, parseVariableIdentifier: true,
-	parseLeftHandSideExpression: true,
-	parseStatement: true, parseSourceElement: true */
-
-	(function (root, factory) {
-	    'use strict';
-
-	    // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
-	    // Rhino, and plain browser loading.
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports !== 'undefined') {
-	        factory(exports);
-	    } else {
-	        factory((root.esprima = {}));
-	    }
-	}(this, function (exports) {
-	    'use strict';
-
-	    var Token,
-	        TokenName,
-	        Syntax,
-	        PropertyKind,
-	        Messages,
-	        Regex,
-	        source,
-	        strict,
-	        index,
-	        lineNumber,
-	        lineStart,
-	        length,
-	        buffer,
-	        state,
-	        extra;
-
-	    Token = {
-	        BooleanLiteral: 1,
-	        EOF: 2,
-	        Identifier: 3,
-	        Keyword: 4,
-	        NullLiteral: 5,
-	        NumericLiteral: 6,
-	        Punctuator: 7,
-	        StringLiteral: 8
-	    };
-
-	    TokenName = {};
-	    TokenName[Token.BooleanLiteral] = 'Boolean';
-	    TokenName[Token.EOF] = '<end>';
-	    TokenName[Token.Identifier] = 'Identifier';
-	    TokenName[Token.Keyword] = 'Keyword';
-	    TokenName[Token.NullLiteral] = 'Null';
-	    TokenName[Token.NumericLiteral] = 'Numeric';
-	    TokenName[Token.Punctuator] = 'Punctuator';
-	    TokenName[Token.StringLiteral] = 'String';
-
-	    Syntax = {
-	        AssignmentExpression: 'AssignmentExpression',
-	        ArrayExpression: 'ArrayExpression',
-	        BlockStatement: 'BlockStatement',
-	        BinaryExpression: 'BinaryExpression',
-	        BreakStatement: 'BreakStatement',
-	        CallExpression: 'CallExpression',
-	        CatchClause: 'CatchClause',
-	        ConditionalExpression: 'ConditionalExpression',
-	        ContinueStatement: 'ContinueStatement',
-	        DoWhileStatement: 'DoWhileStatement',
-	        DebuggerStatement: 'DebuggerStatement',
-	        EmptyStatement: 'EmptyStatement',
-	        ExpressionStatement: 'ExpressionStatement',
-	        ForStatement: 'ForStatement',
-	        ForInStatement: 'ForInStatement',
-	        FunctionDeclaration: 'FunctionDeclaration',
-	        FunctionExpression: 'FunctionExpression',
-	        Identifier: 'Identifier',
-	        IfStatement: 'IfStatement',
-	        Literal: 'Literal',
-	        LabeledStatement: 'LabeledStatement',
-	        LogicalExpression: 'LogicalExpression',
-	        MemberExpression: 'MemberExpression',
-	        NewExpression: 'NewExpression',
-	        ObjectExpression: 'ObjectExpression',
-	        Program: 'Program',
-	        Property: 'Property',
-	        ReturnStatement: 'ReturnStatement',
-	        SequenceExpression: 'SequenceExpression',
-	        SwitchStatement: 'SwitchStatement',
-	        SwitchCase: 'SwitchCase',
-	        ThisExpression: 'ThisExpression',
-	        ThrowStatement: 'ThrowStatement',
-	        TryStatement: 'TryStatement',
-	        UnaryExpression: 'UnaryExpression',
-	        UpdateExpression: 'UpdateExpression',
-	        VariableDeclaration: 'VariableDeclaration',
-	        VariableDeclarator: 'VariableDeclarator',
-	        WhileStatement: 'WhileStatement',
-	        WithStatement: 'WithStatement'
-	    };
-
-	    PropertyKind = {
-	        Data: 1,
-	        Get: 2,
-	        Set: 4
-	    };
-
-	    // Error messages should be identical to V8.
-	    Messages = {
-	        UnexpectedToken:  'Unexpected token %0',
-	        UnexpectedNumber:  'Unexpected number',
-	        UnexpectedString:  'Unexpected string',
-	        UnexpectedIdentifier:  'Unexpected identifier',
-	        UnexpectedReserved:  'Unexpected reserved word',
-	        UnexpectedEOS:  'Unexpected end of input',
-	        NewlineAfterThrow:  'Illegal newline after throw',
-	        InvalidRegExp: 'Invalid regular expression',
-	        UnterminatedRegExp:  'Invalid regular expression: missing /',
-	        InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
-	        InvalidLHSInForIn:  'Invalid left-hand side in for-in',
-	        MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
-	        NoCatchOrFinally:  'Missing catch or finally after try',
-	        UnknownLabel: 'Undefined label \'%0\'',
-	        Redeclaration: '%0 \'%1\' has already been declared',
-	        IllegalContinue: 'Illegal continue statement',
-	        IllegalBreak: 'Illegal break statement',
-	        IllegalReturn: 'Illegal return statement',
-	        StrictModeWith:  'Strict mode code may not include a with statement',
-	        StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
-	        StrictVarName:  'Variable name may not be eval or arguments in strict mode',
-	        StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
-	        StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
-	        StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
-	        StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
-	        StrictDelete:  'Delete of an unqualified identifier in strict mode.',
-	        StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
-	        AccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-	        AccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
-	        StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
-	        StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
-	        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
-	        StrictReservedWord:  'Use of future reserved word in strict mode'
-	    };
-
-	    // See also tools/generate-unicode-regex.py.
-	    Regex = {
-	        NonAsciiIdentifierStart: new RegExp('[\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0\u08a2-\u08ac\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097f\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c33\u0c35-\u0c39\u0c3d\u0c58\u0c59\u0c60\u0c61\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d60\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f4\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f0\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191c\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19c1-\u19c7\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u2e2f\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309d-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fcc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua697\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua78e\ua790-\ua793\ua7a0-\ua7aa\ua7f8-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa80-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uabc0-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc]'),
-	        NonAsciiIdentifierPart: new RegExp('[\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0300-\u0374\u0376\u0377\u037a-\u037d\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u0483-\u0487\u048a-\u0527\u0531-\u0556\u0559\u0561-\u0587\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u05d0-\u05ea\u05f0-\u05f2\u0610-\u061a\u0620-\u0669\u066e-\u06d3\u06d5-\u06dc\u06df-\u06e8\u06ea-\u06fc\u06ff\u0710-\u074a\u074d-\u07b1\u07c0-\u07f5\u07fa\u0800-\u082d\u0840-\u085b\u08a0\u08a2-\u08ac\u08e4-\u08fe\u0900-\u0963\u0966-\u096f\u0971-\u0977\u0979-\u097f\u0981-\u0983\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bc-\u09c4\u09c7\u09c8\u09cb-\u09ce\u09d7\u09dc\u09dd\u09df-\u09e3\u09e6-\u09f1\u0a01-\u0a03\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a59-\u0a5c\u0a5e\u0a66-\u0a75\u0a81-\u0a83\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abc-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ad0\u0ae0-\u0ae3\u0ae6-\u0aef\u0b01-\u0b03\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3c-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b56\u0b57\u0b5c\u0b5d\u0b5f-\u0b63\u0b66-\u0b6f\u0b71\u0b82\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd0\u0bd7\u0be6-\u0bef\u0c01-\u0c03\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c33\u0c35-\u0c39\u0c3d-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c58\u0c59\u0c60-\u0c63\u0c66-\u0c6f\u0c82\u0c83\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbc-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0cde\u0ce0-\u0ce3\u0ce6-\u0cef\u0cf1\u0cf2\u0d02\u0d03\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d-\u0d44\u0d46-\u0d48\u0d4a-\u0d4e\u0d57\u0d60-\u0d63\u0d66-\u0d6f\u0d7a-\u0d7f\u0d82\u0d83\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0df2\u0df3\u0e01-\u0e3a\u0e40-\u0e4e\u0e50-\u0e59\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb9\u0ebb-\u0ebd\u0ec0-\u0ec4\u0ec6\u0ec8-\u0ecd\u0ed0-\u0ed9\u0edc-\u0edf\u0f00\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f3e-\u0f47\u0f49-\u0f6c\u0f71-\u0f84\u0f86-\u0f97\u0f99-\u0fbc\u0fc6\u1000-\u1049\u1050-\u109d\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u135d-\u135f\u1380-\u138f\u13a0-\u13f4\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f0\u1700-\u170c\u170e-\u1714\u1720-\u1734\u1740-\u1753\u1760-\u176c\u176e-\u1770\u1772\u1773\u1780-\u17d3\u17d7\u17dc\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u1820-\u1877\u1880-\u18aa\u18b0-\u18f5\u1900-\u191c\u1920-\u192b\u1930-\u193b\u1946-\u196d\u1970-\u1974\u1980-\u19ab\u19b0-\u19c9\u19d0-\u19d9\u1a00-\u1a1b\u1a20-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1aa7\u1b00-\u1b4b\u1b50-\u1b59\u1b6b-\u1b73\u1b80-\u1bf3\u1c00-\u1c37\u1c40-\u1c49\u1c4d-\u1c7d\u1cd0-\u1cd2\u1cd4-\u1cf6\u1d00-\u1de6\u1dfc-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u200c\u200d\u203f\u2040\u2054\u2071\u207f\u2090-\u209c\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d7f-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u2de0-\u2dff\u2e2f\u3005-\u3007\u3021-\u302f\u3031-\u3035\u3038-\u303c\u3041-\u3096\u3099\u309a\u309d-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fcc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua62b\ua640-\ua66f\ua674-\ua67d\ua67f-\ua697\ua69f-\ua6f1\ua717-\ua71f\ua722-\ua788\ua78b-\ua78e\ua790-\ua793\ua7a0-\ua7aa\ua7f8-\ua827\ua840-\ua873\ua880-\ua8c4\ua8d0-\ua8d9\ua8e0-\ua8f7\ua8fb\ua900-\ua92d\ua930-\ua953\ua960-\ua97c\ua980-\ua9c0\ua9cf-\ua9d9\uaa00-\uaa36\uaa40-\uaa4d\uaa50-\uaa59\uaa60-\uaa76\uaa7a\uaa7b\uaa80-\uaac2\uaadb-\uaadd\uaae0-\uaaef\uaaf2-\uaaf6\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uabc0-\uabea\uabec\uabed\uabf0-\uabf9\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe00-\ufe0f\ufe20-\ufe26\ufe33\ufe34\ufe4d-\ufe4f\ufe70-\ufe74\ufe76-\ufefc\uff10-\uff19\uff21-\uff3a\uff3f\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc]')
-	    };
-
-	    // Ensure the condition is true, otherwise throw an error.
-	    // This is only to have a better contract semantic, i.e. another safety net
-	    // to catch a logic error. The condition shall be fulfilled in normal case.
-	    // Do NOT use this to enforce a certain condition on any user input.
-
-	    function assert(condition, message) {
-	        if (!condition) {
-	            throw new Error('ASSERT: ' + message);
-	        }
-	    }
-
-	    function sliceSource(from, to) {
-	        return source.slice(from, to);
-	    }
-
-	    if (typeof 'esprima'[0] === 'undefined') {
-	        sliceSource = function sliceArraySource(from, to) {
-	            return source.slice(from, to).join('');
-	        };
-	    }
-
-	    function isDecimalDigit(ch) {
-	        return '0123456789'.indexOf(ch) >= 0;
-	    }
-
-	    function isHexDigit(ch) {
-	        return '0123456789abcdefABCDEF'.indexOf(ch) >= 0;
-	    }
-
-	    function isOctalDigit(ch) {
-	        return '01234567'.indexOf(ch) >= 0;
-	    }
-
-
-	    // 7.2 White Space
-
-	    function isWhiteSpace(ch) {
-	        return (ch === ' ') || (ch === '\u0009') || (ch === '\u000B') ||
-	            (ch === '\u000C') || (ch === '\u00A0') ||
-	            (ch.charCodeAt(0) >= 0x1680 &&
-	             '\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\uFEFF'.indexOf(ch) >= 0);
-	    }
-
-	    // 7.3 Line Terminators
-
-	    function isLineTerminator(ch) {
-	        return (ch === '\n' || ch === '\r' || ch === '\u2028' || ch === '\u2029');
-	    }
-
-	    // 7.6 Identifier Names and Identifiers
-
-	    function isIdentifierStart(ch) {
-	        return (ch === '$') || (ch === '_') || (ch === '\\') ||
-	            (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-	            ((ch.charCodeAt(0) >= 0x80) && Regex.NonAsciiIdentifierStart.test(ch));
-	    }
-
-	    function isIdentifierPart(ch) {
-	        return (ch === '$') || (ch === '_') || (ch === '\\') ||
-	            (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-	            ((ch >= '0') && (ch <= '9')) ||
-	            ((ch.charCodeAt(0) >= 0x80) && Regex.NonAsciiIdentifierPart.test(ch));
-	    }
-
-	    // 7.6.1.2 Future Reserved Words
-
-	    function isFutureReservedWord(id) {
-	        switch (id) {
-
-	        // Future reserved words.
-	        case 'class':
-	        case 'enum':
-	        case 'export':
-	        case 'extends':
-	        case 'import':
-	        case 'super':
-	            return true;
-	        }
-
-	        return false;
-	    }
-
-	    function isStrictModeReservedWord(id) {
-	        switch (id) {
-
-	        // Strict Mode reserved words.
-	        case 'implements':
-	        case 'interface':
-	        case 'package':
-	        case 'private':
-	        case 'protected':
-	        case 'public':
-	        case 'static':
-	        case 'yield':
-	        case 'let':
-	            return true;
-	        }
-
-	        return false;
-	    }
-
-	    function isRestrictedWord(id) {
-	        return id === 'eval' || id === 'arguments';
-	    }
-
-	    // 7.6.1.1 Keywords
-
-	    function isKeyword(id) {
-	        var keyword = false;
-	        switch (id.length) {
-	        case 2:
-	            keyword = (id === 'if') || (id === 'in') || (id === 'do');
-	            break;
-	        case 3:
-	            keyword = (id === 'var') || (id === 'for') || (id === 'new') || (id === 'try');
-	            break;
-	        case 4:
-	            keyword = (id === 'this') || (id === 'else') || (id === 'case') || (id === 'void') || (id === 'with');
-	            break;
-	        case 5:
-	            keyword = (id === 'while') || (id === 'break') || (id === 'catch') || (id === 'throw');
-	            break;
-	        case 6:
-	            keyword = (id === 'return') || (id === 'typeof') || (id === 'delete') || (id === 'switch');
-	            break;
-	        case 7:
-	            keyword = (id === 'default') || (id === 'finally');
-	            break;
-	        case 8:
-	            keyword = (id === 'function') || (id === 'continue') || (id === 'debugger');
-	            break;
-	        case 10:
-	            keyword = (id === 'instanceof');
-	            break;
-	        }
-
-	        if (keyword) {
-	            return true;
-	        }
-
-	        switch (id) {
-	        // Future reserved words.
-	        // 'const' is specialized as Keyword in V8.
-	        case 'const':
-	            return true;
-
-	        // For compatiblity to SpiderMonkey and ES.next
-	        case 'yield':
-	        case 'let':
-	            return true;
-	        }
-
-	        if (strict && isStrictModeReservedWord(id)) {
-	            return true;
-	        }
-
-	        return isFutureReservedWord(id);
-	    }
-
-	    // 7.4 Comments
-
-	    function skipComment() {
-	        var ch, blockComment, lineComment;
-
-	        blockComment = false;
-	        lineComment = false;
-
-	        while (index < length) {
-	            ch = source[index];
-
-	            if (lineComment) {
-	                ch = source[index++];
-	                if (isLineTerminator(ch)) {
-	                    lineComment = false;
-	                    if (ch === '\r' && source[index] === '\n') {
-	                        ++index;
-	                    }
-	                    ++lineNumber;
-	                    lineStart = index;
-	                }
-	            } else if (blockComment) {
-	                if (isLineTerminator(ch)) {
-	                    if (ch === '\r' && source[index + 1] === '\n') {
-	                        ++index;
-	                    }
-	                    ++lineNumber;
-	                    ++index;
-	                    lineStart = index;
-	                    if (index >= length) {
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-	                } else {
-	                    ch = source[index++];
-	                    if (index >= length) {
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-	                    if (ch === '*') {
-	                        ch = source[index];
-	                        if (ch === '/') {
-	                            ++index;
-	                            blockComment = false;
-	                        }
-	                    }
-	                }
-	            } else if (ch === '/') {
-	                ch = source[index + 1];
-	                if (ch === '/') {
-	                    index += 2;
-	                    lineComment = true;
-	                } else if (ch === '*') {
-	                    index += 2;
-	                    blockComment = true;
-	                    if (index >= length) {
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-	                } else {
-	                    break;
-	                }
-	            } else if (isWhiteSpace(ch)) {
-	                ++index;
-	            } else if (isLineTerminator(ch)) {
-	                ++index;
-	                if (ch ===  '\r' && source[index] === '\n') {
-	                    ++index;
-	                }
-	                ++lineNumber;
-	                lineStart = index;
-	            } else {
-	                break;
-	            }
-	        }
-	    }
-
-	    function scanHexEscape(prefix) {
-	        var i, len, ch, code = 0;
-
-	        len = (prefix === 'u') ? 4 : 2;
-	        for (i = 0; i < len; ++i) {
-	            if (index < length && isHexDigit(source[index])) {
-	                ch = source[index++];
-	                code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
-	            } else {
-	                return '';
-	            }
-	        }
-	        return String.fromCharCode(code);
-	    }
-
-	    function scanIdentifier() {
-	        var ch, start, id, restore;
-
-	        ch = source[index];
-	        if (!isIdentifierStart(ch)) {
-	            return;
-	        }
-
-	        start = index;
-	        if (ch === '\\') {
-	            ++index;
-	            if (source[index] !== 'u') {
-	                return;
-	            }
-	            ++index;
-	            restore = index;
-	            ch = scanHexEscape('u');
-	            if (ch) {
-	                if (ch === '\\' || !isIdentifierStart(ch)) {
-	                    return;
-	                }
-	                id = ch;
-	            } else {
-	                index = restore;
-	                id = 'u';
-	            }
-	        } else {
-	            id = source[index++];
-	        }
-
-	        while (index < length) {
-	            ch = source[index];
-	            if (!isIdentifierPart(ch)) {
-	                break;
-	            }
-	            if (ch === '\\') {
-	                ++index;
-	                if (source[index] !== 'u') {
-	                    return;
-	                }
-	                ++index;
-	                restore = index;
-	                ch = scanHexEscape('u');
-	                if (ch) {
-	                    if (ch === '\\' || !isIdentifierPart(ch)) {
-	                        return;
-	                    }
-	                    id += ch;
-	                } else {
-	                    index = restore;
-	                    id += 'u';
-	                }
-	            } else {
-	                id += source[index++];
-	            }
-	        }
-
-	        // There is no keyword or literal with only one character.
-	        // Thus, it must be an identifier.
-	        if (id.length === 1) {
-	            return {
-	                type: Token.Identifier,
-	                value: id,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        if (isKeyword(id)) {
-	            return {
-	                type: Token.Keyword,
-	                value: id,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        // 7.8.1 Null Literals
-
-	        if (id === 'null') {
-	            return {
-	                type: Token.NullLiteral,
-	                value: id,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        // 7.8.2 Boolean Literals
-
-	        if (id === 'true' || id === 'false') {
-	            return {
-	                type: Token.BooleanLiteral,
-	                value: id,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        return {
-	            type: Token.Identifier,
-	            value: id,
-	            lineNumber: lineNumber,
-	            lineStart: lineStart,
-	            range: [start, index]
-	        };
-	    }
-
-	    // 7.7 Punctuators
-
-	    function scanPunctuator() {
-	        var start = index,
-	            ch1 = source[index],
-	            ch2,
-	            ch3,
-	            ch4;
-
-	        // Check for most common single-character punctuators.
-
-	        if (ch1 === ';' || ch1 === '{' || ch1 === '}') {
-	            ++index;
-	            return {
-	                type: Token.Punctuator,
-	                value: ch1,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        if (ch1 === ',' || ch1 === '(' || ch1 === ')') {
-	            ++index;
-	            return {
-	                type: Token.Punctuator,
-	                value: ch1,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        // Dot (.) can also start a floating-point number, hence the need
-	        // to check the next character.
-
-	        ch2 = source[index + 1];
-	        if (ch1 === '.' && !isDecimalDigit(ch2)) {
-	            return {
-	                type: Token.Punctuator,
-	                value: source[index++],
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        // Peek more characters.
-
-	        ch3 = source[index + 2];
-	        ch4 = source[index + 3];
-
-	        // 4-character punctuator: >>>=
-
-	        if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
-	            if (ch4 === '=') {
-	                index += 4;
-	                return {
-	                    type: Token.Punctuator,
-	                    value: '>>>=',
-	                    lineNumber: lineNumber,
-	                    lineStart: lineStart,
-	                    range: [start, index]
-	                };
-	            }
-	        }
-
-	        // 3-character punctuators: === !== >>> <<= >>=
-
-	        if (ch1 === '=' && ch2 === '=' && ch3 === '=') {
-	            index += 3;
-	            return {
-	                type: Token.Punctuator,
-	                value: '===',
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        if (ch1 === '!' && ch2 === '=' && ch3 === '=') {
-	            index += 3;
-	            return {
-	                type: Token.Punctuator,
-	                value: '!==',
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
-	            index += 3;
-	            return {
-	                type: Token.Punctuator,
-	                value: '>>>',
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        if (ch1 === '<' && ch2 === '<' && ch3 === '=') {
-	            index += 3;
-	            return {
-	                type: Token.Punctuator,
-	                value: '<<=',
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        if (ch1 === '>' && ch2 === '>' && ch3 === '=') {
-	            index += 3;
-	            return {
-	                type: Token.Punctuator,
-	                value: '>>=',
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-
-	        // 2-character punctuators: <= >= == != ++ -- << >> && ||
-	        // += -= *= %= &= |= ^= /=
-
-	        if (ch2 === '=') {
-	            if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
-	                index += 2;
-	                return {
-	                    type: Token.Punctuator,
-	                    value: ch1 + ch2,
-	                    lineNumber: lineNumber,
-	                    lineStart: lineStart,
-	                    range: [start, index]
-	                };
-	            }
-	        }
-
-	        if (ch1 === ch2 && ('+-<>&|'.indexOf(ch1) >= 0)) {
-	            if ('+-<>&|'.indexOf(ch2) >= 0) {
-	                index += 2;
-	                return {
-	                    type: Token.Punctuator,
-	                    value: ch1 + ch2,
-	                    lineNumber: lineNumber,
-	                    lineStart: lineStart,
-	                    range: [start, index]
-	                };
-	            }
-	        }
-
-	        // The remaining 1-character punctuators.
-
-	        if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
-	            return {
-	                type: Token.Punctuator,
-	                value: source[index++],
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [start, index]
-	            };
-	        }
-	    }
-
-	    // 7.8.3 Numeric Literals
-
-	    function scanNumericLiteral() {
-	        var number, start, ch;
-
-	        ch = source[index];
-	        assert(isDecimalDigit(ch) || (ch === '.'),
-	            'Numeric literal must start with a decimal digit or a decimal point');
-
-	        start = index;
-	        number = '';
-	        if (ch !== '.') {
-	            number = source[index++];
-	            ch = source[index];
-
-	            // Hex number starts with '0x'.
-	            // Octal number starts with '0'.
-	            if (number === '0') {
-	                if (ch === 'x' || ch === 'X') {
-	                    number += source[index++];
-	                    while (index < length) {
-	                        ch = source[index];
-	                        if (!isHexDigit(ch)) {
-	                            break;
-	                        }
-	                        number += source[index++];
-	                    }
-
-	                    if (number.length <= 2) {
-	                        // only 0x
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-
-	                    if (index < length) {
-	                        ch = source[index];
-	                        if (isIdentifierStart(ch)) {
-	                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                        }
-	                    }
-	                    return {
-	                        type: Token.NumericLiteral,
-	                        value: parseInt(number, 16),
-	                        lineNumber: lineNumber,
-	                        lineStart: lineStart,
-	                        range: [start, index]
-	                    };
-	                } else if (isOctalDigit(ch)) {
-	                    number += source[index++];
-	                    while (index < length) {
-	                        ch = source[index];
-	                        if (!isOctalDigit(ch)) {
-	                            break;
-	                        }
-	                        number += source[index++];
-	                    }
-
-	                    if (index < length) {
-	                        ch = source[index];
-	                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-	                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                        }
-	                    }
-	                    return {
-	                        type: Token.NumericLiteral,
-	                        value: parseInt(number, 8),
-	                        octal: true,
-	                        lineNumber: lineNumber,
-	                        lineStart: lineStart,
-	                        range: [start, index]
-	                    };
-	                }
-
-	                // decimal number starts with '0' such as '09' is illegal.
-	                if (isDecimalDigit(ch)) {
-	                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                }
-	            }
-
-	            while (index < length) {
-	                ch = source[index];
-	                if (!isDecimalDigit(ch)) {
-	                    break;
-	                }
-	                number += source[index++];
-	            }
-	        }
-
-	        if (ch === '.') {
-	            number += source[index++];
-	            while (index < length) {
-	                ch = source[index];
-	                if (!isDecimalDigit(ch)) {
-	                    break;
-	                }
-	                number += source[index++];
-	            }
-	        }
-
-	        if (ch === 'e' || ch === 'E') {
-	            number += source[index++];
-
-	            ch = source[index];
-	            if (ch === '+' || ch === '-') {
-	                number += source[index++];
-	            }
-
-	            ch = source[index];
-	            if (isDecimalDigit(ch)) {
-	                number += source[index++];
-	                while (index < length) {
-	                    ch = source[index];
-	                    if (!isDecimalDigit(ch)) {
-	                        break;
-	                    }
-	                    number += source[index++];
-	                }
-	            } else {
-	                ch = 'character ' + ch;
-	                if (index >= length) {
-	                    ch = '<end>';
-	                }
-	                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	            }
-	        }
-
-	        if (index < length) {
-	            ch = source[index];
-	            if (isIdentifierStart(ch)) {
-	                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	            }
-	        }
-
-	        return {
-	            type: Token.NumericLiteral,
-	            value: parseFloat(number),
-	            lineNumber: lineNumber,
-	            lineStart: lineStart,
-	            range: [start, index]
-	        };
-	    }
-
-	    // 7.8.4 String Literals
-
-	    function scanStringLiteral() {
-	        var str = '', quote, start, ch, code, unescaped, restore, octal = false;
-
-	        quote = source[index];
-	        assert((quote === '\'' || quote === '"'),
-	            'String literal must starts with a quote');
-
-	        start = index;
-	        ++index;
-
-	        while (index < length) {
-	            ch = source[index++];
-
-	            if (ch === quote) {
-	                quote = '';
-	                break;
-	            } else if (ch === '\\') {
-	                ch = source[index++];
-	                if (!isLineTerminator(ch)) {
-	                    switch (ch) {
-	                    case 'n':
-	                        str += '\n';
-	                        break;
-	                    case 'r':
-	                        str += '\r';
-	                        break;
-	                    case 't':
-	                        str += '\t';
-	                        break;
-	                    case 'u':
-	                    case 'x':
-	                        restore = index;
-	                        unescaped = scanHexEscape(ch);
-	                        if (unescaped) {
-	                            str += unescaped;
-	                        } else {
-	                            index = restore;
-	                            str += ch;
-	                        }
-	                        break;
-	                    case 'b':
-	                        str += '\b';
-	                        break;
-	                    case 'f':
-	                        str += '\f';
-	                        break;
-	                    case 'v':
-	                        str += '\x0B';
-	                        break;
-
-	                    default:
-	                        if (isOctalDigit(ch)) {
-	                            code = '01234567'.indexOf(ch);
-
-	                            // \0 is not octal escape sequence
-	                            if (code !== 0) {
-	                                octal = true;
-	                            }
-
-	                            if (index < length && isOctalDigit(source[index])) {
-	                                octal = true;
-	                                code = code * 8 + '01234567'.indexOf(source[index++]);
-
-	                                // 3 digits are only allowed when string starts
-	                                // with 0, 1, 2, 3
-	                                if ('0123'.indexOf(ch) >= 0 &&
-	                                        index < length &&
-	                                        isOctalDigit(source[index])) {
-	                                    code = code * 8 + '01234567'.indexOf(source[index++]);
-	                                }
-	                            }
-	                            str += String.fromCharCode(code);
-	                        } else {
-	                            str += ch;
-	                        }
-	                        break;
-	                    }
-	                } else {
-	                    ++lineNumber;
-	                    if (ch ===  '\r' && source[index] === '\n') {
-	                        ++index;
-	                    }
-	                }
-	            } else if (isLineTerminator(ch)) {
-	                break;
-	            } else {
-	                str += ch;
-	            }
-	        }
-
-	        if (quote !== '') {
-	            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	        }
-
-	        return {
-	            type: Token.StringLiteral,
-	            value: str,
-	            octal: octal,
-	            lineNumber: lineNumber,
-	            lineStart: lineStart,
-	            range: [start, index]
-	        };
-	    }
-
-	    function scanRegExp() {
-	        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
-
-	        buffer = null;
-	        skipComment();
-
-	        start = index;
-	        ch = source[index];
-	        assert(ch === '/', 'Regular expression literal must start with a slash');
-	        str = source[index++];
-
-	        while (index < length) {
-	            ch = source[index++];
-	            str += ch;
-	            if (ch === '\\') {
-	                ch = source[index++];
-	                // ECMA-262 7.8.5
-	                if (isLineTerminator(ch)) {
-	                    throwError({}, Messages.UnterminatedRegExp);
-	                }
-	                str += ch;
-	            } else if (classMarker) {
-	                if (ch === ']') {
-	                    classMarker = false;
-	                }
-	            } else {
-	                if (ch === '/') {
-	                    terminated = true;
-	                    break;
-	                } else if (ch === '[') {
-	                    classMarker = true;
-	                } else if (isLineTerminator(ch)) {
-	                    throwError({}, Messages.UnterminatedRegExp);
-	                }
-	            }
-	        }
-
-	        if (!terminated) {
-	            throwError({}, Messages.UnterminatedRegExp);
-	        }
-
-	        // Exclude leading and trailing slash.
-	        pattern = str.substr(1, str.length - 2);
-
-	        flags = '';
-	        while (index < length) {
-	            ch = source[index];
-	            if (!isIdentifierPart(ch)) {
-	                break;
-	            }
-
-	            ++index;
-	            if (ch === '\\' && index < length) {
-	                ch = source[index];
-	                if (ch === 'u') {
-	                    ++index;
-	                    restore = index;
-	                    ch = scanHexEscape('u');
-	                    if (ch) {
-	                        flags += ch;
-	                        str += '\\u';
-	                        for (; restore < index; ++restore) {
-	                            str += source[restore];
-	                        }
-	                    } else {
-	                        index = restore;
-	                        flags += 'u';
-	                        str += '\\u';
-	                    }
-	                } else {
-	                    str += '\\';
-	                }
-	            } else {
-	                flags += ch;
-	                str += ch;
-	            }
-	        }
-
-	        try {
-	            value = new RegExp(pattern, flags);
-	        } catch (e) {
-	            throwError({}, Messages.InvalidRegExp);
-	        }
-
-	        return {
-	            literal: str,
-	            value: value,
-	            range: [start, index]
-	        };
-	    }
-
-	    function isIdentifierName(token) {
-	        return token.type === Token.Identifier ||
-	            token.type === Token.Keyword ||
-	            token.type === Token.BooleanLiteral ||
-	            token.type === Token.NullLiteral;
-	    }
-
-	    function advance() {
-	        var ch, token;
-
-	        skipComment();
-
-	        if (index >= length) {
-	            return {
-	                type: Token.EOF,
-	                lineNumber: lineNumber,
-	                lineStart: lineStart,
-	                range: [index, index]
-	            };
-	        }
-
-	        token = scanPunctuator();
-	        if (typeof token !== 'undefined') {
-	            return token;
-	        }
-
-	        ch = source[index];
-
-	        if (ch === '\'' || ch === '"') {
-	            return scanStringLiteral();
-	        }
-
-	        if (ch === '.' || isDecimalDigit(ch)) {
-	            return scanNumericLiteral();
-	        }
-
-	        token = scanIdentifier();
-	        if (typeof token !== 'undefined') {
-	            return token;
-	        }
-
-	        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	    }
-
-	    function lex() {
-	        var token;
-
-	        if (buffer) {
-	            index = buffer.range[1];
-	            lineNumber = buffer.lineNumber;
-	            lineStart = buffer.lineStart;
-	            token = buffer;
-	            buffer = null;
-	            return token;
-	        }
-
-	        buffer = null;
-	        return advance();
-	    }
-
-	    function lookahead() {
-	        var pos, line, start;
-
-	        if (buffer !== null) {
-	            return buffer;
-	        }
-
-	        pos = index;
-	        line = lineNumber;
-	        start = lineStart;
-	        buffer = advance();
-	        index = pos;
-	        lineNumber = line;
-	        lineStart = start;
-
-	        return buffer;
-	    }
-
-	    // Return true if there is a line terminator before the next token.
-
-	    function peekLineTerminator() {
-	        var pos, line, start, found;
-
-	        pos = index;
-	        line = lineNumber;
-	        start = lineStart;
-	        skipComment();
-	        found = lineNumber !== line;
-	        index = pos;
-	        lineNumber = line;
-	        lineStart = start;
-
-	        return found;
-	    }
-
-	    // Throw an exception
-
-	    function throwError(token, messageFormat) {
-	        var error,
-	            args = Array.prototype.slice.call(arguments, 2),
-	            msg = messageFormat.replace(
-	                /%(\d)/g,
-	                function (whole, index) {
-	                    return args[index] || '';
-	                }
-	            );
-
-	        if (typeof token.lineNumber === 'number') {
-	            error = new Error('Line ' + token.lineNumber + ': ' + msg);
-	            error.index = token.range[0];
-	            error.lineNumber = token.lineNumber;
-	            error.column = token.range[0] - lineStart + 1;
-	        } else {
-	            error = new Error('Line ' + lineNumber + ': ' + msg);
-	            error.index = index;
-	            error.lineNumber = lineNumber;
-	            error.column = index - lineStart + 1;
-	        }
-
-	        throw error;
-	    }
-
-	    function throwErrorTolerant() {
-	        try {
-	            throwError.apply(null, arguments);
-	        } catch (e) {
-	            if (extra.errors) {
-	                extra.errors.push(e);
-	            } else {
-	                throw e;
-	            }
-	        }
-	    }
-
-
-	    // Throw an exception because of the token.
-
-	    function throwUnexpected(token) {
-	        if (token.type === Token.EOF) {
-	            throwError(token, Messages.UnexpectedEOS);
-	        }
-
-	        if (token.type === Token.NumericLiteral) {
-	            throwError(token, Messages.UnexpectedNumber);
-	        }
-
-	        if (token.type === Token.StringLiteral) {
-	            throwError(token, Messages.UnexpectedString);
-	        }
-
-	        if (token.type === Token.Identifier) {
-	            throwError(token, Messages.UnexpectedIdentifier);
-	        }
-
-	        if (token.type === Token.Keyword) {
-	            if (isFutureReservedWord(token.value)) {
-	                throwError(token, Messages.UnexpectedReserved);
-	            } else if (strict && isStrictModeReservedWord(token.value)) {
-	                throwErrorTolerant(token, Messages.StrictReservedWord);
-	                return;
-	            }
-	            throwError(token, Messages.UnexpectedToken, token.value);
-	        }
-
-	        // BooleanLiteral, NullLiteral, or Punctuator.
-	        throwError(token, Messages.UnexpectedToken, token.value);
-	    }
-
-	    // Expect the next token to match the specified punctuator.
-	    // If not, an exception will be thrown.
-
-	    function expect(value) {
-	        var token = lex();
-	        if (token.type !== Token.Punctuator || token.value !== value) {
-	            throwUnexpected(token);
-	        }
-	    }
-
-	    // Expect the next token to match the specified keyword.
-	    // If not, an exception will be thrown.
-
-	    function expectKeyword(keyword) {
-	        var token = lex();
-	        if (token.type !== Token.Keyword || token.value !== keyword) {
-	            throwUnexpected(token);
-	        }
-	    }
-
-	    // Return true if the next token matches the specified punctuator.
-
-	    function match(value) {
-	        var token = lookahead();
-	        return token.type === Token.Punctuator && token.value === value;
-	    }
-
-	    // Return true if the next token matches the specified keyword
-
-	    function matchKeyword(keyword) {
-	        var token = lookahead();
-	        return token.type === Token.Keyword && token.value === keyword;
-	    }
-
-	    // Return true if the next token is an assignment operator
-
-	    function matchAssign() {
-	        var token = lookahead(),
-	            op = token.value;
-
-	        if (token.type !== Token.Punctuator) {
-	            return false;
-	        }
-	        return op === '=' ||
-	            op === '*=' ||
-	            op === '/=' ||
-	            op === '%=' ||
-	            op === '+=' ||
-	            op === '-=' ||
-	            op === '<<=' ||
-	            op === '>>=' ||
-	            op === '>>>=' ||
-	            op === '&=' ||
-	            op === '^=' ||
-	            op === '|=';
-	    }
-
-	    function consumeSemicolon() {
-	        var token, line;
-
-	        // Catch the very common case first.
-	        if (source[index] === ';') {
-	            lex();
-	            return;
-	        }
-
-	        line = lineNumber;
-	        skipComment();
-	        if (lineNumber !== line) {
-	            return;
-	        }
-
-	        if (match(';')) {
-	            lex();
-	            return;
-	        }
-
-	        token = lookahead();
-	        if (token.type !== Token.EOF && !match('}')) {
-	            throwUnexpected(token);
-	        }
-	    }
-
-	    // Return true if provided expression is LeftHandSideExpression
-
-	    function isLeftHandSide(expr) {
-	        return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;
-	    }
-
-	    // 11.1.4 Array Initialiser
-
-	    function parseArrayInitialiser() {
-	        var elements = [];
-
-	        expect('[');
-
-	        while (!match(']')) {
-	            if (match(',')) {
-	                lex();
-	                elements.push(null);
-	            } else {
-	                elements.push(parseAssignmentExpression());
-
-	                if (!match(']')) {
-	                    expect(',');
-	                }
-	            }
-	        }
-
-	        expect(']');
-
-	        return {
-	            type: Syntax.ArrayExpression,
-	            elements: elements
-	        };
-	    }
-
-	    // 11.1.5 Object Initialiser
-
-	    function parsePropertyFunction(param, first) {
-	        var previousStrict, body;
-
-	        previousStrict = strict;
-	        body = parseFunctionSourceElements();
-	        if (first && strict && isRestrictedWord(param[0].name)) {
-	            throwErrorTolerant(first, Messages.StrictParamName);
-	        }
-	        strict = previousStrict;
-
-	        return {
-	            type: Syntax.FunctionExpression,
-	            id: null,
-	            params: param,
-	            defaults: [],
-	            body: body,
-	            rest: null,
-	            generator: false,
-	            expression: false
-	        };
-	    }
-
-	    function parseObjectPropertyKey() {
-	        var token = lex();
-
-	        // Note: This function is called only from parseObjectProperty(), where
-	        // EOF and Punctuator tokens are already filtered out.
-
-	        if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {
-	            if (strict && token.octal) {
-	                throwErrorTolerant(token, Messages.StrictOctalLiteral);
-	            }
-	            return createLiteral(token);
-	        }
-
-	        return {
-	            type: Syntax.Identifier,
-	            name: token.value
-	        };
-	    }
-
-	    function parseObjectProperty() {
-	        var token, key, id, param;
-
-	        token = lookahead();
-
-	        if (token.type === Token.Identifier) {
-
-	            id = parseObjectPropertyKey();
-
-	            // Property Assignment: Getter and Setter.
-
-	            if (token.value === 'get' && !match(':')) {
-	                key = parseObjectPropertyKey();
-	                expect('(');
-	                expect(')');
-	                return {
-	                    type: Syntax.Property,
-	                    key: key,
-	                    value: parsePropertyFunction([]),
-	                    kind: 'get'
-	                };
-	            } else if (token.value === 'set' && !match(':')) {
-	                key = parseObjectPropertyKey();
-	                expect('(');
-	                token = lookahead();
-	                if (token.type !== Token.Identifier) {
-	                    expect(')');
-	                    throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
-	                    return {
-	                        type: Syntax.Property,
-	                        key: key,
-	                        value: parsePropertyFunction([]),
-	                        kind: 'set'
-	                    };
-	                } else {
-	                    param = [ parseVariableIdentifier() ];
-	                    expect(')');
-	                    return {
-	                        type: Syntax.Property,
-	                        key: key,
-	                        value: parsePropertyFunction(param, token),
-	                        kind: 'set'
-	                    };
-	                }
-	            } else {
-	                expect(':');
-	                return {
-	                    type: Syntax.Property,
-	                    key: id,
-	                    value: parseAssignmentExpression(),
-	                    kind: 'init'
-	                };
-	            }
-	        } else if (token.type === Token.EOF || token.type === Token.Punctuator) {
-	            throwUnexpected(token);
-	        } else {
-	            key = parseObjectPropertyKey();
-	            expect(':');
-	            return {
-	                type: Syntax.Property,
-	                key: key,
-	                value: parseAssignmentExpression(),
-	                kind: 'init'
-	            };
-	        }
-	    }
-
-	    function parseObjectInitialiser() {
-	        var properties = [], property, name, kind, map = {}, toString = String;
-
-	        expect('{');
-
-	        while (!match('}')) {
-	            property = parseObjectProperty();
-
-	            if (property.key.type === Syntax.Identifier) {
-	                name = property.key.name;
-	            } else {
-	                name = toString(property.key.value);
-	            }
-	            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
-	            if (Object.prototype.hasOwnProperty.call(map, name)) {
-	                if (map[name] === PropertyKind.Data) {
-	                    if (strict && kind === PropertyKind.Data) {
-	                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
-	                    } else if (kind !== PropertyKind.Data) {
-	                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-	                    }
-	                } else {
-	                    if (kind === PropertyKind.Data) {
-	                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-	                    } else if (map[name] & kind) {
-	                        throwErrorTolerant({}, Messages.AccessorGetSet);
-	                    }
-	                }
-	                map[name] |= kind;
-	            } else {
-	                map[name] = kind;
-	            }
-
-	            properties.push(property);
-
-	            if (!match('}')) {
-	                expect(',');
-	            }
-	        }
-
-	        expect('}');
-
-	        return {
-	            type: Syntax.ObjectExpression,
-	            properties: properties
-	        };
-	    }
-
-	    // 11.1.6 The Grouping Operator
-
-	    function parseGroupExpression() {
-	        var expr;
-
-	        expect('(');
-
-	        expr = parseExpression();
-
-	        expect(')');
-
-	        return expr;
-	    }
-
-
-	    // 11.1 Primary Expressions
-
-	    function parsePrimaryExpression() {
-	        var token = lookahead(),
-	            type = token.type;
-
-	        if (type === Token.Identifier) {
-	            return {
-	                type: Syntax.Identifier,
-	                name: lex().value
-	            };
-	        }
-
-	        if (type === Token.StringLiteral || type === Token.NumericLiteral) {
-	            if (strict && token.octal) {
-	                throwErrorTolerant(token, Messages.StrictOctalLiteral);
-	            }
-	            return createLiteral(lex());
-	        }
-
-	        if (type === Token.Keyword) {
-	            if (matchKeyword('this')) {
-	                lex();
-	                return {
-	                    type: Syntax.ThisExpression
-	                };
-	            }
-
-	            if (matchKeyword('function')) {
-	                return parseFunctionExpression();
-	            }
-	        }
-
-	        if (type === Token.BooleanLiteral) {
-	            lex();
-	            token.value = (token.value === 'true');
-	            return createLiteral(token);
-	        }
-
-	        if (type === Token.NullLiteral) {
-	            lex();
-	            token.value = null;
-	            return createLiteral(token);
-	        }
-
-	        if (match('[')) {
-	            return parseArrayInitialiser();
-	        }
-
-	        if (match('{')) {
-	            return parseObjectInitialiser();
-	        }
-
-	        if (match('(')) {
-	            return parseGroupExpression();
-	        }
-
-	        if (match('/') || match('/=')) {
-	            return createLiteral(scanRegExp());
-	        }
-
-	        return throwUnexpected(lex());
-	    }
-
-	    // 11.2 Left-Hand-Side Expressions
-
-	    function parseArguments() {
-	        var args = [];
-
-	        expect('(');
-
-	        if (!match(')')) {
-	            while (index < length) {
-	                args.push(parseAssignmentExpression());
-	                if (match(')')) {
-	                    break;
-	                }
-	                expect(',');
-	            }
-	        }
-
-	        expect(')');
-
-	        return args;
-	    }
-
-	    function parseNonComputedProperty() {
-	        var token = lex();
-
-	        if (!isIdentifierName(token)) {
-	            throwUnexpected(token);
-	        }
-
-	        return {
-	            type: Syntax.Identifier,
-	            name: token.value
-	        };
-	    }
-
-	    function parseNonComputedMember() {
-	        expect('.');
-
-	        return parseNonComputedProperty();
-	    }
-
-	    function parseComputedMember() {
-	        var expr;
-
-	        expect('[');
-
-	        expr = parseExpression();
-
-	        expect(']');
-
-	        return expr;
-	    }
-
-	    function parseNewExpression() {
-	        var expr;
-
-	        expectKeyword('new');
-
-	        expr = {
-	            type: Syntax.NewExpression,
-	            callee: parseLeftHandSideExpression(),
-	            'arguments': []
-	        };
-
-	        if (match('(')) {
-	            expr['arguments'] = parseArguments();
-	        }
-
-	        return expr;
-	    }
-
-	    function parseLeftHandSideExpressionAllowCall() {
-	        var expr;
-
-	        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
-
-	        while (match('.') || match('[') || match('(')) {
-	            if (match('(')) {
-	                expr = {
-	                    type: Syntax.CallExpression,
-	                    callee: expr,
-	                    'arguments': parseArguments()
-	                };
-	            } else if (match('[')) {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: true,
-	                    object: expr,
-	                    property: parseComputedMember()
-	                };
-	            } else {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: false,
-	                    object: expr,
-	                    property: parseNonComputedMember()
-	                };
-	            }
-	        }
-
-	        return expr;
-	    }
-
-
-	    function parseLeftHandSideExpression() {
-	        var expr;
-
-	        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
-
-	        while (match('.') || match('[')) {
-	            if (match('[')) {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: true,
-	                    object: expr,
-	                    property: parseComputedMember()
-	                };
-	            } else {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: false,
-	                    object: expr,
-	                    property: parseNonComputedMember()
-	                };
-	            }
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.3 Postfix Expressions
-
-	    function parsePostfixExpression() {
-	        var expr = parseLeftHandSideExpressionAllowCall(), token;
-
-	        token = lookahead();
-	        if (token.type !== Token.Punctuator) {
-	            return expr;
-	        }
-
-	        if ((match('++') || match('--')) && !peekLineTerminator()) {
-	            // 11.3.1, 11.3.2
-	            if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-	                throwErrorTolerant({}, Messages.StrictLHSPostfix);
-	            }
-	            if (!isLeftHandSide(expr)) {
-	                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
-	            }
-
-	            expr = {
-	                type: Syntax.UpdateExpression,
-	                operator: lex().value,
-	                argument: expr,
-	                prefix: false
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.4 Unary Operators
-
-	    function parseUnaryExpression() {
-	        var token, expr;
-
-	        token = lookahead();
-	        if (token.type !== Token.Punctuator && token.type !== Token.Keyword) {
-	            return parsePostfixExpression();
-	        }
-
-	        if (match('++') || match('--')) {
-	            token = lex();
-	            expr = parseUnaryExpression();
-	            // 11.4.4, 11.4.5
-	            if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-	                throwErrorTolerant({}, Messages.StrictLHSPrefix);
-	            }
-
-	            if (!isLeftHandSide(expr)) {
-	                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
-	            }
-
-	            expr = {
-	                type: Syntax.UpdateExpression,
-	                operator: token.value,
-	                argument: expr,
-	                prefix: true
-	            };
-	            return expr;
-	        }
-
-	        if (match('+') || match('-') || match('~') || match('!')) {
-	            expr = {
-	                type: Syntax.UnaryExpression,
-	                operator: lex().value,
-	                argument: parseUnaryExpression(),
-	                prefix: true
-	            };
-	            return expr;
-	        }
-
-	        if (matchKeyword('delete') || matchKeyword('void') || matchKeyword('typeof')) {
-	            expr = {
-	                type: Syntax.UnaryExpression,
-	                operator: lex().value,
-	                argument: parseUnaryExpression(),
-	                prefix: true
-	            };
-	            if (strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {
-	                throwErrorTolerant({}, Messages.StrictDelete);
-	            }
-	            return expr;
-	        }
-
-	        return parsePostfixExpression();
-	    }
-
-	    // 11.5 Multiplicative Operators
-
-	    function parseMultiplicativeExpression() {
-	        var expr = parseUnaryExpression();
-
-	        while (match('*') || match('/') || match('%')) {
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: lex().value,
-	                left: expr,
-	                right: parseUnaryExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.6 Additive Operators
-
-	    function parseAdditiveExpression() {
-	        var expr = parseMultiplicativeExpression();
-
-	        while (match('+') || match('-')) {
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: lex().value,
-	                left: expr,
-	                right: parseMultiplicativeExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.7 Bitwise Shift Operators
-
-	    function parseShiftExpression() {
-	        var expr = parseAdditiveExpression();
-
-	        while (match('<<') || match('>>') || match('>>>')) {
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: lex().value,
-	                left: expr,
-	                right: parseAdditiveExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-	    // 11.8 Relational Operators
-
-	    function parseRelationalExpression() {
-	        var expr, previousAllowIn;
-
-	        previousAllowIn = state.allowIn;
-	        state.allowIn = true;
-
-	        expr = parseShiftExpression();
-
-	        while (match('<') || match('>') || match('<=') || match('>=') || (previousAllowIn && matchKeyword('in')) || matchKeyword('instanceof')) {
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: lex().value,
-	                left: expr,
-	                right: parseShiftExpression()
-	            };
-	        }
-
-	        state.allowIn = previousAllowIn;
-	        return expr;
-	    }
-
-	    // 11.9 Equality Operators
-
-	    function parseEqualityExpression() {
-	        var expr = parseRelationalExpression();
-
-	        while (match('==') || match('!=') || match('===') || match('!==')) {
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: lex().value,
-	                left: expr,
-	                right: parseRelationalExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.10 Binary Bitwise Operators
-
-	    function parseBitwiseANDExpression() {
-	        var expr = parseEqualityExpression();
-
-	        while (match('&')) {
-	            lex();
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: '&',
-	                left: expr,
-	                right: parseEqualityExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    function parseBitwiseXORExpression() {
-	        var expr = parseBitwiseANDExpression();
-
-	        while (match('^')) {
-	            lex();
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: '^',
-	                left: expr,
-	                right: parseBitwiseANDExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    function parseBitwiseORExpression() {
-	        var expr = parseBitwiseXORExpression();
-
-	        while (match('|')) {
-	            lex();
-	            expr = {
-	                type: Syntax.BinaryExpression,
-	                operator: '|',
-	                left: expr,
-	                right: parseBitwiseXORExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.11 Binary Logical Operators
-
-	    function parseLogicalANDExpression() {
-	        var expr = parseBitwiseORExpression();
-
-	        while (match('&&')) {
-	            lex();
-	            expr = {
-	                type: Syntax.LogicalExpression,
-	                operator: '&&',
-	                left: expr,
-	                right: parseBitwiseORExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    function parseLogicalORExpression() {
-	        var expr = parseLogicalANDExpression();
-
-	        while (match('||')) {
-	            lex();
-	            expr = {
-	                type: Syntax.LogicalExpression,
-	                operator: '||',
-	                left: expr,
-	                right: parseLogicalANDExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.12 Conditional Operator
-
-	    function parseConditionalExpression() {
-	        var expr, previousAllowIn, consequent;
-
-	        expr = parseLogicalORExpression();
-
-	        if (match('?')) {
-	            lex();
-	            previousAllowIn = state.allowIn;
-	            state.allowIn = true;
-	            consequent = parseAssignmentExpression();
-	            state.allowIn = previousAllowIn;
-	            expect(':');
-
-	            expr = {
-	                type: Syntax.ConditionalExpression,
-	                test: expr,
-	                consequent: consequent,
-	                alternate: parseAssignmentExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.13 Assignment Operators
-
-	    function parseAssignmentExpression() {
-	        var token, expr;
-
-	        token = lookahead();
-	        expr = parseConditionalExpression();
-
-	        if (matchAssign()) {
-	            // LeftHandSideExpression
-	            if (!isLeftHandSide(expr)) {
-	                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
-	            }
-
-	            // 11.13.1
-	            if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-	                throwErrorTolerant(token, Messages.StrictLHSAssignment);
-	            }
-
-	            expr = {
-	                type: Syntax.AssignmentExpression,
-	                operator: lex().value,
-	                left: expr,
-	                right: parseAssignmentExpression()
-	            };
-	        }
-
-	        return expr;
-	    }
-
-	    // 11.14 Comma Operator
-
-	    function parseExpression() {
-	        var expr = parseAssignmentExpression();
-
-	        if (match(',')) {
-	            expr = {
-	                type: Syntax.SequenceExpression,
-	                expressions: [ expr ]
-	            };
-
-	            while (index < length) {
-	                if (!match(',')) {
-	                    break;
-	                }
-	                lex();
-	                expr.expressions.push(parseAssignmentExpression());
-	            }
-
-	        }
-	        return expr;
-	    }
-
-	    // 12.1 Block
-
-	    function parseStatementList() {
-	        var list = [],
-	            statement;
-
-	        while (index < length) {
-	            if (match('}')) {
-	                break;
-	            }
-	            statement = parseSourceElement();
-	            if (typeof statement === 'undefined') {
-	                break;
-	            }
-	            list.push(statement);
-	        }
-
-	        return list;
-	    }
-
-	    function parseBlock() {
-	        var block;
-
-	        expect('{');
-
-	        block = parseStatementList();
-
-	        expect('}');
-
-	        return {
-	            type: Syntax.BlockStatement,
-	            body: block
-	        };
-	    }
-
-	    // 12.2 Variable Statement
-
-	    function parseVariableIdentifier() {
-	        var token = lex();
-
-	        if (token.type !== Token.Identifier) {
-	            throwUnexpected(token);
-	        }
-
-	        return {
-	            type: Syntax.Identifier,
-	            name: token.value
-	        };
-	    }
-
-	    function parseVariableDeclaration(kind) {
-	        var id = parseVariableIdentifier(),
-	            init = null;
-
-	        // 12.2.1
-	        if (strict && isRestrictedWord(id.name)) {
-	            throwErrorTolerant({}, Messages.StrictVarName);
-	        }
-
-	        if (kind === 'const') {
-	            expect('=');
-	            init = parseAssignmentExpression();
-	        } else if (match('=')) {
-	            lex();
-	            init = parseAssignmentExpression();
-	        }
-
-	        return {
-	            type: Syntax.VariableDeclarator,
-	            id: id,
-	            init: init
-	        };
-	    }
-
-	    function parseVariableDeclarationList(kind) {
-	        var list = [];
-
-	        do {
-	            list.push(parseVariableDeclaration(kind));
-	            if (!match(',')) {
-	                break;
-	            }
-	            lex();
-	        } while (index < length);
-
-	        return list;
-	    }
-
-	    function parseVariableStatement() {
-	        var declarations;
-
-	        expectKeyword('var');
-
-	        declarations = parseVariableDeclarationList();
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.VariableDeclaration,
-	            declarations: declarations,
-	            kind: 'var'
-	        };
-	    }
-
-	    // kind may be `const` or `let`
-	    // Both are experimental and not in the specification yet.
-	    // see http://wiki.ecmascript.org/doku.php?id=harmony:const
-	    // and http://wiki.ecmascript.org/doku.php?id=harmony:let
-	    function parseConstLetDeclaration(kind) {
-	        var declarations;
-
-	        expectKeyword(kind);
-
-	        declarations = parseVariableDeclarationList(kind);
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.VariableDeclaration,
-	            declarations: declarations,
-	            kind: kind
-	        };
-	    }
-
-	    // 12.3 Empty Statement
-
-	    function parseEmptyStatement() {
-	        expect(';');
-
-	        return {
-	            type: Syntax.EmptyStatement
-	        };
-	    }
-
-	    // 12.4 Expression Statement
-
-	    function parseExpressionStatement() {
-	        var expr = parseExpression();
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.ExpressionStatement,
-	            expression: expr
-	        };
-	    }
-
-	    // 12.5 If statement
-
-	    function parseIfStatement() {
-	        var test, consequent, alternate;
-
-	        expectKeyword('if');
-
-	        expect('(');
-
-	        test = parseExpression();
-
-	        expect(')');
-
-	        consequent = parseStatement();
-
-	        if (matchKeyword('else')) {
-	            lex();
-	            alternate = parseStatement();
-	        } else {
-	            alternate = null;
-	        }
-
-	        return {
-	            type: Syntax.IfStatement,
-	            test: test,
-	            consequent: consequent,
-	            alternate: alternate
-	        };
-	    }
-
-	    // 12.6 Iteration Statements
-
-	    function parseDoWhileStatement() {
-	        var body, test, oldInIteration;
-
-	        expectKeyword('do');
-
-	        oldInIteration = state.inIteration;
-	        state.inIteration = true;
-
-	        body = parseStatement();
-
-	        state.inIteration = oldInIteration;
-
-	        expectKeyword('while');
-
-	        expect('(');
-
-	        test = parseExpression();
-
-	        expect(')');
-
-	        if (match(';')) {
-	            lex();
-	        }
-
-	        return {
-	            type: Syntax.DoWhileStatement,
-	            body: body,
-	            test: test
-	        };
-	    }
-
-	    function parseWhileStatement() {
-	        var test, body, oldInIteration;
-
-	        expectKeyword('while');
-
-	        expect('(');
-
-	        test = parseExpression();
-
-	        expect(')');
-
-	        oldInIteration = state.inIteration;
-	        state.inIteration = true;
-
-	        body = parseStatement();
-
-	        state.inIteration = oldInIteration;
-
-	        return {
-	            type: Syntax.WhileStatement,
-	            test: test,
-	            body: body
-	        };
-	    }
-
-	    function parseForVariableDeclaration() {
-	        var token = lex();
-
-	        return {
-	            type: Syntax.VariableDeclaration,
-	            declarations: parseVariableDeclarationList(),
-	            kind: token.value
-	        };
-	    }
-
-	    function parseForStatement() {
-	        var init, test, update, left, right, body, oldInIteration;
-
-	        init = test = update = null;
-
-	        expectKeyword('for');
-
-	        expect('(');
-
-	        if (match(';')) {
-	            lex();
-	        } else {
-	            if (matchKeyword('var') || matchKeyword('let')) {
-	                state.allowIn = false;
-	                init = parseForVariableDeclaration();
-	                state.allowIn = true;
-
-	                if (init.declarations.length === 1 && matchKeyword('in')) {
-	                    lex();
-	                    left = init;
-	                    right = parseExpression();
-	                    init = null;
-	                }
-	            } else {
-	                state.allowIn = false;
-	                init = parseExpression();
-	                state.allowIn = true;
-
-	                if (matchKeyword('in')) {
-	                    // LeftHandSideExpression
-	                    if (!isLeftHandSide(init)) {
-	                        throwErrorTolerant({}, Messages.InvalidLHSInForIn);
-	                    }
-
-	                    lex();
-	                    left = init;
-	                    right = parseExpression();
-	                    init = null;
-	                }
-	            }
-
-	            if (typeof left === 'undefined') {
-	                expect(';');
-	            }
-	        }
-
-	        if (typeof left === 'undefined') {
-
-	            if (!match(';')) {
-	                test = parseExpression();
-	            }
-	            expect(';');
-
-	            if (!match(')')) {
-	                update = parseExpression();
-	            }
-	        }
-
-	        expect(')');
-
-	        oldInIteration = state.inIteration;
-	        state.inIteration = true;
-
-	        body = parseStatement();
-
-	        state.inIteration = oldInIteration;
-
-	        if (typeof left === 'undefined') {
-	            return {
-	                type: Syntax.ForStatement,
-	                init: init,
-	                test: test,
-	                update: update,
-	                body: body
-	            };
-	        }
-
-	        return {
-	            type: Syntax.ForInStatement,
-	            left: left,
-	            right: right,
-	            body: body,
-	            each: false
-	        };
-	    }
-
-	    // 12.7 The continue statement
-
-	    function parseContinueStatement() {
-	        var token, label = null;
-
-	        expectKeyword('continue');
-
-	        // Optimize the most common form: 'continue;'.
-	        if (source[index] === ';') {
-	            lex();
-
-	            if (!state.inIteration) {
-	                throwError({}, Messages.IllegalContinue);
-	            }
-
-	            return {
-	                type: Syntax.ContinueStatement,
-	                label: null
-	            };
-	        }
-
-	        if (peekLineTerminator()) {
-	            if (!state.inIteration) {
-	                throwError({}, Messages.IllegalContinue);
-	            }
-
-	            return {
-	                type: Syntax.ContinueStatement,
-	                label: null
-	            };
-	        }
-
-	        token = lookahead();
-	        if (token.type === Token.Identifier) {
-	            label = parseVariableIdentifier();
-
-	            if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
-	                throwError({}, Messages.UnknownLabel, label.name);
-	            }
-	        }
-
-	        consumeSemicolon();
-
-	        if (label === null && !state.inIteration) {
-	            throwError({}, Messages.IllegalContinue);
-	        }
-
-	        return {
-	            type: Syntax.ContinueStatement,
-	            label: label
-	        };
-	    }
-
-	    // 12.8 The break statement
-
-	    function parseBreakStatement() {
-	        var token, label = null;
-
-	        expectKeyword('break');
-
-	        // Optimize the most common form: 'break;'.
-	        if (source[index] === ';') {
-	            lex();
-
-	            if (!(state.inIteration || state.inSwitch)) {
-	                throwError({}, Messages.IllegalBreak);
-	            }
-
-	            return {
-	                type: Syntax.BreakStatement,
-	                label: null
-	            };
-	        }
-
-	        if (peekLineTerminator()) {
-	            if (!(state.inIteration || state.inSwitch)) {
-	                throwError({}, Messages.IllegalBreak);
-	            }
-
-	            return {
-	                type: Syntax.BreakStatement,
-	                label: null
-	            };
-	        }
-
-	        token = lookahead();
-	        if (token.type === Token.Identifier) {
-	            label = parseVariableIdentifier();
-
-	            if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
-	                throwError({}, Messages.UnknownLabel, label.name);
-	            }
-	        }
-
-	        consumeSemicolon();
-
-	        if (label === null && !(state.inIteration || state.inSwitch)) {
-	            throwError({}, Messages.IllegalBreak);
-	        }
-
-	        return {
-	            type: Syntax.BreakStatement,
-	            label: label
-	        };
-	    }
-
-	    // 12.9 The return statement
-
-	    function parseReturnStatement() {
-	        var token, argument = null;
-
-	        expectKeyword('return');
-
-	        if (!state.inFunctionBody) {
-	            throwErrorTolerant({}, Messages.IllegalReturn);
-	        }
-
-	        // 'return' followed by a space and an identifier is very common.
-	        if (source[index] === ' ') {
-	            if (isIdentifierStart(source[index + 1])) {
-	                argument = parseExpression();
-	                consumeSemicolon();
-	                return {
-	                    type: Syntax.ReturnStatement,
-	                    argument: argument
-	                };
-	            }
-	        }
-
-	        if (peekLineTerminator()) {
-	            return {
-	                type: Syntax.ReturnStatement,
-	                argument: null
-	            };
-	        }
-
-	        if (!match(';')) {
-	            token = lookahead();
-	            if (!match('}') && token.type !== Token.EOF) {
-	                argument = parseExpression();
-	            }
-	        }
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.ReturnStatement,
-	            argument: argument
-	        };
-	    }
-
-	    // 12.10 The with statement
-
-	    function parseWithStatement() {
-	        var object, body;
-
-	        if (strict) {
-	            throwErrorTolerant({}, Messages.StrictModeWith);
-	        }
-
-	        expectKeyword('with');
-
-	        expect('(');
-
-	        object = parseExpression();
-
-	        expect(')');
-
-	        body = parseStatement();
-
-	        return {
-	            type: Syntax.WithStatement,
-	            object: object,
-	            body: body
-	        };
-	    }
-
-	    // 12.10 The swith statement
-
-	    function parseSwitchCase() {
-	        var test,
-	            consequent = [],
-	            statement;
-
-	        if (matchKeyword('default')) {
-	            lex();
-	            test = null;
-	        } else {
-	            expectKeyword('case');
-	            test = parseExpression();
-	        }
-	        expect(':');
-
-	        while (index < length) {
-	            if (match('}') || matchKeyword('default') || matchKeyword('case')) {
-	                break;
-	            }
-	            statement = parseStatement();
-	            if (typeof statement === 'undefined') {
-	                break;
-	            }
-	            consequent.push(statement);
-	        }
-
-	        return {
-	            type: Syntax.SwitchCase,
-	            test: test,
-	            consequent: consequent
-	        };
-	    }
-
-	    function parseSwitchStatement() {
-	        var discriminant, cases, clause, oldInSwitch, defaultFound;
-
-	        expectKeyword('switch');
-
-	        expect('(');
-
-	        discriminant = parseExpression();
-
-	        expect(')');
-
-	        expect('{');
-
-	        cases = [];
-
-	        if (match('}')) {
-	            lex();
-	            return {
-	                type: Syntax.SwitchStatement,
-	                discriminant: discriminant,
-	                cases: cases
-	            };
-	        }
-
-	        oldInSwitch = state.inSwitch;
-	        state.inSwitch = true;
-	        defaultFound = false;
-
-	        while (index < length) {
-	            if (match('}')) {
-	                break;
-	            }
-	            clause = parseSwitchCase();
-	            if (clause.test === null) {
-	                if (defaultFound) {
-	                    throwError({}, Messages.MultipleDefaultsInSwitch);
-	                }
-	                defaultFound = true;
-	            }
-	            cases.push(clause);
-	        }
-
-	        state.inSwitch = oldInSwitch;
-
-	        expect('}');
-
-	        return {
-	            type: Syntax.SwitchStatement,
-	            discriminant: discriminant,
-	            cases: cases
-	        };
-	    }
-
-	    // 12.13 The throw statement
-
-	    function parseThrowStatement() {
-	        var argument;
-
-	        expectKeyword('throw');
-
-	        if (peekLineTerminator()) {
-	            throwError({}, Messages.NewlineAfterThrow);
-	        }
-
-	        argument = parseExpression();
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.ThrowStatement,
-	            argument: argument
-	        };
-	    }
-
-	    // 12.14 The try statement
-
-	    function parseCatchClause() {
-	        var param;
-
-	        expectKeyword('catch');
-
-	        expect('(');
-	        if (match(')')) {
-	            throwUnexpected(lookahead());
-	        }
-
-	        param = parseVariableIdentifier();
-	        // 12.14.1
-	        if (strict && isRestrictedWord(param.name)) {
-	            throwErrorTolerant({}, Messages.StrictCatchVariable);
-	        }
-
-	        expect(')');
-
-	        return {
-	            type: Syntax.CatchClause,
-	            param: param,
-	            body: parseBlock()
-	        };
-	    }
-
-	    function parseTryStatement() {
-	        var block, handlers = [], finalizer = null;
-
-	        expectKeyword('try');
-
-	        block = parseBlock();
-
-	        if (matchKeyword('catch')) {
-	            handlers.push(parseCatchClause());
-	        }
-
-	        if (matchKeyword('finally')) {
-	            lex();
-	            finalizer = parseBlock();
-	        }
-
-	        if (handlers.length === 0 && !finalizer) {
-	            throwError({}, Messages.NoCatchOrFinally);
-	        }
-
-	        return {
-	            type: Syntax.TryStatement,
-	            block: block,
-	            guardedHandlers: [],
-	            handlers: handlers,
-	            finalizer: finalizer
-	        };
-	    }
-
-	    // 12.15 The debugger statement
-
-	    function parseDebuggerStatement() {
-	        expectKeyword('debugger');
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.DebuggerStatement
-	        };
-	    }
-
-	    // 12 Statements
-
-	    function parseStatement() {
-	        var token = lookahead(),
-	            expr,
-	            labeledBody;
-
-	        if (token.type === Token.EOF) {
-	            throwUnexpected(token);
-	        }
-
-	        if (token.type === Token.Punctuator) {
-	            switch (token.value) {
-	            case ';':
-	                return parseEmptyStatement();
-	            case '{':
-	                return parseBlock();
-	            case '(':
-	                return parseExpressionStatement();
-	            default:
-	                break;
-	            }
-	        }
-
-	        if (token.type === Token.Keyword) {
-	            switch (token.value) {
-	            case 'break':
-	                return parseBreakStatement();
-	            case 'continue':
-	                return parseContinueStatement();
-	            case 'debugger':
-	                return parseDebuggerStatement();
-	            case 'do':
-	                return parseDoWhileStatement();
-	            case 'for':
-	                return parseForStatement();
-	            case 'function':
-	                return parseFunctionDeclaration();
-	            case 'if':
-	                return parseIfStatement();
-	            case 'return':
-	                return parseReturnStatement();
-	            case 'switch':
-	                return parseSwitchStatement();
-	            case 'throw':
-	                return parseThrowStatement();
-	            case 'try':
-	                return parseTryStatement();
-	            case 'var':
-	                return parseVariableStatement();
-	            case 'while':
-	                return parseWhileStatement();
-	            case 'with':
-	                return parseWithStatement();
-	            default:
-	                break;
-	            }
-	        }
-
-	        expr = parseExpression();
-
-	        // 12.12 Labelled Statements
-	        if ((expr.type === Syntax.Identifier) && match(':')) {
-	            lex();
-
-	            if (Object.prototype.hasOwnProperty.call(state.labelSet, expr.name)) {
-	                throwError({}, Messages.Redeclaration, 'Label', expr.name);
-	            }
-
-	            state.labelSet[expr.name] = true;
-	            labeledBody = parseStatement();
-	            delete state.labelSet[expr.name];
-
-	            return {
-	                type: Syntax.LabeledStatement,
-	                label: expr,
-	                body: labeledBody
-	            };
-	        }
-
-	        consumeSemicolon();
-
-	        return {
-	            type: Syntax.ExpressionStatement,
-	            expression: expr
-	        };
-	    }
-
-	    // 13 Function Definition
-
-	    function parseFunctionSourceElements() {
-	        var sourceElement, sourceElements = [], token, directive, firstRestricted,
-	            oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
-
-	        expect('{');
-
-	        while (index < length) {
-	            token = lookahead();
-	            if (token.type !== Token.StringLiteral) {
-	                break;
-	            }
-
-	            sourceElement = parseSourceElement();
-	            sourceElements.push(sourceElement);
-	            if (sourceElement.expression.type !== Syntax.Literal) {
-	                // this is not directive
-	                break;
-	            }
-	            directive = sliceSource(token.range[0] + 1, token.range[1] - 1);
-	            if (directive === 'use strict') {
-	                strict = true;
-	                if (firstRestricted) {
-	                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
-	                }
-	            } else {
-	                if (!firstRestricted && token.octal) {
-	                    firstRestricted = token;
-	                }
-	            }
-	        }
-
-	        oldLabelSet = state.labelSet;
-	        oldInIteration = state.inIteration;
-	        oldInSwitch = state.inSwitch;
-	        oldInFunctionBody = state.inFunctionBody;
-
-	        state.labelSet = {};
-	        state.inIteration = false;
-	        state.inSwitch = false;
-	        state.inFunctionBody = true;
-
-	        while (index < length) {
-	            if (match('}')) {
-	                break;
-	            }
-	            sourceElement = parseSourceElement();
-	            if (typeof sourceElement === 'undefined') {
-	                break;
-	            }
-	            sourceElements.push(sourceElement);
-	        }
-
-	        expect('}');
-
-	        state.labelSet = oldLabelSet;
-	        state.inIteration = oldInIteration;
-	        state.inSwitch = oldInSwitch;
-	        state.inFunctionBody = oldInFunctionBody;
-
-	        return {
-	            type: Syntax.BlockStatement,
-	            body: sourceElements
-	        };
-	    }
-
-	    function parseFunctionDeclaration() {
-	        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, paramSet;
-
-	        expectKeyword('function');
-	        token = lookahead();
-	        id = parseVariableIdentifier();
-	        if (strict) {
-	            if (isRestrictedWord(token.value)) {
-	                throwErrorTolerant(token, Messages.StrictFunctionName);
-	            }
-	        } else {
-	            if (isRestrictedWord(token.value)) {
-	                firstRestricted = token;
-	                message = Messages.StrictFunctionName;
-	            } else if (isStrictModeReservedWord(token.value)) {
-	                firstRestricted = token;
-	                message = Messages.StrictReservedWord;
-	            }
-	        }
-
-	        expect('(');
-
-	        if (!match(')')) {
-	            paramSet = {};
-	            while (index < length) {
-	                token = lookahead();
-	                param = parseVariableIdentifier();
-	                if (strict) {
-	                    if (isRestrictedWord(token.value)) {
-	                        stricted = token;
-	                        message = Messages.StrictParamName;
-	                    }
-	                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-	                        stricted = token;
-	                        message = Messages.StrictParamDupe;
-	                    }
-	                } else if (!firstRestricted) {
-	                    if (isRestrictedWord(token.value)) {
-	                        firstRestricted = token;
-	                        message = Messages.StrictParamName;
-	                    } else if (isStrictModeReservedWord(token.value)) {
-	                        firstRestricted = token;
-	                        message = Messages.StrictReservedWord;
-	                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-	                        firstRestricted = token;
-	                        message = Messages.StrictParamDupe;
-	                    }
-	                }
-	                params.push(param);
-	                paramSet[param.name] = true;
-	                if (match(')')) {
-	                    break;
-	                }
-	                expect(',');
-	            }
-	        }
-
-	        expect(')');
-
-	        previousStrict = strict;
-	        body = parseFunctionSourceElements();
-	        if (strict && firstRestricted) {
-	            throwError(firstRestricted, message);
-	        }
-	        if (strict && stricted) {
-	            throwErrorTolerant(stricted, message);
-	        }
-	        strict = previousStrict;
-
-	        return {
-	            type: Syntax.FunctionDeclaration,
-	            id: id,
-	            params: params,
-	            defaults: [],
-	            body: body,
-	            rest: null,
-	            generator: false,
-	            expression: false
-	        };
-	    }
-
-	    function parseFunctionExpression() {
-	        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, paramSet;
-
-	        expectKeyword('function');
-
-	        if (!match('(')) {
-	            token = lookahead();
-	            id = parseVariableIdentifier();
-	            if (strict) {
-	                if (isRestrictedWord(token.value)) {
-	                    throwErrorTolerant(token, Messages.StrictFunctionName);
-	                }
-	            } else {
-	                if (isRestrictedWord(token.value)) {
-	                    firstRestricted = token;
-	                    message = Messages.StrictFunctionName;
-	                } else if (isStrictModeReservedWord(token.value)) {
-	                    firstRestricted = token;
-	                    message = Messages.StrictReservedWord;
-	                }
-	            }
-	        }
-
-	        expect('(');
-
-	        if (!match(')')) {
-	            paramSet = {};
-	            while (index < length) {
-	                token = lookahead();
-	                param = parseVariableIdentifier();
-	                if (strict) {
-	                    if (isRestrictedWord(token.value)) {
-	                        stricted = token;
-	                        message = Messages.StrictParamName;
-	                    }
-	                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-	                        stricted = token;
-	                        message = Messages.StrictParamDupe;
-	                    }
-	                } else if (!firstRestricted) {
-	                    if (isRestrictedWord(token.value)) {
-	                        firstRestricted = token;
-	                        message = Messages.StrictParamName;
-	                    } else if (isStrictModeReservedWord(token.value)) {
-	                        firstRestricted = token;
-	                        message = Messages.StrictReservedWord;
-	                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-	                        firstRestricted = token;
-	                        message = Messages.StrictParamDupe;
-	                    }
-	                }
-	                params.push(param);
-	                paramSet[param.name] = true;
-	                if (match(')')) {
-	                    break;
-	                }
-	                expect(',');
-	            }
-	        }
-
-	        expect(')');
-
-	        previousStrict = strict;
-	        body = parseFunctionSourceElements();
-	        if (strict && firstRestricted) {
-	            throwError(firstRestricted, message);
-	        }
-	        if (strict && stricted) {
-	            throwErrorTolerant(stricted, message);
-	        }
-	        strict = previousStrict;
-
-	        return {
-	            type: Syntax.FunctionExpression,
-	            id: id,
-	            params: params,
-	            defaults: [],
-	            body: body,
-	            rest: null,
-	            generator: false,
-	            expression: false
-	        };
-	    }
-
-	    // 14 Program
-
-	    function parseSourceElement() {
-	        var token = lookahead();
-
-	        if (token.type === Token.Keyword) {
-	            switch (token.value) {
-	            case 'const':
-	            case 'let':
-	                return parseConstLetDeclaration(token.value);
-	            case 'function':
-	                return parseFunctionDeclaration();
-	            default:
-	                return parseStatement();
-	            }
-	        }
-
-	        if (token.type !== Token.EOF) {
-	            return parseStatement();
-	        }
-	    }
-
-	    function parseSourceElements() {
-	        var sourceElement, sourceElements = [], token, directive, firstRestricted;
-
-	        while (index < length) {
-	            token = lookahead();
-	            if (token.type !== Token.StringLiteral) {
-	                break;
-	            }
-
-	            sourceElement = parseSourceElement();
-	            sourceElements.push(sourceElement);
-	            if (sourceElement.expression.type !== Syntax.Literal) {
-	                // this is not directive
-	                break;
-	            }
-	            directive = sliceSource(token.range[0] + 1, token.range[1] - 1);
-	            if (directive === 'use strict') {
-	                strict = true;
-	                if (firstRestricted) {
-	                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
-	                }
-	            } else {
-	                if (!firstRestricted && token.octal) {
-	                    firstRestricted = token;
-	                }
-	            }
-	        }
-
-	        while (index < length) {
-	            sourceElement = parseSourceElement();
-	            if (typeof sourceElement === 'undefined') {
-	                break;
-	            }
-	            sourceElements.push(sourceElement);
-	        }
-	        return sourceElements;
-	    }
-
-	    function parseProgram() {
-	        var program;
-	        strict = false;
-	        program = {
-	            type: Syntax.Program,
-	            body: parseSourceElements()
-	        };
-	        return program;
-	    }
-
-	    // The following functions are needed only when the option to preserve
-	    // the comments is active.
-
-	    function addComment(type, value, start, end, loc) {
-	        assert(typeof start === 'number', 'Comment must have valid position');
-
-	        // Because the way the actual token is scanned, often the comments
-	        // (if any) are skipped twice during the lexical analysis.
-	        // Thus, we need to skip adding a comment if the comment array already
-	        // handled it.
-	        if (extra.comments.length > 0) {
-	            if (extra.comments[extra.comments.length - 1].range[1] > start) {
-	                return;
-	            }
-	        }
-
-	        extra.comments.push({
-	            type: type,
-	            value: value,
-	            range: [start, end],
-	            loc: loc
-	        });
-	    }
-
-	    function scanComment() {
-	        var comment, ch, loc, start, blockComment, lineComment;
-
-	        comment = '';
-	        blockComment = false;
-	        lineComment = false;
-
-	        while (index < length) {
-	            ch = source[index];
-
-	            if (lineComment) {
-	                ch = source[index++];
-	                if (isLineTerminator(ch)) {
-	                    loc.end = {
-	                        line: lineNumber,
-	                        column: index - lineStart - 1
-	                    };
-	                    lineComment = false;
-	                    addComment('Line', comment, start, index - 1, loc);
-	                    if (ch === '\r' && source[index] === '\n') {
-	                        ++index;
-	                    }
-	                    ++lineNumber;
-	                    lineStart = index;
-	                    comment = '';
-	                } else if (index >= length) {
-	                    lineComment = false;
-	                    comment += ch;
-	                    loc.end = {
-	                        line: lineNumber,
-	                        column: length - lineStart
-	                    };
-	                    addComment('Line', comment, start, length, loc);
-	                } else {
-	                    comment += ch;
-	                }
-	            } else if (blockComment) {
-	                if (isLineTerminator(ch)) {
-	                    if (ch === '\r' && source[index + 1] === '\n') {
-	                        ++index;
-	                        comment += '\r\n';
-	                    } else {
-	                        comment += ch;
-	                    }
-	                    ++lineNumber;
-	                    ++index;
-	                    lineStart = index;
-	                    if (index >= length) {
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-	                } else {
-	                    ch = source[index++];
-	                    if (index >= length) {
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-	                    comment += ch;
-	                    if (ch === '*') {
-	                        ch = source[index];
-	                        if (ch === '/') {
-	                            comment = comment.substr(0, comment.length - 1);
-	                            blockComment = false;
-	                            ++index;
-	                            loc.end = {
-	                                line: lineNumber,
-	                                column: index - lineStart
-	                            };
-	                            addComment('Block', comment, start, index, loc);
-	                            comment = '';
-	                        }
-	                    }
-	                }
-	            } else if (ch === '/') {
-	                ch = source[index + 1];
-	                if (ch === '/') {
-	                    loc = {
-	                        start: {
-	                            line: lineNumber,
-	                            column: index - lineStart
-	                        }
-	                    };
-	                    start = index;
-	                    index += 2;
-	                    lineComment = true;
-	                    if (index >= length) {
-	                        loc.end = {
-	                            line: lineNumber,
-	                            column: index - lineStart
-	                        };
-	                        lineComment = false;
-	                        addComment('Line', comment, start, index, loc);
-	                    }
-	                } else if (ch === '*') {
-	                    start = index;
-	                    index += 2;
-	                    blockComment = true;
-	                    loc = {
-	                        start: {
-	                            line: lineNumber,
-	                            column: index - lineStart - 2
-	                        }
-	                    };
-	                    if (index >= length) {
-	                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-	                    }
-	                } else {
-	                    break;
-	                }
-	            } else if (isWhiteSpace(ch)) {
-	                ++index;
-	            } else if (isLineTerminator(ch)) {
-	                ++index;
-	                if (ch ===  '\r' && source[index] === '\n') {
-	                    ++index;
-	                }
-	                ++lineNumber;
-	                lineStart = index;
-	            } else {
-	                break;
-	            }
-	        }
-	    }
-
-	    function filterCommentLocation() {
-	        var i, entry, comment, comments = [];
-
-	        for (i = 0; i < extra.comments.length; ++i) {
-	            entry = extra.comments[i];
-	            comment = {
-	                type: entry.type,
-	                value: entry.value
-	            };
-	            if (extra.range) {
-	                comment.range = entry.range;
-	            }
-	            if (extra.loc) {
-	                comment.loc = entry.loc;
-	            }
-	            comments.push(comment);
-	        }
-
-	        extra.comments = comments;
-	    }
-
-	    function collectToken() {
-	        var start, loc, token, range, value;
-
-	        skipComment();
-	        start = index;
-	        loc = {
-	            start: {
-	                line: lineNumber,
-	                column: index - lineStart
-	            }
-	        };
-
-	        token = extra.advance();
-	        loc.end = {
-	            line: lineNumber,
-	            column: index - lineStart
-	        };
-
-	        if (token.type !== Token.EOF) {
-	            range = [token.range[0], token.range[1]];
-	            value = sliceSource(token.range[0], token.range[1]);
-	            extra.tokens.push({
-	                type: TokenName[token.type],
-	                value: value,
-	                range: range,
-	                loc: loc
-	            });
-	        }
-
-	        return token;
-	    }
-
-	    function collectRegex() {
-	        var pos, loc, regex, token;
-
-	        skipComment();
-
-	        pos = index;
-	        loc = {
-	            start: {
-	                line: lineNumber,
-	                column: index - lineStart
-	            }
-	        };
-
-	        regex = extra.scanRegExp();
-	        loc.end = {
-	            line: lineNumber,
-	            column: index - lineStart
-	        };
-
-	        // Pop the previous token, which is likely '/' or '/='
-	        if (extra.tokens.length > 0) {
-	            token = extra.tokens[extra.tokens.length - 1];
-	            if (token.range[0] === pos && token.type === 'Punctuator') {
-	                if (token.value === '/' || token.value === '/=') {
-	                    extra.tokens.pop();
-	                }
-	            }
-	        }
-
-	        extra.tokens.push({
-	            type: 'RegularExpression',
-	            value: regex.literal,
-	            range: [pos, index],
-	            loc: loc
-	        });
-
-	        return regex;
-	    }
-
-	    function filterTokenLocation() {
-	        var i, entry, token, tokens = [];
-
-	        for (i = 0; i < extra.tokens.length; ++i) {
-	            entry = extra.tokens[i];
-	            token = {
-	                type: entry.type,
-	                value: entry.value
-	            };
-	            if (extra.range) {
-	                token.range = entry.range;
-	            }
-	            if (extra.loc) {
-	                token.loc = entry.loc;
-	            }
-	            tokens.push(token);
-	        }
-
-	        extra.tokens = tokens;
-	    }
-
-	    function createLiteral(token) {
-	        return {
-	            type: Syntax.Literal,
-	            value: token.value
-	        };
-	    }
-
-	    function createRawLiteral(token) {
-	        return {
-	            type: Syntax.Literal,
-	            value: token.value,
-	            raw: sliceSource(token.range[0], token.range[1])
-	        };
-	    }
-
-	    function createLocationMarker() {
-	        var marker = {};
-
-	        marker.range = [index, index];
-	        marker.loc = {
-	            start: {
-	                line: lineNumber,
-	                column: index - lineStart
-	            },
-	            end: {
-	                line: lineNumber,
-	                column: index - lineStart
-	            }
-	        };
-
-	        marker.end = function () {
-	            this.range[1] = index;
-	            this.loc.end.line = lineNumber;
-	            this.loc.end.column = index - lineStart;
-	        };
-
-	        marker.applyGroup = function (node) {
-	            if (extra.range) {
-	                node.groupRange = [this.range[0], this.range[1]];
-	            }
-	            if (extra.loc) {
-	                node.groupLoc = {
-	                    start: {
-	                        line: this.loc.start.line,
-	                        column: this.loc.start.column
-	                    },
-	                    end: {
-	                        line: this.loc.end.line,
-	                        column: this.loc.end.column
-	                    }
-	                };
-	            }
-	        };
-
-	        marker.apply = function (node) {
-	            if (extra.range) {
-	                node.range = [this.range[0], this.range[1]];
-	            }
-	            if (extra.loc) {
-	                node.loc = {
-	                    start: {
-	                        line: this.loc.start.line,
-	                        column: this.loc.start.column
-	                    },
-	                    end: {
-	                        line: this.loc.end.line,
-	                        column: this.loc.end.column
-	                    }
-	                };
-	            }
-	        };
-
-	        return marker;
-	    }
-
-	    function trackGroupExpression() {
-	        var marker, expr;
-
-	        skipComment();
-	        marker = createLocationMarker();
-	        expect('(');
-
-	        expr = parseExpression();
-
-	        expect(')');
-
-	        marker.end();
-	        marker.applyGroup(expr);
-
-	        return expr;
-	    }
-
-	    function trackLeftHandSideExpression() {
-	        var marker, expr;
-
-	        skipComment();
-	        marker = createLocationMarker();
-
-	        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
-
-	        while (match('.') || match('[')) {
-	            if (match('[')) {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: true,
-	                    object: expr,
-	                    property: parseComputedMember()
-	                };
-	                marker.end();
-	                marker.apply(expr);
-	            } else {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: false,
-	                    object: expr,
-	                    property: parseNonComputedMember()
-	                };
-	                marker.end();
-	                marker.apply(expr);
-	            }
-	        }
-
-	        return expr;
-	    }
-
-	    function trackLeftHandSideExpressionAllowCall() {
-	        var marker, expr;
-
-	        skipComment();
-	        marker = createLocationMarker();
-
-	        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
-
-	        while (match('.') || match('[') || match('(')) {
-	            if (match('(')) {
-	                expr = {
-	                    type: Syntax.CallExpression,
-	                    callee: expr,
-	                    'arguments': parseArguments()
-	                };
-	                marker.end();
-	                marker.apply(expr);
-	            } else if (match('[')) {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: true,
-	                    object: expr,
-	                    property: parseComputedMember()
-	                };
-	                marker.end();
-	                marker.apply(expr);
-	            } else {
-	                expr = {
-	                    type: Syntax.MemberExpression,
-	                    computed: false,
-	                    object: expr,
-	                    property: parseNonComputedMember()
-	                };
-	                marker.end();
-	                marker.apply(expr);
-	            }
-	        }
-
-	        return expr;
-	    }
-
-	    function filterGroup(node) {
-	        var n, i, entry;
-
-	        n = (Object.prototype.toString.apply(node) === '[object Array]') ? [] : {};
-	        for (i in node) {
-	            if (node.hasOwnProperty(i) && i !== 'groupRange' && i !== 'groupLoc') {
-	                entry = node[i];
-	                if (entry === null || typeof entry !== 'object' || entry instanceof RegExp) {
-	                    n[i] = entry;
-	                } else {
-	                    n[i] = filterGroup(entry);
-	                }
-	            }
-	        }
-	        return n;
-	    }
-
-	    function wrapTrackingFunction(range, loc) {
-
-	        return function (parseFunction) {
-
-	            function isBinary(node) {
-	                return node.type === Syntax.LogicalExpression ||
-	                    node.type === Syntax.BinaryExpression;
-	            }
-
-	            function visit(node) {
-	                var start, end;
-
-	                if (isBinary(node.left)) {
-	                    visit(node.left);
-	                }
-	                if (isBinary(node.right)) {
-	                    visit(node.right);
-	                }
-
-	                if (range) {
-	                    if (node.left.groupRange || node.right.groupRange) {
-	                        start = node.left.groupRange ? node.left.groupRange[0] : node.left.range[0];
-	                        end = node.right.groupRange ? node.right.groupRange[1] : node.right.range[1];
-	                        node.range = [start, end];
-	                    } else if (typeof node.range === 'undefined') {
-	                        start = node.left.range[0];
-	                        end = node.right.range[1];
-	                        node.range = [start, end];
-	                    }
-	                }
-	                if (loc) {
-	                    if (node.left.groupLoc || node.right.groupLoc) {
-	                        start = node.left.groupLoc ? node.left.groupLoc.start : node.left.loc.start;
-	                        end = node.right.groupLoc ? node.right.groupLoc.end : node.right.loc.end;
-	                        node.loc = {
-	                            start: start,
-	                            end: end
-	                        };
-	                    } else if (typeof node.loc === 'undefined') {
-	                        node.loc = {
-	                            start: node.left.loc.start,
-	                            end: node.right.loc.end
-	                        };
-	                    }
-	                }
-	            }
-
-	            return function () {
-	                var marker, node;
-
-	                skipComment();
-
-	                marker = createLocationMarker();
-	                node = parseFunction.apply(null, arguments);
-	                marker.end();
-
-	                if (range && typeof node.range === 'undefined') {
-	                    marker.apply(node);
-	                }
-
-	                if (loc && typeof node.loc === 'undefined') {
-	                    marker.apply(node);
-	                }
-
-	                if (isBinary(node)) {
-	                    visit(node);
-	                }
-
-	                return node;
-	            };
-	        };
-	    }
-
-	    function patch() {
-
-	        var wrapTracking;
-
-	        if (extra.comments) {
-	            extra.skipComment = skipComment;
-	            skipComment = scanComment;
-	        }
-
-	        if (extra.raw) {
-	            extra.createLiteral = createLiteral;
-	            createLiteral = createRawLiteral;
-	        }
-
-	        if (extra.range || extra.loc) {
-
-	            extra.parseGroupExpression = parseGroupExpression;
-	            extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
-	            extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
-	            parseGroupExpression = trackGroupExpression;
-	            parseLeftHandSideExpression = trackLeftHandSideExpression;
-	            parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
-
-	            wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
-
-	            extra.parseAdditiveExpression = parseAdditiveExpression;
-	            extra.parseAssignmentExpression = parseAssignmentExpression;
-	            extra.parseBitwiseANDExpression = parseBitwiseANDExpression;
-	            extra.parseBitwiseORExpression = parseBitwiseORExpression;
-	            extra.parseBitwiseXORExpression = parseBitwiseXORExpression;
-	            extra.parseBlock = parseBlock;
-	            extra.parseFunctionSourceElements = parseFunctionSourceElements;
-	            extra.parseCatchClause = parseCatchClause;
-	            extra.parseComputedMember = parseComputedMember;
-	            extra.parseConditionalExpression = parseConditionalExpression;
-	            extra.parseConstLetDeclaration = parseConstLetDeclaration;
-	            extra.parseEqualityExpression = parseEqualityExpression;
-	            extra.parseExpression = parseExpression;
-	            extra.parseForVariableDeclaration = parseForVariableDeclaration;
-	            extra.parseFunctionDeclaration = parseFunctionDeclaration;
-	            extra.parseFunctionExpression = parseFunctionExpression;
-	            extra.parseLogicalANDExpression = parseLogicalANDExpression;
-	            extra.parseLogicalORExpression = parseLogicalORExpression;
-	            extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
-	            extra.parseNewExpression = parseNewExpression;
-	            extra.parseNonComputedProperty = parseNonComputedProperty;
-	            extra.parseObjectProperty = parseObjectProperty;
-	            extra.parseObjectPropertyKey = parseObjectPropertyKey;
-	            extra.parsePostfixExpression = parsePostfixExpression;
-	            extra.parsePrimaryExpression = parsePrimaryExpression;
-	            extra.parseProgram = parseProgram;
-	            extra.parsePropertyFunction = parsePropertyFunction;
-	            extra.parseRelationalExpression = parseRelationalExpression;
-	            extra.parseStatement = parseStatement;
-	            extra.parseShiftExpression = parseShiftExpression;
-	            extra.parseSwitchCase = parseSwitchCase;
-	            extra.parseUnaryExpression = parseUnaryExpression;
-	            extra.parseVariableDeclaration = parseVariableDeclaration;
-	            extra.parseVariableIdentifier = parseVariableIdentifier;
-
-	            parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);
-	            parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
-	            parseBitwiseANDExpression = wrapTracking(extra.parseBitwiseANDExpression);
-	            parseBitwiseORExpression = wrapTracking(extra.parseBitwiseORExpression);
-	            parseBitwiseXORExpression = wrapTracking(extra.parseBitwiseXORExpression);
-	            parseBlock = wrapTracking(extra.parseBlock);
-	            parseFunctionSourceElements = wrapTracking(extra.parseFunctionSourceElements);
-	            parseCatchClause = wrapTracking(extra.parseCatchClause);
-	            parseComputedMember = wrapTracking(extra.parseComputedMember);
-	            parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
-	            parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
-	            parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
-	            parseExpression = wrapTracking(extra.parseExpression);
-	            parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
-	            parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
-	            parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
-	            parseLeftHandSideExpression = wrapTracking(parseLeftHandSideExpression);
-	            parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
-	            parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
-	            parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
-	            parseNewExpression = wrapTracking(extra.parseNewExpression);
-	            parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
-	            parseObjectProperty = wrapTracking(extra.parseObjectProperty);
-	            parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
-	            parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
-	            parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
-	            parseProgram = wrapTracking(extra.parseProgram);
-	            parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
-	            parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
-	            parseStatement = wrapTracking(extra.parseStatement);
-	            parseShiftExpression = wrapTracking(extra.parseShiftExpression);
-	            parseSwitchCase = wrapTracking(extra.parseSwitchCase);
-	            parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
-	            parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
-	            parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
-	        }
-
-	        if (typeof extra.tokens !== 'undefined') {
-	            extra.advance = advance;
-	            extra.scanRegExp = scanRegExp;
-
-	            advance = collectToken;
-	            scanRegExp = collectRegex;
-	        }
-	    }
-
-	    function unpatch() {
-	        if (typeof extra.skipComment === 'function') {
-	            skipComment = extra.skipComment;
-	        }
-
-	        if (extra.raw) {
-	            createLiteral = extra.createLiteral;
-	        }
-
-	        if (extra.range || extra.loc) {
-	            parseAdditiveExpression = extra.parseAdditiveExpression;
-	            parseAssignmentExpression = extra.parseAssignmentExpression;
-	            parseBitwiseANDExpression = extra.parseBitwiseANDExpression;
-	            parseBitwiseORExpression = extra.parseBitwiseORExpression;
-	            parseBitwiseXORExpression = extra.parseBitwiseXORExpression;
-	            parseBlock = extra.parseBlock;
-	            parseFunctionSourceElements = extra.parseFunctionSourceElements;
-	            parseCatchClause = extra.parseCatchClause;
-	            parseComputedMember = extra.parseComputedMember;
-	            parseConditionalExpression = extra.parseConditionalExpression;
-	            parseConstLetDeclaration = extra.parseConstLetDeclaration;
-	            parseEqualityExpression = extra.parseEqualityExpression;
-	            parseExpression = extra.parseExpression;
-	            parseForVariableDeclaration = extra.parseForVariableDeclaration;
-	            parseFunctionDeclaration = extra.parseFunctionDeclaration;
-	            parseFunctionExpression = extra.parseFunctionExpression;
-	            parseGroupExpression = extra.parseGroupExpression;
-	            parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
-	            parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
-	            parseLogicalANDExpression = extra.parseLogicalANDExpression;
-	            parseLogicalORExpression = extra.parseLogicalORExpression;
-	            parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
-	            parseNewExpression = extra.parseNewExpression;
-	            parseNonComputedProperty = extra.parseNonComputedProperty;
-	            parseObjectProperty = extra.parseObjectProperty;
-	            parseObjectPropertyKey = extra.parseObjectPropertyKey;
-	            parsePrimaryExpression = extra.parsePrimaryExpression;
-	            parsePostfixExpression = extra.parsePostfixExpression;
-	            parseProgram = extra.parseProgram;
-	            parsePropertyFunction = extra.parsePropertyFunction;
-	            parseRelationalExpression = extra.parseRelationalExpression;
-	            parseStatement = extra.parseStatement;
-	            parseShiftExpression = extra.parseShiftExpression;
-	            parseSwitchCase = extra.parseSwitchCase;
-	            parseUnaryExpression = extra.parseUnaryExpression;
-	            parseVariableDeclaration = extra.parseVariableDeclaration;
-	            parseVariableIdentifier = extra.parseVariableIdentifier;
-	        }
-
-	        if (typeof extra.scanRegExp === 'function') {
-	            advance = extra.advance;
-	            scanRegExp = extra.scanRegExp;
-	        }
-	    }
-
-	    function stringToArray(str) {
-	        var length = str.length,
-	            result = [],
-	            i;
-	        for (i = 0; i < length; ++i) {
-	            result[i] = str.charAt(i);
-	        }
-	        return result;
-	    }
-
-	    function parse(code, options) {
-	        var program, toString;
-
-	        toString = String;
-	        if (typeof code !== 'string' && !(code instanceof String)) {
-	            code = toString(code);
-	        }
-
-	        source = code;
-	        index = 0;
-	        lineNumber = (source.length > 0) ? 1 : 0;
-	        lineStart = 0;
-	        length = source.length;
-	        buffer = null;
-	        state = {
-	            allowIn: true,
-	            labelSet: {},
-	            inFunctionBody: false,
-	            inIteration: false,
-	            inSwitch: false
-	        };
-
-	        extra = {};
-	        if (typeof options !== 'undefined') {
-	            extra.range = (typeof options.range === 'boolean') && options.range;
-	            extra.loc = (typeof options.loc === 'boolean') && options.loc;
-	            extra.raw = (typeof options.raw === 'boolean') && options.raw;
-	            if (typeof options.tokens === 'boolean' && options.tokens) {
-	                extra.tokens = [];
-	            }
-	            if (typeof options.comment === 'boolean' && options.comment) {
-	                extra.comments = [];
-	            }
-	            if (typeof options.tolerant === 'boolean' && options.tolerant) {
-	                extra.errors = [];
-	            }
-	        }
-
-	        if (length > 0) {
-	            if (typeof source[0] === 'undefined') {
-	                // Try first to convert to a string. This is good as fast path
-	                // for old IE which understands string indexing for string
-	                // literals only and not for string object.
-	                if (code instanceof String) {
-	                    source = code.valueOf();
-	                }
-
-	                // Force accessing the characters via an array.
-	                if (typeof source[0] === 'undefined') {
-	                    source = stringToArray(code);
-	                }
-	            }
-	        }
-
-	        patch();
-	        try {
-	            program = parseProgram();
-	            if (typeof extra.comments !== 'undefined') {
-	                filterCommentLocation();
-	                program.comments = extra.comments;
-	            }
-	            if (typeof extra.tokens !== 'undefined') {
-	                filterTokenLocation();
-	                program.tokens = extra.tokens;
-	            }
-	            if (typeof extra.errors !== 'undefined') {
-	                program.errors = extra.errors;
-	            }
-	            if (extra.range || extra.loc) {
-	                program.body = filterGroup(program.body);
-	            }
-	        } catch (e) {
-	            throw e;
-	        } finally {
-	            unpatch();
-	            extra = {};
-	        }
-
-	        return program;
-	    }
-
-	    // Sync with package.json.
-	    exports.version = '1.0.4';
-
-	    exports.parse = parse;
-
-	    // Deep copy.
-	    exports.Syntax = (function () {
-	        var name, types = {};
-
-	        if (typeof Object.create === 'function') {
-	            types = Object.create(null);
-	        }
-
-	        for (name in Syntax) {
-	            if (Syntax.hasOwnProperty(name)) {
-	                types[name] = Syntax[name];
-	            }
-	        }
-
-	        if (typeof Object.freeze === 'function') {
-	            Object.freeze(types);
-	        }
-
-	        return types;
-	    }());
-
-	}));
-	/* vim: set sw=4 ts=4 et tw=80 : */
-	return module.exports;
-	})({exports:{}});
-
-	var index = (function (module, global) {
-	var exports = module.exports;
-	var parse = esprima.parse
-	var hoist = index$1
-
-	var InfiniteChecker = infiniteChecker
-	var Primitives = primitives
-
-	module.exports = safeEval
-	module.exports.FunctionFactory = FunctionFactory
-	module.exports.Function = FunctionFactory()
-
-	var maxIterations = 1000000
-
-	// 'eval' with a controlled environment
-	function safeEval(src, parentContext){
-	  var tree = prepareAst(src)
-	  var context = Object.create(parentContext || {})
-	  return finalValue(evaluateAst(tree, context))
-	}
-
-	// create a 'Function' constructor for a controlled environment
-	function FunctionFactory(parentContext){
-	  var context = Object.create(parentContext || {})
-	  return function Function() {
-	    // normalize arguments array
-	    var args = Array.prototype.slice.call(arguments)
-	    var src = args.slice(-1)[0]
-	    args = args.slice(0,-1)
-	    if (typeof src === 'string'){
-	      //HACK: esprima doesn't like returns outside functions
-	      src = parse('function a(){' + src + '}').body[0].body
-	    }
-	    var tree = prepareAst(src)
-	    return getFunction(tree, args, context)
-	  }
-	}
-
-	// takes an AST or js source and returns an AST
-	function prepareAst(src){
-	  var tree = (typeof src === 'string') ? parse(src) : src
-	  return hoist(tree)
-	}
-
-	// evaluate an AST in the given context
-	function evaluateAst(tree, context){
-
-	  var safeFunction = FunctionFactory(context)
-	  var primitives = Primitives(context)
-
-	  // block scoped context for catch (ex) and 'let'
-	  var blockContext = context
-
-	  return walk(tree)
-
-	  // recursively walk every node in an array
-	  function walkAll(nodes){
-	    var result = undefined
-	    for (var i=0;i<nodes.length;i++){
-	      var childNode = nodes[i]
-	      if (childNode.type === 'EmptyStatement') continue
-	      result = walk(childNode)
-	      if (result instanceof ReturnValue){
-	        return result
-	      }
-	    }
-	    return result
-	  }
-
-	  // recursively evalutate the node of an AST
-	  function walk(node){
-	    if (!node) return
-	    switch (node.type) {
-
-	      case 'Program':
-	        return walkAll(node.body)
-
-	      case 'BlockStatement':
-	        enterBlock()
-	        var result = walkAll(node.body)
-	        leaveBlock()
-	        return result
-
-	      case 'FunctionDeclaration':
-	        var params = node.params.map(getName)
-	        var value = getFunction(node.body, params, blockContext)
-	        return context[node.id.name] = value
-
-	      case 'FunctionExpression':
-	        var params = node.params.map(getName)
-	        return getFunction(node.body, params, blockContext)
-
-	      case 'ReturnStatement':
-	        var value = walk(node.argument)
-	        return new ReturnValue('return', value)
-
-	      case 'BreakStatement':
-	        return new ReturnValue('break')
-
-	      case 'ContinueStatement':
-	        return new ReturnValue('continue')
-
-	      case 'ExpressionStatement':
-	        return walk(node.expression)
-
-	      case 'AssignmentExpression':
-	        return setValue(blockContext, node.left, node.right, node.operator)
-
-	      case 'UpdateExpression':
-	        return setValue(blockContext, node.argument, null, node.operator)
-
-	      case 'VariableDeclaration':
-	        node.declarations.forEach(function(declaration){
-	          var target = node.kind === 'let' ? blockContext : context
-	          if (declaration.init){
-	            target[declaration.id.name] = walk(declaration.init)
-	          } else {
-	            target[declaration.id.name] = undefined
-	          }
-	        })
-	        break
-
-	      case 'SwitchStatement':
-	        var defaultHandler = null
-	        var matched = false
-	        var value = walk(node.discriminant)
-	        var result = undefined
-
-	        enterBlock()
-
-	        var i = 0
-	        while (result == null){
-	          if (i<node.cases.length){
-	            if (node.cases[i].test){ // check or fall through
-	              matched = matched || (walk(node.cases[i].test) === value)
-	            } else if (defaultHandler == null) {
-	              defaultHandler = i
-	            }
-	            if (matched){
-	              var r = walkAll(node.cases[i].consequent)
-	              if (r instanceof ReturnValue){ // break out
-	                if (r.type == 'break') break
-	                result = r
-	              }
-	            }
-	            i += 1 // continue
-	          } else if (!matched && defaultHandler != null){
-	            // go back and do the default handler
-	            i = defaultHandler
-	            matched = true
-	          } else {
-	            // nothing we can do
-	            break
-	          }
-	        }
-
-	        leaveBlock()
-	        return result
-
-	      case 'IfStatement':
-	        if (walk(node.test)){
-	          return walk(node.consequent)
-	        } else if (node.alternate) {
-	          return walk(node.alternate)
-	        }
-
-	      case 'ForStatement':
-	        var infinite = InfiniteChecker(maxIterations)
-	        var result = undefined
-
-	        enterBlock() // allow lets on delarations
-	        for (walk(node.init); walk(node.test); walk(node.update)){
-	          var r = walk(node.body)
-
-	          // handle early return, continue and break
-	          if (r instanceof ReturnValue){
-	            if (r.type == 'continue') continue
-	            if (r.type == 'break') break
-	            result = r
-	            break
-	          }
-
-	          infinite.check()
-	        }
-	        leaveBlock()
-	        return result
-
-	      case 'ForInStatement':
-	        var infinite = InfiniteChecker(maxIterations)
-	        var result = undefined
-
-	        var value = walk(node.right)
-	        var property = node.left
-
-	        var target = context
-	        enterBlock()
-
-	        if (property.type == 'VariableDeclaration'){
-	          walk(property)
-	          property = property.declarations[0].id
-	          if (property.kind === 'let'){
-	            target = blockContext
-	          }
-	        }
-
-	        for (var key in value){
-	          setValue(target, property, {type: 'Literal', value: key})
-	          var r = walk(node.body)
-
-	          // handle early return, continue and break
-	          if (r instanceof ReturnValue){
-	            if (r.type == 'continue') continue
-	            if (r.type == 'break') break
-	            result = r
-	            break
-	          }
-
-	          infinite.check()
-	        }
-	        leaveBlock()
-
-	        return result
-
-	      case 'WhileStatement':
-	        var infinite = InfiniteChecker(maxIterations)
-	        while (walk(node.test)){
-	          walk(node.body)
-	          infinite.check()
-	        }
-	        break
-
-	      case 'TryStatement':
-	        try {
-	          walk(node.block)
-	        } catch (error) {
-	          enterBlock()
-	          var catchClause = node.handlers[0]
-	          if (catchClause) {
-	            blockContext[catchClause.param.name] = error
-	            walk(catchClause.body)
-	          }
-	          leaveBlock()
-	        } finally {
-	          if (node.finalizer) {
-	            walk(node.finalizer)
-	          }
-	        }
-	        break
-
-	      case 'Literal':
-	        return node.value
-
-	      case 'UnaryExpression':
-	        var val = walk(node.argument)
-	        switch(node.operator) {
-	          case '+': return +val
-	          case '-': return -val
-	          case '~': return ~val
-	          case '!': return !val
-	          case 'typeof': return typeof val
-	          default: return unsupportedExpression(node)
-	        }
-
-	      case 'ArrayExpression':
-	        var obj = blockContext['Array']()
-	        for (var i=0;i<node.elements.length;i++){
-	          obj.push(walk(node.elements[i]))
-	        }
-	        return obj
-
-	      case 'ObjectExpression':
-	        var obj = blockContext['Object']()
-	        for (var i = 0; i < node.properties.length; i++) {
-	          var prop = node.properties[i]
-	          var value = (prop.value === null) ? prop.value : walk(prop.value)
-	          obj[prop.key.value || prop.key.name] = value
-	        }
-	        return obj
-
-	      case 'NewExpression':
-	        var args = node.arguments.map(function(arg){
-	          return walk(arg)
-	        })
-	        var target = walk(node.callee)
-	        return primitives.applyNew(target, args)
-
-
-	      case 'BinaryExpression':
-	        var l = walk(node.left)
-	        var r = walk(node.right)
-	        switch(node.operator) {
-	          case '==':  return l === r
-	          case '===': return l === r
-	          case '!=':  return l != r
-	          case '!==': return l !== r
-	          case '+':   return l + r
-	          case '-':   return l - r
-	          case '*':   return l * r
-	          case '/':   return l / r
-	          case '%':   return l % r
-	          case '<':   return l < r
-	          case '<=':  return l <= r
-	          case '>':   return l > r
-	          case '>=':  return l >= r
-	          case '|':   return l | r
-	          case '&':   return l & r
-	          case '^':   return l ^ r
-	          case 'instanceof': return l instanceof r
-	          default: return unsupportedExpression(node)
-	        }
-
-	      case 'LogicalExpression':
-	        switch(node.operator) {
-	          case '&&':  return walk(node.left) && walk(node.right)
-	          case '||':  return walk(node.left) || walk(node.right)
-	          default: return unsupportedExpression(node)
-	        }
-
-	      case 'ThisExpression':
-	        return blockContext['this']
-
-	      case 'Identifier':
-	        if (node.name === 'undefined'){
-	          return undefined
-	        } else if (hasProperty(blockContext, node.name, primitives)){
-	          return finalValue(blockContext[node.name])
-	        } else {
-	          throw new ReferenceError(node.name + ' is not defined')
-	        }
-
-	      case 'CallExpression':
-	        var args = node.arguments.map(function(arg){
-	          return walk(arg)
-	        })
-	        var object = null
-	        var target = walk(node.callee)
-
-	        if (node.callee.type === 'MemberExpression'){
-	          object = walk(node.callee.object)
-	        }
-	        return target.apply(object, args)
-
-	      case 'MemberExpression':
-	        var obj = walk(node.object)
-	        if (node.computed){
-	          var prop = walk(node.property)
-	        } else {
-	          var prop = node.property.name
-	        }
-	        obj = primitives.getPropertyObject(obj, prop)
-	        return checkValue(obj[prop]);
-
-	      case 'ConditionalExpression':
-	        var val = walk(node.test)
-	        return val ? walk(node.consequent) : walk(node.alternate)
-
-	      case 'EmptyStatement':
-	        return
-
-	      default:
-	        return unsupportedExpression(node)
-	    }
-	  }
-
-	  // safely retrieve a value
-	  function checkValue(value){
-	    if (value === Function$1){
-	      value = safeFunction
-	    }
-	    return finalValue(value)
-	  }
-
-	  // block scope context control
-	  function enterBlock(){
-	    blockContext = Object.create(blockContext)
-	  }
-	  function leaveBlock(){
-	    blockContext = Object.getPrototypeOf(blockContext)
-	  }
-
-	  // set a value in the specified context if allowed
-	  function setValue(object, left, right, operator){
-	    var name = null
-
-	    if (left.type === 'Identifier'){
-	      name = left.name
-	      // handle parent context shadowing
-	      object = objectForKey(object, name, primitives)
-	    } else if (left.type === 'MemberExpression'){
-	      if (left.computed){
-	        name = walk(left.property)
-	      } else {
-	        name = left.property.name
-	      }
-	      object = walk(left.object)
-	    }
-
-	    // stop built in properties from being able to be changed
-	    if (canSetProperty(object, name, primitives)){
-	      switch(operator) {
-	        case undefined: return object[name] = walk(right)
-	        case '=':  return object[name] = walk(right)
-	        case '+=': return object[name] += walk(right)
-	        case '-=': return object[name] -= walk(right)
-	        case '++': return object[name]++
-	        case '--': return object[name]--
-	      }
-	    }
-
-	  }
-
-	}
-
-	// when an unsupported expression is encountered, throw an error
-	function unsupportedExpression(node){
-	  console.error(node)
-	  var err = new Error('Unsupported expression: ' + node.type)
-	  err.node = node
-	  throw err
-	}
-
-	// walk a provided object's prototypal hierarchy to retrieve an inherited object
-	function objectForKey(object, key, primitives){
-	  var proto = primitives.getPrototypeOf(object)
-	  if (!proto || hasOwnProperty(object, key)){
-	    return object
-	  } else {
-	    return objectForKey(proto, key, primitives)
-	  }
-	}
-
-	function hasProperty(object, key, primitives){
-	  var proto = primitives.getPrototypeOf(object)
-	  var hasOwn = hasOwnProperty(object, key)
-	  if (object[key] !== undefined){
-	    return true
-	  } else if (!proto || hasOwn){
-	    return hasOwn
-	  } else {
-	    return hasProperty(proto, key, primitives)
-	  }
-	}
-
-	function hasOwnProperty(object, key){
-	  return Object.prototype.hasOwnProperty.call(object, key)
-	}
-
-	function propertyIsEnumerable(object, key){
-	  return Object.prototype.propertyIsEnumerable.call(object, key)
-	}
-
-
-	// determine if we have write access to a property
-	function canSetProperty(object, property, primitives){
-	  if (property === '__proto__' || primitives.isPrimitive(object)){
-	    return false
-	  } else if (object != null){
-
-	    if (hasOwnProperty(object, property)){
-	      if (propertyIsEnumerable(object, property)){
-	        return true
-	      } else {
-	        return false
-	      }
-	    } else {
-	      return canSetProperty(primitives.getPrototypeOf(object), property, primitives)
-	    }
-
-	  } else {
-	    return true
-	  }
-	}
-
-	// generate a function with specified context
-	function getFunction(body, params, parentContext){
-	  return function(){
-	    var context = Object.create(parentContext)
-	    if (this == global){
-	      context['this'] = null
-	    } else {
-	      context['this'] = this
-	    }
-	    // normalize arguments array
-	    var args = Array.prototype.slice.call(arguments)
-	    context['arguments'] = arguments
-	    args.forEach(function(arg,idx){
-	      var param = params[idx]
-	      if (param){
-	        context[param] = arg
-	      }
-	    })
-	    var result = evaluateAst(body, context)
-
-	    if (result instanceof ReturnValue){
-	      return result.value
-	    }
-	  }
-	}
-
-	function finalValue(value){
-	  if (value instanceof ReturnValue){
-	    return value.value
-	  }
-	  return value
-	}
-
-	// get the name of an identifier
-	function getName(identifier){
-	  return identifier.name
-	}
-
-	// a ReturnValue struct for differentiating between expression result and return statement
-	function ReturnValue(type, value){
-	  this.type = type
-	  this.value = value
-	}
-	return module.exports;
-	})({exports:{}}, __commonjs_global);
-
-	var Function$1 = index.Function;
-
 	var pathCache = new Cache(1000);
 
 	// actions
@@ -7656,10 +2994,9 @@
 
 	function makeGetterFn(body) {
 	  try {
-	    var fn = index.Function('scope', 'Math', 'return ' + body);
-	    return function (scope) {
-	      return fn.call(this, scope, Math);
-	    };
+	    /* eslint-disable no-new-func */
+	    return new Function('scope', 'return ' + body + ';');
+	    /* eslint-enable no-new-func */
 	  } catch (e) {
 	    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
 	  }
@@ -14659,9 +9996,7 @@
 	        name = null;
 	      }
 	    }
-	    var Sub = function VueComponent(options) {
-	      Vue.call(this, options);
-	    };
+	    var Sub = createClass(name || 'VueComponent');
 	    Sub.prototype = Object.create(Super.prototype);
 	    Sub.prototype.constructor = Sub;
 	    Sub.cid = cid++;
@@ -14684,6 +10019,21 @@
 	    }
 	    return Sub;
 	  };
+
+	  /**
+	   * A function that returns a sub-class constructor with the
+	   * given name. This gives us much nicer output when
+	   * logging instances in the console.
+	   *
+	   * @param {String} name
+	   * @return {Function}
+	   */
+
+	  function createClass(name) {
+	    /* eslint-disable no-new-func */
+	    return new Function('return function ' + classify(name) + ' (options) { this._init(options) }')();
+	    /* eslint-enable no-new-func */
+	  }
 
 	  /**
 	   * Plugin system
@@ -14752,7 +10102,7 @@
 
 	installGlobalAPI(Vue);
 
-	Vue.version = '1.0.24-csp';
+	Vue.version = '1.0.24';
 
 	// devtools global hook
 	/* istanbul ignore next */
@@ -14890,7 +10240,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/Users/Teo/Desktop/web/components/App.vue"
+	  var id = "/home/alex4o/Projects/TechFest/static/components/App.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -15252,7 +10602,6 @@
 	      newUsername: "",
 	      newPassword: "",
 	      users: []
-
 	    };
 	  }
 	};
@@ -15261,7 +10610,2903 @@
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n<div id=\"app\">\n\t<input v-model=\"newUsername\" v-on:keyup.enter=\"addUser\" placeholder=\"username\">\n\t<input v-model=\"newPassword\" v-on:keyup.enter=\"addUser\" placeholder=\"password\">\n  \t<ul>\n    <li v-for=\"user in users\">\n      <span>{{ user.name }}:{{user.pass}}</span>\n      <button v-on:click=\"removeUser($index)\">X</button>\n    </li>\n  \t</ul>\n  \t\n\n</div>\n\n";
+	module.exports = "\n\n<div id=\"app\">\n\t<input v-model=\"newUsername\" v-on:keyup.enter=\"addUser\" placeholder=\"username\">\n\t<input v-model=\"newPassword\" v-on:keyup.enter=\"addUser\" placeholder=\"password\">\n  \t<ul>\n    <li v-for=\"user in users\">\n      <span>{{ user.name }}:{{user.pass}}</span>\n      <button v-on:click=\"removeUser($index)\">X</button>\n    </li>\n  \t</ul>\n\n    <router-view></router-view>\n  \t\n\n</div>\n\n";
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(11)
+	__vue_script__ = __webpack_require__(13)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] components/Login.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(14)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/alex4o/Projects/TechFest/static/components/Login.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(12);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Login.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Login.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = {
+		methods: {},
+		data: function data() {
+			return {};
+		}
+	};
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = "\nLogin\n\n";
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(16)
+	__vue_script__ = __webpack_require__(18)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] components/Register.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(19)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/home/alex4o/Projects/TechFest/static/components/Register.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(17);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Register.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Register.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = {
+		methods: {},
+		data: function data() {
+			return {};
+		}
+	};
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "\nRegister\n\n";
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * vue-router v0.7.13
+	 * (c) 2016 Evan You
+	 * Released under the MIT License.
+	 */
+	(function (global, factory) {
+	   true ? module.exports = factory() :
+	  typeof define === 'function' && define.amd ? define(factory) :
+	  global.VueRouter = factory();
+	}(this, function () { 'use strict';
+
+	  var babelHelpers = {};
+
+	  babelHelpers.classCallCheck = function (instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	      throw new TypeError("Cannot call a class as a function");
+	    }
+	  };
+	  function Target(path, matcher, delegate) {
+	    this.path = path;
+	    this.matcher = matcher;
+	    this.delegate = delegate;
+	  }
+
+	  Target.prototype = {
+	    to: function to(target, callback) {
+	      var delegate = this.delegate;
+
+	      if (delegate && delegate.willAddRoute) {
+	        target = delegate.willAddRoute(this.matcher.target, target);
+	      }
+
+	      this.matcher.add(this.path, target);
+
+	      if (callback) {
+	        if (callback.length === 0) {
+	          throw new Error("You must have an argument in the function passed to `to`");
+	        }
+	        this.matcher.addChild(this.path, target, callback, this.delegate);
+	      }
+	      return this;
+	    }
+	  };
+
+	  function Matcher(target) {
+	    this.routes = {};
+	    this.children = {};
+	    this.target = target;
+	  }
+
+	  Matcher.prototype = {
+	    add: function add(path, handler) {
+	      this.routes[path] = handler;
+	    },
+
+	    addChild: function addChild(path, target, callback, delegate) {
+	      var matcher = new Matcher(target);
+	      this.children[path] = matcher;
+
+	      var match = generateMatch(path, matcher, delegate);
+
+	      if (delegate && delegate.contextEntered) {
+	        delegate.contextEntered(target, match);
+	      }
+
+	      callback(match);
+	    }
+	  };
+
+	  function generateMatch(startingPath, matcher, delegate) {
+	    return function (path, nestedCallback) {
+	      var fullPath = startingPath + path;
+
+	      if (nestedCallback) {
+	        nestedCallback(generateMatch(fullPath, matcher, delegate));
+	      } else {
+	        return new Target(startingPath + path, matcher, delegate);
+	      }
+	    };
+	  }
+
+	  function addRoute(routeArray, path, handler) {
+	    var len = 0;
+	    for (var i = 0, l = routeArray.length; i < l; i++) {
+	      len += routeArray[i].path.length;
+	    }
+
+	    path = path.substr(len);
+	    var route = { path: path, handler: handler };
+	    routeArray.push(route);
+	  }
+
+	  function eachRoute(baseRoute, matcher, callback, binding) {
+	    var routes = matcher.routes;
+
+	    for (var path in routes) {
+	      if (routes.hasOwnProperty(path)) {
+	        var routeArray = baseRoute.slice();
+	        addRoute(routeArray, path, routes[path]);
+
+	        if (matcher.children[path]) {
+	          eachRoute(routeArray, matcher.children[path], callback, binding);
+	        } else {
+	          callback.call(binding, routeArray);
+	        }
+	      }
+	    }
+	  }
+
+	  function map (callback, addRouteCallback) {
+	    var matcher = new Matcher();
+
+	    callback(generateMatch("", matcher, this.delegate));
+
+	    eachRoute([], matcher, function (route) {
+	      if (addRouteCallback) {
+	        addRouteCallback(this, route);
+	      } else {
+	        this.add(route);
+	      }
+	    }, this);
+	  }
+
+	  var specials = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'];
+
+	  var escapeRegex = new RegExp('(\\' + specials.join('|\\') + ')', 'g');
+
+	  var noWarning = false;
+	  function warn(msg) {
+	    if (!noWarning && typeof console !== 'undefined') {
+	      console.error('[vue-router] ' + msg);
+	    }
+	  }
+
+	  function tryDecode(uri, asComponent) {
+	    try {
+	      return asComponent ? decodeURIComponent(uri) : decodeURI(uri);
+	    } catch (e) {
+	      warn('malformed URI' + (asComponent ? ' component: ' : ': ') + uri);
+	    }
+	  }
+
+	  function isArray(test) {
+	    return Object.prototype.toString.call(test) === "[object Array]";
+	  }
+
+	  // A Segment represents a segment in the original route description.
+	  // Each Segment type provides an `eachChar` and `regex` method.
+	  //
+	  // The `eachChar` method invokes the callback with one or more character
+	  // specifications. A character specification consumes one or more input
+	  // characters.
+	  //
+	  // The `regex` method returns a regex fragment for the segment. If the
+	  // segment is a dynamic of star segment, the regex fragment also includes
+	  // a capture.
+	  //
+	  // A character specification contains:
+	  //
+	  // * `validChars`: a String with a list of all valid characters, or
+	  // * `invalidChars`: a String with a list of all invalid characters
+	  // * `repeat`: true if the character specification can repeat
+
+	  function StaticSegment(string) {
+	    this.string = string;
+	  }
+	  StaticSegment.prototype = {
+	    eachChar: function eachChar(callback) {
+	      var string = this.string,
+	          ch;
+
+	      for (var i = 0, l = string.length; i < l; i++) {
+	        ch = string.charAt(i);
+	        callback({ validChars: ch });
+	      }
+	    },
+
+	    regex: function regex() {
+	      return this.string.replace(escapeRegex, '\\$1');
+	    },
+
+	    generate: function generate() {
+	      return this.string;
+	    }
+	  };
+
+	  function DynamicSegment(name) {
+	    this.name = name;
+	  }
+	  DynamicSegment.prototype = {
+	    eachChar: function eachChar(callback) {
+	      callback({ invalidChars: "/", repeat: true });
+	    },
+
+	    regex: function regex() {
+	      return "([^/]+)";
+	    },
+
+	    generate: function generate(params) {
+	      var val = params[this.name];
+	      return val == null ? ":" + this.name : val;
+	    }
+	  };
+
+	  function StarSegment(name) {
+	    this.name = name;
+	  }
+	  StarSegment.prototype = {
+	    eachChar: function eachChar(callback) {
+	      callback({ invalidChars: "", repeat: true });
+	    },
+
+	    regex: function regex() {
+	      return "(.+)";
+	    },
+
+	    generate: function generate(params) {
+	      var val = params[this.name];
+	      return val == null ? ":" + this.name : val;
+	    }
+	  };
+
+	  function EpsilonSegment() {}
+	  EpsilonSegment.prototype = {
+	    eachChar: function eachChar() {},
+	    regex: function regex() {
+	      return "";
+	    },
+	    generate: function generate() {
+	      return "";
+	    }
+	  };
+
+	  function parse(route, names, specificity) {
+	    // normalize route as not starting with a "/". Recognition will
+	    // also normalize.
+	    if (route.charAt(0) === "/") {
+	      route = route.substr(1);
+	    }
+
+	    var segments = route.split("/"),
+	        results = [];
+
+	    // A routes has specificity determined by the order that its different segments
+	    // appear in. This system mirrors how the magnitude of numbers written as strings
+	    // works.
+	    // Consider a number written as: "abc". An example would be "200". Any other number written
+	    // "xyz" will be smaller than "abc" so long as `a > z`. For instance, "199" is smaller
+	    // then "200", even though "y" and "z" (which are both 9) are larger than "0" (the value
+	    // of (`b` and `c`). This is because the leading symbol, "2", is larger than the other
+	    // leading symbol, "1".
+	    // The rule is that symbols to the left carry more weight than symbols to the right
+	    // when a number is written out as a string. In the above strings, the leading digit
+	    // represents how many 100's are in the number, and it carries more weight than the middle
+	    // number which represents how many 10's are in the number.
+	    // This system of number magnitude works well for route specificity, too. A route written as
+	    // `a/b/c` will be more specific than `x/y/z` as long as `a` is more specific than
+	    // `x`, irrespective of the other parts.
+	    // Because of this similarity, we assign each type of segment a number value written as a
+	    // string. We can find the specificity of compound routes by concatenating these strings
+	    // together, from left to right. After we have looped through all of the segments,
+	    // we convert the string to a number.
+	    specificity.val = '';
+
+	    for (var i = 0, l = segments.length; i < l; i++) {
+	      var segment = segments[i],
+	          match;
+
+	      if (match = segment.match(/^:([^\/]+)$/)) {
+	        results.push(new DynamicSegment(match[1]));
+	        names.push(match[1]);
+	        specificity.val += '3';
+	      } else if (match = segment.match(/^\*([^\/]+)$/)) {
+	        results.push(new StarSegment(match[1]));
+	        specificity.val += '2';
+	        names.push(match[1]);
+	      } else if (segment === "") {
+	        results.push(new EpsilonSegment());
+	        specificity.val += '1';
+	      } else {
+	        results.push(new StaticSegment(segment));
+	        specificity.val += '4';
+	      }
+	    }
+
+	    specificity.val = +specificity.val;
+
+	    return results;
+	  }
+
+	  // A State has a character specification and (`charSpec`) and a list of possible
+	  // subsequent states (`nextStates`).
+	  //
+	  // If a State is an accepting state, it will also have several additional
+	  // properties:
+	  //
+	  // * `regex`: A regular expression that is used to extract parameters from paths
+	  //   that reached this accepting state.
+	  // * `handlers`: Information on how to convert the list of captures into calls
+	  //   to registered handlers with the specified parameters
+	  // * `types`: How many static, dynamic or star segments in this route. Used to
+	  //   decide which route to use if multiple registered routes match a path.
+	  //
+	  // Currently, State is implemented naively by looping over `nextStates` and
+	  // comparing a character specification against a character. A more efficient
+	  // implementation would use a hash of keys pointing at one or more next states.
+
+	  function State(charSpec) {
+	    this.charSpec = charSpec;
+	    this.nextStates = [];
+	  }
+
+	  State.prototype = {
+	    get: function get(charSpec) {
+	      var nextStates = this.nextStates;
+
+	      for (var i = 0, l = nextStates.length; i < l; i++) {
+	        var child = nextStates[i];
+
+	        var isEqual = child.charSpec.validChars === charSpec.validChars;
+	        isEqual = isEqual && child.charSpec.invalidChars === charSpec.invalidChars;
+
+	        if (isEqual) {
+	          return child;
+	        }
+	      }
+	    },
+
+	    put: function put(charSpec) {
+	      var state;
+
+	      // If the character specification already exists in a child of the current
+	      // state, just return that state.
+	      if (state = this.get(charSpec)) {
+	        return state;
+	      }
+
+	      // Make a new state for the character spec
+	      state = new State(charSpec);
+
+	      // Insert the new state as a child of the current state
+	      this.nextStates.push(state);
+
+	      // If this character specification repeats, insert the new state as a child
+	      // of itself. Note that this will not trigger an infinite loop because each
+	      // transition during recognition consumes a character.
+	      if (charSpec.repeat) {
+	        state.nextStates.push(state);
+	      }
+
+	      // Return the new state
+	      return state;
+	    },
+
+	    // Find a list of child states matching the next character
+	    match: function match(ch) {
+	      // DEBUG "Processing `" + ch + "`:"
+	      var nextStates = this.nextStates,
+	          child,
+	          charSpec,
+	          chars;
+
+	      // DEBUG "  " + debugState(this)
+	      var returned = [];
+
+	      for (var i = 0, l = nextStates.length; i < l; i++) {
+	        child = nextStates[i];
+
+	        charSpec = child.charSpec;
+
+	        if (typeof (chars = charSpec.validChars) !== 'undefined') {
+	          if (chars.indexOf(ch) !== -1) {
+	            returned.push(child);
+	          }
+	        } else if (typeof (chars = charSpec.invalidChars) !== 'undefined') {
+	          if (chars.indexOf(ch) === -1) {
+	            returned.push(child);
+	          }
+	        }
+	      }
+
+	      return returned;
+	    }
+
+	    /** IF DEBUG
+	    , debug: function() {
+	      var charSpec = this.charSpec,
+	          debug = "[",
+	          chars = charSpec.validChars || charSpec.invalidChars;
+	       if (charSpec.invalidChars) { debug += "^"; }
+	      debug += chars;
+	      debug += "]";
+	       if (charSpec.repeat) { debug += "+"; }
+	       return debug;
+	    }
+	    END IF **/
+	  };
+
+	  /** IF DEBUG
+	  function debug(log) {
+	    console.log(log);
+	  }
+
+	  function debugState(state) {
+	    return state.nextStates.map(function(n) {
+	      if (n.nextStates.length === 0) { return "( " + n.debug() + " [accepting] )"; }
+	      return "( " + n.debug() + " <then> " + n.nextStates.map(function(s) { return s.debug() }).join(" or ") + " )";
+	    }).join(", ")
+	  }
+	  END IF **/
+
+	  // Sort the routes by specificity
+	  function sortSolutions(states) {
+	    return states.sort(function (a, b) {
+	      return b.specificity.val - a.specificity.val;
+	    });
+	  }
+
+	  function recognizeChar(states, ch) {
+	    var nextStates = [];
+
+	    for (var i = 0, l = states.length; i < l; i++) {
+	      var state = states[i];
+
+	      nextStates = nextStates.concat(state.match(ch));
+	    }
+
+	    return nextStates;
+	  }
+
+	  var oCreate = Object.create || function (proto) {
+	    function F() {}
+	    F.prototype = proto;
+	    return new F();
+	  };
+
+	  function RecognizeResults(queryParams) {
+	    this.queryParams = queryParams || {};
+	  }
+	  RecognizeResults.prototype = oCreate({
+	    splice: Array.prototype.splice,
+	    slice: Array.prototype.slice,
+	    push: Array.prototype.push,
+	    length: 0,
+	    queryParams: null
+	  });
+
+	  function findHandler(state, path, queryParams) {
+	    var handlers = state.handlers,
+	        regex = state.regex;
+	    var captures = path.match(regex),
+	        currentCapture = 1;
+	    var result = new RecognizeResults(queryParams);
+
+	    for (var i = 0, l = handlers.length; i < l; i++) {
+	      var handler = handlers[i],
+	          names = handler.names,
+	          params = {};
+
+	      for (var j = 0, m = names.length; j < m; j++) {
+	        params[names[j]] = captures[currentCapture++];
+	      }
+
+	      result.push({ handler: handler.handler, params: params, isDynamic: !!names.length });
+	    }
+
+	    return result;
+	  }
+
+	  function addSegment(currentState, segment) {
+	    segment.eachChar(function (ch) {
+	      var state;
+
+	      currentState = currentState.put(ch);
+	    });
+
+	    return currentState;
+	  }
+
+	  function decodeQueryParamPart(part) {
+	    // http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.1
+	    part = part.replace(/\+/gm, '%20');
+	    return tryDecode(part, true);
+	  }
+
+	  // The main interface
+
+	  var RouteRecognizer = function RouteRecognizer() {
+	    this.rootState = new State();
+	    this.names = {};
+	  };
+
+	  RouteRecognizer.prototype = {
+	    add: function add(routes, options) {
+	      var currentState = this.rootState,
+	          regex = "^",
+	          specificity = {},
+	          handlers = [],
+	          allSegments = [],
+	          name;
+
+	      var isEmpty = true;
+
+	      for (var i = 0, l = routes.length; i < l; i++) {
+	        var route = routes[i],
+	            names = [];
+
+	        var segments = parse(route.path, names, specificity);
+
+	        allSegments = allSegments.concat(segments);
+
+	        for (var j = 0, m = segments.length; j < m; j++) {
+	          var segment = segments[j];
+
+	          if (segment instanceof EpsilonSegment) {
+	            continue;
+	          }
+
+	          isEmpty = false;
+
+	          // Add a "/" for the new segment
+	          currentState = currentState.put({ validChars: "/" });
+	          regex += "/";
+
+	          // Add a representation of the segment to the NFA and regex
+	          currentState = addSegment(currentState, segment);
+	          regex += segment.regex();
+	        }
+
+	        var handler = { handler: route.handler, names: names };
+	        handlers.push(handler);
+	      }
+
+	      if (isEmpty) {
+	        currentState = currentState.put({ validChars: "/" });
+	        regex += "/";
+	      }
+
+	      currentState.handlers = handlers;
+	      currentState.regex = new RegExp(regex + "$");
+	      currentState.specificity = specificity;
+
+	      if (name = options && options.as) {
+	        this.names[name] = {
+	          segments: allSegments,
+	          handlers: handlers
+	        };
+	      }
+	    },
+
+	    handlersFor: function handlersFor(name) {
+	      var route = this.names[name],
+	          result = [];
+	      if (!route) {
+	        throw new Error("There is no route named " + name);
+	      }
+
+	      for (var i = 0, l = route.handlers.length; i < l; i++) {
+	        result.push(route.handlers[i]);
+	      }
+
+	      return result;
+	    },
+
+	    hasRoute: function hasRoute(name) {
+	      return !!this.names[name];
+	    },
+
+	    generate: function generate(name, params) {
+	      var route = this.names[name],
+	          output = "";
+	      if (!route) {
+	        throw new Error("There is no route named " + name);
+	      }
+
+	      var segments = route.segments;
+
+	      for (var i = 0, l = segments.length; i < l; i++) {
+	        var segment = segments[i];
+
+	        if (segment instanceof EpsilonSegment) {
+	          continue;
+	        }
+
+	        output += "/";
+	        output += segment.generate(params);
+	      }
+
+	      if (output.charAt(0) !== '/') {
+	        output = '/' + output;
+	      }
+
+	      if (params && params.queryParams) {
+	        output += this.generateQueryString(params.queryParams);
+	      }
+
+	      return output;
+	    },
+
+	    generateQueryString: function generateQueryString(params) {
+	      var pairs = [];
+	      var keys = [];
+	      for (var key in params) {
+	        if (params.hasOwnProperty(key)) {
+	          keys.push(key);
+	        }
+	      }
+	      keys.sort();
+	      for (var i = 0, len = keys.length; i < len; i++) {
+	        key = keys[i];
+	        var value = params[key];
+	        if (value == null) {
+	          continue;
+	        }
+	        var pair = encodeURIComponent(key);
+	        if (isArray(value)) {
+	          for (var j = 0, l = value.length; j < l; j++) {
+	            var arrayPair = key + '[]' + '=' + encodeURIComponent(value[j]);
+	            pairs.push(arrayPair);
+	          }
+	        } else {
+	          pair += "=" + encodeURIComponent(value);
+	          pairs.push(pair);
+	        }
+	      }
+
+	      if (pairs.length === 0) {
+	        return '';
+	      }
+
+	      return "?" + pairs.join("&");
+	    },
+
+	    parseQueryString: function parseQueryString(queryString) {
+	      var pairs = queryString.split("&"),
+	          queryParams = {};
+	      for (var i = 0; i < pairs.length; i++) {
+	        var pair = pairs[i].split('='),
+	            key = decodeQueryParamPart(pair[0]),
+	            keyLength = key.length,
+	            isArray = false,
+	            value;
+	        if (pair.length === 1) {
+	          value = 'true';
+	        } else {
+	          //Handle arrays
+	          if (keyLength > 2 && key.slice(keyLength - 2) === '[]') {
+	            isArray = true;
+	            key = key.slice(0, keyLength - 2);
+	            if (!queryParams[key]) {
+	              queryParams[key] = [];
+	            }
+	          }
+	          value = pair[1] ? decodeQueryParamPart(pair[1]) : '';
+	        }
+	        if (isArray) {
+	          queryParams[key].push(value);
+	        } else {
+	          queryParams[key] = value;
+	        }
+	      }
+	      return queryParams;
+	    },
+
+	    recognize: function recognize(path, silent) {
+	      noWarning = silent;
+	      var states = [this.rootState],
+	          pathLen,
+	          i,
+	          l,
+	          queryStart,
+	          queryParams = {},
+	          isSlashDropped = false;
+
+	      queryStart = path.indexOf('?');
+	      if (queryStart !== -1) {
+	        var queryString = path.substr(queryStart + 1, path.length);
+	        path = path.substr(0, queryStart);
+	        if (queryString) {
+	          queryParams = this.parseQueryString(queryString);
+	        }
+	      }
+
+	      path = tryDecode(path);
+	      if (!path) return;
+
+	      // DEBUG GROUP path
+
+	      if (path.charAt(0) !== "/") {
+	        path = "/" + path;
+	      }
+
+	      pathLen = path.length;
+	      if (pathLen > 1 && path.charAt(pathLen - 1) === "/") {
+	        path = path.substr(0, pathLen - 1);
+	        isSlashDropped = true;
+	      }
+
+	      for (i = 0, l = path.length; i < l; i++) {
+	        states = recognizeChar(states, path.charAt(i));
+	        if (!states.length) {
+	          break;
+	        }
+	      }
+
+	      // END DEBUG GROUP
+
+	      var solutions = [];
+	      for (i = 0, l = states.length; i < l; i++) {
+	        if (states[i].handlers) {
+	          solutions.push(states[i]);
+	        }
+	      }
+
+	      states = sortSolutions(solutions);
+
+	      var state = solutions[0];
+
+	      if (state && state.handlers) {
+	        // if a trailing slash was dropped and a star segment is the last segment
+	        // specified, put the trailing slash back
+	        if (isSlashDropped && state.regex.source.slice(-5) === "(.+)$") {
+	          path = path + "/";
+	        }
+	        return findHandler(state, path, queryParams);
+	      }
+	    }
+	  };
+
+	  RouteRecognizer.prototype.map = map;
+
+	  var genQuery = RouteRecognizer.prototype.generateQueryString;
+
+	  // export default for holding the Vue reference
+	  var exports$1 = {};
+	  /**
+	   * Warn stuff.
+	   *
+	   * @param {String} msg
+	   */
+
+	  function warn$1(msg) {
+	    /* istanbul ignore next */
+	    if (typeof console !== 'undefined') {
+	      console.error('[vue-router] ' + msg);
+	    }
+	  }
+
+	  /**
+	   * Resolve a relative path.
+	   *
+	   * @param {String} base
+	   * @param {String} relative
+	   * @param {Boolean} append
+	   * @return {String}
+	   */
+
+	  function resolvePath(base, relative, append) {
+	    var query = base.match(/(\?.*)$/);
+	    if (query) {
+	      query = query[1];
+	      base = base.slice(0, -query.length);
+	    }
+	    // a query!
+	    if (relative.charAt(0) === '?') {
+	      return base + relative;
+	    }
+	    var stack = base.split('/');
+	    // remove trailing segment if:
+	    // - not appending
+	    // - appending to trailing slash (last segment is empty)
+	    if (!append || !stack[stack.length - 1]) {
+	      stack.pop();
+	    }
+	    // resolve relative path
+	    var segments = relative.replace(/^\//, '').split('/');
+	    for (var i = 0; i < segments.length; i++) {
+	      var segment = segments[i];
+	      if (segment === '.') {
+	        continue;
+	      } else if (segment === '..') {
+	        stack.pop();
+	      } else {
+	        stack.push(segment);
+	      }
+	    }
+	    // ensure leading slash
+	    if (stack[0] !== '') {
+	      stack.unshift('');
+	    }
+	    return stack.join('/');
+	  }
+
+	  /**
+	   * Forgiving check for a promise
+	   *
+	   * @param {Object} p
+	   * @return {Boolean}
+	   */
+
+	  function isPromise(p) {
+	    return p && typeof p.then === 'function';
+	  }
+
+	  /**
+	   * Retrive a route config field from a component instance
+	   * OR a component contructor.
+	   *
+	   * @param {Function|Vue} component
+	   * @param {String} name
+	   * @return {*}
+	   */
+
+	  function getRouteConfig(component, name) {
+	    var options = component && (component.$options || component.options);
+	    return options && options.route && options.route[name];
+	  }
+
+	  /**
+	   * Resolve an async component factory. Have to do a dirty
+	   * mock here because of Vue core's internal API depends on
+	   * an ID check.
+	   *
+	   * @param {Object} handler
+	   * @param {Function} cb
+	   */
+
+	  var resolver = undefined;
+
+	  function resolveAsyncComponent(handler, cb) {
+	    if (!resolver) {
+	      resolver = {
+	        resolve: exports$1.Vue.prototype._resolveComponent,
+	        $options: {
+	          components: {
+	            _: handler.component
+	          }
+	        }
+	      };
+	    } else {
+	      resolver.$options.components._ = handler.component;
+	    }
+	    resolver.resolve('_', function (Component) {
+	      handler.component = Component;
+	      cb(Component);
+	    });
+	  }
+
+	  /**
+	   * Map the dynamic segments in a path to params.
+	   *
+	   * @param {String} path
+	   * @param {Object} params
+	   * @param {Object} query
+	   */
+
+	  function mapParams(path, params, query) {
+	    if (params === undefined) params = {};
+
+	    path = path.replace(/:([^\/]+)/g, function (_, key) {
+	      var val = params[key];
+	      /* istanbul ignore if */
+	      if (!val) {
+	        warn$1('param "' + key + '" not found when generating ' + 'path for "' + path + '" with params ' + JSON.stringify(params));
+	      }
+	      return val || '';
+	    });
+	    if (query) {
+	      path += genQuery(query);
+	    }
+	    return path;
+	  }
+
+	  var hashRE = /#.*$/;
+
+	  var HTML5History = (function () {
+	    function HTML5History(_ref) {
+	      var root = _ref.root;
+	      var onChange = _ref.onChange;
+	      babelHelpers.classCallCheck(this, HTML5History);
+
+	      if (root && root !== '/') {
+	        // make sure there's the starting slash
+	        if (root.charAt(0) !== '/') {
+	          root = '/' + root;
+	        }
+	        // remove trailing slash
+	        this.root = root.replace(/\/$/, '');
+	        this.rootRE = new RegExp('^\\' + this.root);
+	      } else {
+	        this.root = null;
+	      }
+	      this.onChange = onChange;
+	      // check base tag
+	      var baseEl = document.querySelector('base');
+	      this.base = baseEl && baseEl.getAttribute('href');
+	    }
+
+	    HTML5History.prototype.start = function start() {
+	      var _this = this;
+
+	      this.listener = function (e) {
+	        var url = location.pathname + location.search;
+	        if (_this.root) {
+	          url = url.replace(_this.rootRE, '');
+	        }
+	        _this.onChange(url, e && e.state, location.hash);
+	      };
+	      window.addEventListener('popstate', this.listener);
+	      this.listener();
+	    };
+
+	    HTML5History.prototype.stop = function stop() {
+	      window.removeEventListener('popstate', this.listener);
+	    };
+
+	    HTML5History.prototype.go = function go(path, replace, append) {
+	      var url = this.formatPath(path, append);
+	      if (replace) {
+	        history.replaceState({}, '', url);
+	      } else {
+	        // record scroll position by replacing current state
+	        history.replaceState({
+	          pos: {
+	            x: window.pageXOffset,
+	            y: window.pageYOffset
+	          }
+	        }, '', location.href);
+	        // then push new state
+	        history.pushState({}, '', url);
+	      }
+	      var hashMatch = path.match(hashRE);
+	      var hash = hashMatch && hashMatch[0];
+	      path = url
+	      // strip hash so it doesn't mess up params
+	      .replace(hashRE, '')
+	      // remove root before matching
+	      .replace(this.rootRE, '');
+	      this.onChange(path, null, hash);
+	    };
+
+	    HTML5History.prototype.formatPath = function formatPath(path, append) {
+	      return path.charAt(0) === '/'
+	      // absolute path
+	      ? this.root ? this.root + '/' + path.replace(/^\//, '') : path : resolvePath(this.base || location.pathname, path, append);
+	    };
+
+	    return HTML5History;
+	  })();
+
+	  var HashHistory = (function () {
+	    function HashHistory(_ref) {
+	      var hashbang = _ref.hashbang;
+	      var onChange = _ref.onChange;
+	      babelHelpers.classCallCheck(this, HashHistory);
+
+	      this.hashbang = hashbang;
+	      this.onChange = onChange;
+	    }
+
+	    HashHistory.prototype.start = function start() {
+	      var self = this;
+	      this.listener = function () {
+	        var path = location.hash;
+	        var raw = path.replace(/^#!?/, '');
+	        // always
+	        if (raw.charAt(0) !== '/') {
+	          raw = '/' + raw;
+	        }
+	        var formattedPath = self.formatPath(raw);
+	        if (formattedPath !== path) {
+	          location.replace(formattedPath);
+	          return;
+	        }
+	        // determine query
+	        // note it's possible to have queries in both the actual URL
+	        // and the hash fragment itself.
+	        var query = location.search && path.indexOf('?') > -1 ? '&' + location.search.slice(1) : location.search;
+	        self.onChange(path.replace(/^#!?/, '') + query);
+	      };
+	      window.addEventListener('hashchange', this.listener);
+	      this.listener();
+	    };
+
+	    HashHistory.prototype.stop = function stop() {
+	      window.removeEventListener('hashchange', this.listener);
+	    };
+
+	    HashHistory.prototype.go = function go(path, replace, append) {
+	      path = this.formatPath(path, append);
+	      if (replace) {
+	        location.replace(path);
+	      } else {
+	        location.hash = path;
+	      }
+	    };
+
+	    HashHistory.prototype.formatPath = function formatPath(path, append) {
+	      var isAbsoloute = path.charAt(0) === '/';
+	      var prefix = '#' + (this.hashbang ? '!' : '');
+	      return isAbsoloute ? prefix + path : prefix + resolvePath(location.hash.replace(/^#!?/, ''), path, append);
+	    };
+
+	    return HashHistory;
+	  })();
+
+	  var AbstractHistory = (function () {
+	    function AbstractHistory(_ref) {
+	      var onChange = _ref.onChange;
+	      babelHelpers.classCallCheck(this, AbstractHistory);
+
+	      this.onChange = onChange;
+	      this.currentPath = '/';
+	    }
+
+	    AbstractHistory.prototype.start = function start() {
+	      this.onChange('/');
+	    };
+
+	    AbstractHistory.prototype.stop = function stop() {
+	      // noop
+	    };
+
+	    AbstractHistory.prototype.go = function go(path, replace, append) {
+	      path = this.currentPath = this.formatPath(path, append);
+	      this.onChange(path);
+	    };
+
+	    AbstractHistory.prototype.formatPath = function formatPath(path, append) {
+	      return path.charAt(0) === '/' ? path : resolvePath(this.currentPath, path, append);
+	    };
+
+	    return AbstractHistory;
+	  })();
+
+	  /**
+	   * Determine the reusability of an existing router view.
+	   *
+	   * @param {Directive} view
+	   * @param {Object} handler
+	   * @param {Transition} transition
+	   */
+
+	  function canReuse(view, handler, transition) {
+	    var component = view.childVM;
+	    if (!component || !handler) {
+	      return false;
+	    }
+	    // important: check view.Component here because it may
+	    // have been changed in activate hook
+	    if (view.Component !== handler.component) {
+	      return false;
+	    }
+	    var canReuseFn = getRouteConfig(component, 'canReuse');
+	    return typeof canReuseFn === 'boolean' ? canReuseFn : canReuseFn ? canReuseFn.call(component, {
+	      to: transition.to,
+	      from: transition.from
+	    }) : true; // defaults to true
+	  }
+
+	  /**
+	   * Check if a component can deactivate.
+	   *
+	   * @param {Directive} view
+	   * @param {Transition} transition
+	   * @param {Function} next
+	   */
+
+	  function canDeactivate(view, transition, next) {
+	    var fromComponent = view.childVM;
+	    var hook = getRouteConfig(fromComponent, 'canDeactivate');
+	    if (!hook) {
+	      next();
+	    } else {
+	      transition.callHook(hook, fromComponent, next, {
+	        expectBoolean: true
+	      });
+	    }
+	  }
+
+	  /**
+	   * Check if a component can activate.
+	   *
+	   * @param {Object} handler
+	   * @param {Transition} transition
+	   * @param {Function} next
+	   */
+
+	  function canActivate(handler, transition, next) {
+	    resolveAsyncComponent(handler, function (Component) {
+	      // have to check due to async-ness
+	      if (transition.aborted) {
+	        return;
+	      }
+	      // determine if this component can be activated
+	      var hook = getRouteConfig(Component, 'canActivate');
+	      if (!hook) {
+	        next();
+	      } else {
+	        transition.callHook(hook, null, next, {
+	          expectBoolean: true
+	        });
+	      }
+	    });
+	  }
+
+	  /**
+	   * Call deactivate hooks for existing router-views.
+	   *
+	   * @param {Directive} view
+	   * @param {Transition} transition
+	   * @param {Function} next
+	   */
+
+	  function deactivate(view, transition, next) {
+	    var component = view.childVM;
+	    var hook = getRouteConfig(component, 'deactivate');
+	    if (!hook) {
+	      next();
+	    } else {
+	      transition.callHooks(hook, component, next);
+	    }
+	  }
+
+	  /**
+	   * Activate / switch component for a router-view.
+	   *
+	   * @param {Directive} view
+	   * @param {Transition} transition
+	   * @param {Number} depth
+	   * @param {Function} [cb]
+	   */
+
+	  function activate(view, transition, depth, cb, reuse) {
+	    var handler = transition.activateQueue[depth];
+	    if (!handler) {
+	      saveChildView(view);
+	      if (view._bound) {
+	        view.setComponent(null);
+	      }
+	      cb && cb();
+	      return;
+	    }
+
+	    var Component = view.Component = handler.component;
+	    var activateHook = getRouteConfig(Component, 'activate');
+	    var dataHook = getRouteConfig(Component, 'data');
+	    var waitForData = getRouteConfig(Component, 'waitForData');
+
+	    view.depth = depth;
+	    view.activated = false;
+
+	    var component = undefined;
+	    var loading = !!(dataHook && !waitForData);
+
+	    // "reuse" is a flag passed down when the parent view is
+	    // either reused via keep-alive or as a child of a kept-alive view.
+	    // of course we can only reuse if the current kept-alive instance
+	    // is of the correct type.
+	    reuse = reuse && view.childVM && view.childVM.constructor === Component;
+
+	    if (reuse) {
+	      // just reuse
+	      component = view.childVM;
+	      component.$loadingRouteData = loading;
+	    } else {
+	      saveChildView(view);
+
+	      // unbuild current component. this step also destroys
+	      // and removes all nested child views.
+	      view.unbuild(true);
+
+	      // build the new component. this will also create the
+	      // direct child view of the current one. it will register
+	      // itself as view.childView.
+	      component = view.build({
+	        _meta: {
+	          $loadingRouteData: loading
+	        },
+	        created: function created() {
+	          this._routerView = view;
+	        }
+	      });
+
+	      // handle keep-alive.
+	      // when a kept-alive child vm is restored, we need to
+	      // add its cached child views into the router's view list,
+	      // and also properly update current view's child view.
+	      if (view.keepAlive) {
+	        component.$loadingRouteData = loading;
+	        var cachedChildView = component._keepAliveRouterView;
+	        if (cachedChildView) {
+	          view.childView = cachedChildView;
+	          component._keepAliveRouterView = null;
+	        }
+	      }
+	    }
+
+	    // cleanup the component in case the transition is aborted
+	    // before the component is ever inserted.
+	    var cleanup = function cleanup() {
+	      component.$destroy();
+	    };
+
+	    // actually insert the component and trigger transition
+	    var insert = function insert() {
+	      if (reuse) {
+	        cb && cb();
+	        return;
+	      }
+	      var router = transition.router;
+	      if (router._rendered || router._transitionOnLoad) {
+	        view.transition(component);
+	      } else {
+	        // no transition on first render, manual transition
+	        /* istanbul ignore if */
+	        if (view.setCurrent) {
+	          // 0.12 compat
+	          view.setCurrent(component);
+	        } else {
+	          // 1.0
+	          view.childVM = component;
+	        }
+	        component.$before(view.anchor, null, false);
+	      }
+	      cb && cb();
+	    };
+
+	    var afterData = function afterData() {
+	      // activate the child view
+	      if (view.childView) {
+	        activate(view.childView, transition, depth + 1, null, reuse || view.keepAlive);
+	      }
+	      insert();
+	    };
+
+	    // called after activation hook is resolved
+	    var afterActivate = function afterActivate() {
+	      view.activated = true;
+	      if (dataHook && waitForData) {
+	        // wait until data loaded to insert
+	        loadData(component, transition, dataHook, afterData, cleanup);
+	      } else {
+	        // load data and insert at the same time
+	        if (dataHook) {
+	          loadData(component, transition, dataHook);
+	        }
+	        afterData();
+	      }
+	    };
+
+	    if (activateHook) {
+	      transition.callHooks(activateHook, component, afterActivate, {
+	        cleanup: cleanup,
+	        postActivate: true
+	      });
+	    } else {
+	      afterActivate();
+	    }
+	  }
+
+	  /**
+	   * Reuse a view, just reload data if necessary.
+	   *
+	   * @param {Directive} view
+	   * @param {Transition} transition
+	   */
+
+	  function reuse(view, transition) {
+	    var component = view.childVM;
+	    var dataHook = getRouteConfig(component, 'data');
+	    if (dataHook) {
+	      loadData(component, transition, dataHook);
+	    }
+	  }
+
+	  /**
+	   * Asynchronously load and apply data to component.
+	   *
+	   * @param {Vue} component
+	   * @param {Transition} transition
+	   * @param {Function} hook
+	   * @param {Function} cb
+	   * @param {Function} cleanup
+	   */
+
+	  function loadData(component, transition, hook, cb, cleanup) {
+	    component.$loadingRouteData = true;
+	    transition.callHooks(hook, component, function () {
+	      component.$loadingRouteData = false;
+	      component.$emit('route-data-loaded', component);
+	      cb && cb();
+	    }, {
+	      cleanup: cleanup,
+	      postActivate: true,
+	      processData: function processData(data) {
+	        // handle promise sugar syntax
+	        var promises = [];
+	        if (isPlainObject(data)) {
+	          Object.keys(data).forEach(function (key) {
+	            var val = data[key];
+	            if (isPromise(val)) {
+	              promises.push(val.then(function (resolvedVal) {
+	                component.$set(key, resolvedVal);
+	              }));
+	            } else {
+	              component.$set(key, val);
+	            }
+	          });
+	        }
+	        if (promises.length) {
+	          return promises[0].constructor.all(promises);
+	        }
+	      }
+	    });
+	  }
+
+	  /**
+	   * Save the child view for a kept-alive view so that
+	   * we can restore it when it is switched back to.
+	   *
+	   * @param {Directive} view
+	   */
+
+	  function saveChildView(view) {
+	    if (view.keepAlive && view.childVM && view.childView) {
+	      view.childVM._keepAliveRouterView = view.childView;
+	    }
+	    view.childView = null;
+	  }
+
+	  /**
+	   * Check plain object.
+	   *
+	   * @param {*} val
+	   */
+
+	  function isPlainObject(val) {
+	    return Object.prototype.toString.call(val) === '[object Object]';
+	  }
+
+	  /**
+	   * A RouteTransition object manages the pipeline of a
+	   * router-view switching process. This is also the object
+	   * passed into user route hooks.
+	   *
+	   * @param {Router} router
+	   * @param {Route} to
+	   * @param {Route} from
+	   */
+
+	  var RouteTransition = (function () {
+	    function RouteTransition(router, to, from) {
+	      babelHelpers.classCallCheck(this, RouteTransition);
+
+	      this.router = router;
+	      this.to = to;
+	      this.from = from;
+	      this.next = null;
+	      this.aborted = false;
+	      this.done = false;
+	    }
+
+	    /**
+	     * Abort current transition and return to previous location.
+	     */
+
+	    RouteTransition.prototype.abort = function abort() {
+	      if (!this.aborted) {
+	        this.aborted = true;
+	        // if the root path throws an error during validation
+	        // on initial load, it gets caught in an infinite loop.
+	        var abortingOnLoad = !this.from.path && this.to.path === '/';
+	        if (!abortingOnLoad) {
+	          this.router.replace(this.from.path || '/');
+	        }
+	      }
+	    };
+
+	    /**
+	     * Abort current transition and redirect to a new location.
+	     *
+	     * @param {String} path
+	     */
+
+	    RouteTransition.prototype.redirect = function redirect(path) {
+	      if (!this.aborted) {
+	        this.aborted = true;
+	        if (typeof path === 'string') {
+	          path = mapParams(path, this.to.params, this.to.query);
+	        } else {
+	          path.params = path.params || this.to.params;
+	          path.query = path.query || this.to.query;
+	        }
+	        this.router.replace(path);
+	      }
+	    };
+
+	    /**
+	     * A router view transition's pipeline can be described as
+	     * follows, assuming we are transitioning from an existing
+	     * <router-view> chain [Component A, Component B] to a new
+	     * chain [Component A, Component C]:
+	     *
+	     *  A    A
+	     *  | => |
+	     *  B    C
+	     *
+	     * 1. Reusablity phase:
+	     *   -> canReuse(A, A)
+	     *   -> canReuse(B, C)
+	     *   -> determine new queues:
+	     *      - deactivation: [B]
+	     *      - activation: [C]
+	     *
+	     * 2. Validation phase:
+	     *   -> canDeactivate(B)
+	     *   -> canActivate(C)
+	     *
+	     * 3. Activation phase:
+	     *   -> deactivate(B)
+	     *   -> activate(C)
+	     *
+	     * Each of these steps can be asynchronous, and any
+	     * step can potentially abort the transition.
+	     *
+	     * @param {Function} cb
+	     */
+
+	    RouteTransition.prototype.start = function start(cb) {
+	      var transition = this;
+
+	      // determine the queue of views to deactivate
+	      var deactivateQueue = [];
+	      var view = this.router._rootView;
+	      while (view) {
+	        deactivateQueue.unshift(view);
+	        view = view.childView;
+	      }
+	      var reverseDeactivateQueue = deactivateQueue.slice().reverse();
+
+	      // determine the queue of route handlers to activate
+	      var activateQueue = this.activateQueue = toArray(this.to.matched).map(function (match) {
+	        return match.handler;
+	      });
+
+	      // 1. Reusability phase
+	      var i = undefined,
+	          reuseQueue = undefined;
+	      for (i = 0; i < reverseDeactivateQueue.length; i++) {
+	        if (!canReuse(reverseDeactivateQueue[i], activateQueue[i], transition)) {
+	          break;
+	        }
+	      }
+	      if (i > 0) {
+	        reuseQueue = reverseDeactivateQueue.slice(0, i);
+	        deactivateQueue = reverseDeactivateQueue.slice(i).reverse();
+	        activateQueue = activateQueue.slice(i);
+	      }
+
+	      // 2. Validation phase
+	      transition.runQueue(deactivateQueue, canDeactivate, function () {
+	        transition.runQueue(activateQueue, canActivate, function () {
+	          transition.runQueue(deactivateQueue, deactivate, function () {
+	            // 3. Activation phase
+
+	            // Update router current route
+	            transition.router._onTransitionValidated(transition);
+
+	            // trigger reuse for all reused views
+	            reuseQueue && reuseQueue.forEach(function (view) {
+	              return reuse(view, transition);
+	            });
+
+	            // the root of the chain that needs to be replaced
+	            // is the top-most non-reusable view.
+	            if (deactivateQueue.length) {
+	              var _view = deactivateQueue[deactivateQueue.length - 1];
+	              var depth = reuseQueue ? reuseQueue.length : 0;
+	              activate(_view, transition, depth, cb);
+	            } else {
+	              cb();
+	            }
+	          });
+	        });
+	      });
+	    };
+
+	    /**
+	     * Asynchronously and sequentially apply a function to a
+	     * queue.
+	     *
+	     * @param {Array} queue
+	     * @param {Function} fn
+	     * @param {Function} cb
+	     */
+
+	    RouteTransition.prototype.runQueue = function runQueue(queue, fn, cb) {
+	      var transition = this;
+	      step(0);
+	      function step(index) {
+	        if (index >= queue.length) {
+	          cb();
+	        } else {
+	          fn(queue[index], transition, function () {
+	            step(index + 1);
+	          });
+	        }
+	      }
+	    };
+
+	    /**
+	     * Call a user provided route transition hook and handle
+	     * the response (e.g. if the user returns a promise).
+	     *
+	     * If the user neither expects an argument nor returns a
+	     * promise, the hook is assumed to be synchronous.
+	     *
+	     * @param {Function} hook
+	     * @param {*} [context]
+	     * @param {Function} [cb]
+	     * @param {Object} [options]
+	     *                 - {Boolean} expectBoolean
+	     *                 - {Boolean} postActive
+	     *                 - {Function} processData
+	     *                 - {Function} cleanup
+	     */
+
+	    RouteTransition.prototype.callHook = function callHook(hook, context, cb) {
+	      var _ref = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
+	      var _ref$expectBoolean = _ref.expectBoolean;
+	      var expectBoolean = _ref$expectBoolean === undefined ? false : _ref$expectBoolean;
+	      var _ref$postActivate = _ref.postActivate;
+	      var postActivate = _ref$postActivate === undefined ? false : _ref$postActivate;
+	      var processData = _ref.processData;
+	      var cleanup = _ref.cleanup;
+
+	      var transition = this;
+	      var nextCalled = false;
+
+	      // abort the transition
+	      var abort = function abort() {
+	        cleanup && cleanup();
+	        transition.abort();
+	      };
+
+	      // handle errors
+	      var onError = function onError(err) {
+	        postActivate ? next() : abort();
+	        if (err && !transition.router._suppress) {
+	          warn$1('Uncaught error during transition: ');
+	          throw err instanceof Error ? err : new Error(err);
+	        }
+	      };
+
+	      // since promise swallows errors, we have to
+	      // throw it in the next tick...
+	      var onPromiseError = function onPromiseError(err) {
+	        try {
+	          onError(err);
+	        } catch (e) {
+	          setTimeout(function () {
+	            throw e;
+	          }, 0);
+	        }
+	      };
+
+	      // advance the transition to the next step
+	      var next = function next() {
+	        if (nextCalled) {
+	          warn$1('transition.next() should be called only once.');
+	          return;
+	        }
+	        nextCalled = true;
+	        if (transition.aborted) {
+	          cleanup && cleanup();
+	          return;
+	        }
+	        cb && cb();
+	      };
+
+	      var nextWithBoolean = function nextWithBoolean(res) {
+	        if (typeof res === 'boolean') {
+	          res ? next() : abort();
+	        } else if (isPromise(res)) {
+	          res.then(function (ok) {
+	            ok ? next() : abort();
+	          }, onPromiseError);
+	        } else if (!hook.length) {
+	          next();
+	        }
+	      };
+
+	      var nextWithData = function nextWithData(data) {
+	        var res = undefined;
+	        try {
+	          res = processData(data);
+	        } catch (err) {
+	          return onError(err);
+	        }
+	        if (isPromise(res)) {
+	          res.then(next, onPromiseError);
+	        } else {
+	          next();
+	        }
+	      };
+
+	      // expose a clone of the transition object, so that each
+	      // hook gets a clean copy and prevent the user from
+	      // messing with the internals.
+	      var exposed = {
+	        to: transition.to,
+	        from: transition.from,
+	        abort: abort,
+	        next: processData ? nextWithData : next,
+	        redirect: function redirect() {
+	          transition.redirect.apply(transition, arguments);
+	        }
+	      };
+
+	      // actually call the hook
+	      var res = undefined;
+	      try {
+	        res = hook.call(context, exposed);
+	      } catch (err) {
+	        return onError(err);
+	      }
+
+	      if (expectBoolean) {
+	        // boolean hooks
+	        nextWithBoolean(res);
+	      } else if (isPromise(res)) {
+	        // promise
+	        if (processData) {
+	          res.then(nextWithData, onPromiseError);
+	        } else {
+	          res.then(next, onPromiseError);
+	        }
+	      } else if (processData && isPlainOjbect(res)) {
+	        // data promise sugar
+	        nextWithData(res);
+	      } else if (!hook.length) {
+	        next();
+	      }
+	    };
+
+	    /**
+	     * Call a single hook or an array of async hooks in series.
+	     *
+	     * @param {Array} hooks
+	     * @param {*} context
+	     * @param {Function} cb
+	     * @param {Object} [options]
+	     */
+
+	    RouteTransition.prototype.callHooks = function callHooks(hooks, context, cb, options) {
+	      var _this = this;
+
+	      if (Array.isArray(hooks)) {
+	        this.runQueue(hooks, function (hook, _, next) {
+	          if (!_this.aborted) {
+	            _this.callHook(hook, context, next, options);
+	          }
+	        }, cb);
+	      } else {
+	        this.callHook(hooks, context, cb, options);
+	      }
+	    };
+
+	    return RouteTransition;
+	  })();
+
+	  function isPlainOjbect(val) {
+	    return Object.prototype.toString.call(val) === '[object Object]';
+	  }
+
+	  function toArray(val) {
+	    return val ? Array.prototype.slice.call(val) : [];
+	  }
+
+	  var internalKeysRE = /^(component|subRoutes|fullPath)$/;
+
+	  /**
+	   * Route Context Object
+	   *
+	   * @param {String} path
+	   * @param {Router} router
+	   */
+
+	  var Route = function Route(path, router) {
+	    var _this = this;
+
+	    babelHelpers.classCallCheck(this, Route);
+
+	    var matched = router._recognizer.recognize(path);
+	    if (matched) {
+	      // copy all custom fields from route configs
+	      [].forEach.call(matched, function (match) {
+	        for (var key in match.handler) {
+	          if (!internalKeysRE.test(key)) {
+	            _this[key] = match.handler[key];
+	          }
+	        }
+	      });
+	      // set query and params
+	      this.query = matched.queryParams;
+	      this.params = [].reduce.call(matched, function (prev, cur) {
+	        if (cur.params) {
+	          for (var key in cur.params) {
+	            prev[key] = cur.params[key];
+	          }
+	        }
+	        return prev;
+	      }, {});
+	    }
+	    // expose path and router
+	    this.path = path;
+	    // for internal use
+	    this.matched = matched || router._notFoundHandler;
+	    // internal reference to router
+	    Object.defineProperty(this, 'router', {
+	      enumerable: false,
+	      value: router
+	    });
+	    // Important: freeze self to prevent observation
+	    Object.freeze(this);
+	  };
+
+	  function applyOverride (Vue) {
+	    var _Vue$util = Vue.util;
+	    var extend = _Vue$util.extend;
+	    var isArray = _Vue$util.isArray;
+	    var defineReactive = _Vue$util.defineReactive;
+
+	    // override Vue's init and destroy process to keep track of router instances
+	    var init = Vue.prototype._init;
+	    Vue.prototype._init = function (options) {
+	      options = options || {};
+	      var root = options._parent || options.parent || this;
+	      var router = root.$router;
+	      var route = root.$route;
+	      if (router) {
+	        // expose router
+	        this.$router = router;
+	        router._children.push(this);
+	        /* istanbul ignore if */
+	        if (this._defineMeta) {
+	          // 0.12
+	          this._defineMeta('$route', route);
+	        } else {
+	          // 1.0
+	          defineReactive(this, '$route', route);
+	        }
+	      }
+	      init.call(this, options);
+	    };
+
+	    var destroy = Vue.prototype._destroy;
+	    Vue.prototype._destroy = function () {
+	      if (!this._isBeingDestroyed && this.$router) {
+	        this.$router._children.$remove(this);
+	      }
+	      destroy.apply(this, arguments);
+	    };
+
+	    // 1.0 only: enable route mixins
+	    var strats = Vue.config.optionMergeStrategies;
+	    var hooksToMergeRE = /^(data|activate|deactivate)$/;
+
+	    if (strats) {
+	      strats.route = function (parentVal, childVal) {
+	        if (!childVal) return parentVal;
+	        if (!parentVal) return childVal;
+	        var ret = {};
+	        extend(ret, parentVal);
+	        for (var key in childVal) {
+	          var a = ret[key];
+	          var b = childVal[key];
+	          // for data, activate and deactivate, we need to merge them into
+	          // arrays similar to lifecycle hooks.
+	          if (a && hooksToMergeRE.test(key)) {
+	            ret[key] = (isArray(a) ? a : [a]).concat(b);
+	          } else {
+	            ret[key] = b;
+	          }
+	        }
+	        return ret;
+	      };
+	    }
+	  }
+
+	  function View (Vue) {
+
+	    var _ = Vue.util;
+	    var componentDef =
+	    // 0.12
+	    Vue.directive('_component') ||
+	    // 1.0
+	    Vue.internalDirectives.component;
+	    // <router-view> extends the internal component directive
+	    var viewDef = _.extend({}, componentDef);
+
+	    // with some overrides
+	    _.extend(viewDef, {
+
+	      _isRouterView: true,
+
+	      bind: function bind() {
+	        var route = this.vm.$route;
+	        /* istanbul ignore if */
+	        if (!route) {
+	          warn$1('<router-view> can only be used inside a ' + 'router-enabled app.');
+	          return;
+	        }
+	        // force dynamic directive so v-component doesn't
+	        // attempt to build right now
+	        this._isDynamicLiteral = true;
+	        // finally, init by delegating to v-component
+	        componentDef.bind.call(this);
+
+	        // locate the parent view
+	        var parentView = undefined;
+	        var parent = this.vm;
+	        while (parent) {
+	          if (parent._routerView) {
+	            parentView = parent._routerView;
+	            break;
+	          }
+	          parent = parent.$parent;
+	        }
+	        if (parentView) {
+	          // register self as a child of the parent view,
+	          // instead of activating now. This is so that the
+	          // child's activate hook is called after the
+	          // parent's has resolved.
+	          this.parentView = parentView;
+	          parentView.childView = this;
+	        } else {
+	          // this is the root view!
+	          var router = route.router;
+	          router._rootView = this;
+	        }
+
+	        // handle late-rendered view
+	        // two possibilities:
+	        // 1. root view rendered after transition has been
+	        //    validated;
+	        // 2. child view rendered after parent view has been
+	        //    activated.
+	        var transition = route.router._currentTransition;
+	        if (!parentView && transition.done || parentView && parentView.activated) {
+	          var depth = parentView ? parentView.depth + 1 : 0;
+	          activate(this, transition, depth);
+	        }
+	      },
+
+	      unbind: function unbind() {
+	        if (this.parentView) {
+	          this.parentView.childView = null;
+	        }
+	        componentDef.unbind.call(this);
+	      }
+	    });
+
+	    Vue.elementDirective('router-view', viewDef);
+	  }
+
+	  var trailingSlashRE = /\/$/;
+	  var regexEscapeRE = /[-.*+?^${}()|[\]\/\\]/g;
+	  var queryStringRE = /\?.*$/;
+
+	  // install v-link, which provides navigation support for
+	  // HTML5 history mode
+	  function Link (Vue) {
+	    var _Vue$util = Vue.util;
+	    var _bind = _Vue$util.bind;
+	    var isObject = _Vue$util.isObject;
+	    var addClass = _Vue$util.addClass;
+	    var removeClass = _Vue$util.removeClass;
+
+	    var onPriority = Vue.directive('on').priority;
+	    var LINK_UPDATE = '__vue-router-link-update__';
+
+	    var activeId = 0;
+
+	    Vue.directive('link-active', {
+	      priority: 9999,
+	      bind: function bind() {
+	        var _this = this;
+
+	        var id = String(activeId++);
+	        // collect v-links contained within this element.
+	        // we need do this here before the parent-child relationship
+	        // gets messed up by terminal directives (if, for, components)
+	        var childLinks = this.el.querySelectorAll('[v-link]');
+	        for (var i = 0, l = childLinks.length; i < l; i++) {
+	          var link = childLinks[i];
+	          var existingId = link.getAttribute(LINK_UPDATE);
+	          var value = existingId ? existingId + ',' + id : id;
+	          // leave a mark on the link element which can be persisted
+	          // through fragment clones.
+	          link.setAttribute(LINK_UPDATE, value);
+	        }
+	        this.vm.$on(LINK_UPDATE, this.cb = function (link, path) {
+	          if (link.activeIds.indexOf(id) > -1) {
+	            link.updateClasses(path, _this.el);
+	          }
+	        });
+	      },
+	      unbind: function unbind() {
+	        this.vm.$off(LINK_UPDATE, this.cb);
+	      }
+	    });
+
+	    Vue.directive('link', {
+	      priority: onPriority - 2,
+
+	      bind: function bind() {
+	        var vm = this.vm;
+	        /* istanbul ignore if */
+	        if (!vm.$route) {
+	          warn$1('v-link can only be used inside a router-enabled app.');
+	          return;
+	        }
+	        this.router = vm.$route.router;
+	        // update things when the route changes
+	        this.unwatch = vm.$watch('$route', _bind(this.onRouteUpdate, this));
+	        // check v-link-active ids
+	        var activeIds = this.el.getAttribute(LINK_UPDATE);
+	        if (activeIds) {
+	          this.el.removeAttribute(LINK_UPDATE);
+	          this.activeIds = activeIds.split(',');
+	        }
+	        // no need to handle click if link expects to be opened
+	        // in a new window/tab.
+	        /* istanbul ignore if */
+	        if (this.el.tagName === 'A' && this.el.getAttribute('target') === '_blank') {
+	          return;
+	        }
+	        // handle click
+	        this.handler = _bind(this.onClick, this);
+	        this.el.addEventListener('click', this.handler);
+	      },
+
+	      update: function update(target) {
+	        this.target = target;
+	        if (isObject(target)) {
+	          this.append = target.append;
+	          this.exact = target.exact;
+	          this.prevActiveClass = this.activeClass;
+	          this.activeClass = target.activeClass;
+	        }
+	        this.onRouteUpdate(this.vm.$route);
+	      },
+
+	      onClick: function onClick(e) {
+	        // don't redirect with control keys
+	        /* istanbul ignore if */
+	        if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+	        // don't redirect when preventDefault called
+	        /* istanbul ignore if */
+	        if (e.defaultPrevented) return;
+	        // don't redirect on right click
+	        /* istanbul ignore if */
+	        if (e.button !== 0) return;
+
+	        var target = this.target;
+	        if (target) {
+	          // v-link with expression, just go
+	          e.preventDefault();
+	          this.router.go(target);
+	        } else {
+	          // no expression, delegate for an <a> inside
+	          var el = e.target;
+	          while (el.tagName !== 'A' && el !== this.el) {
+	            el = el.parentNode;
+	          }
+	          if (el.tagName === 'A' && sameOrigin(el)) {
+	            e.preventDefault();
+	            var path = el.pathname;
+	            if (this.router.history.root) {
+	              path = path.replace(this.router.history.rootRE, '');
+	            }
+	            this.router.go({
+	              path: path,
+	              replace: target && target.replace,
+	              append: target && target.append
+	            });
+	          }
+	        }
+	      },
+
+	      onRouteUpdate: function onRouteUpdate(route) {
+	        // router.stringifyPath is dependent on current route
+	        // and needs to be called again whenver route changes.
+	        var newPath = this.router.stringifyPath(this.target);
+	        if (this.path !== newPath) {
+	          this.path = newPath;
+	          this.updateActiveMatch();
+	          this.updateHref();
+	        }
+	        if (this.activeIds) {
+	          this.vm.$emit(LINK_UPDATE, this, route.path);
+	        } else {
+	          this.updateClasses(route.path, this.el);
+	        }
+	      },
+
+	      updateActiveMatch: function updateActiveMatch() {
+	        this.activeRE = this.path && !this.exact ? new RegExp('^' + this.path.replace(/\/$/, '').replace(queryStringRE, '').replace(regexEscapeRE, '\\$&') + '(\\/|$)') : null;
+	      },
+
+	      updateHref: function updateHref() {
+	        if (this.el.tagName !== 'A') {
+	          return;
+	        }
+	        var path = this.path;
+	        var router = this.router;
+	        var isAbsolute = path.charAt(0) === '/';
+	        // do not format non-hash relative paths
+	        var href = path && (router.mode === 'hash' || isAbsolute) ? router.history.formatPath(path, this.append) : path;
+	        if (href) {
+	          this.el.href = href;
+	        } else {
+	          this.el.removeAttribute('href');
+	        }
+	      },
+
+	      updateClasses: function updateClasses(path, el) {
+	        var activeClass = this.activeClass || this.router._linkActiveClass;
+	        // clear old class
+	        if (this.prevActiveClass && this.prevActiveClass !== activeClass) {
+	          toggleClasses(el, this.prevActiveClass, removeClass);
+	        }
+	        // remove query string before matching
+	        var dest = this.path.replace(queryStringRE, '');
+	        path = path.replace(queryStringRE, '');
+	        // add new class
+	        if (this.exact) {
+	          if (dest === path ||
+	          // also allow additional trailing slash
+	          dest.charAt(dest.length - 1) !== '/' && dest === path.replace(trailingSlashRE, '')) {
+	            toggleClasses(el, activeClass, addClass);
+	          } else {
+	            toggleClasses(el, activeClass, removeClass);
+	          }
+	        } else {
+	          if (this.activeRE && this.activeRE.test(path)) {
+	            toggleClasses(el, activeClass, addClass);
+	          } else {
+	            toggleClasses(el, activeClass, removeClass);
+	          }
+	        }
+	      },
+
+	      unbind: function unbind() {
+	        this.el.removeEventListener('click', this.handler);
+	        this.unwatch && this.unwatch();
+	      }
+	    });
+
+	    function sameOrigin(link) {
+	      return link.protocol === location.protocol && link.hostname === location.hostname && link.port === location.port;
+	    }
+
+	    // this function is copied from v-bind:class implementation until
+	    // we properly expose it...
+	    function toggleClasses(el, key, fn) {
+	      key = key.trim();
+	      if (key.indexOf(' ') === -1) {
+	        fn(el, key);
+	        return;
+	      }
+	      var keys = key.split(/\s+/);
+	      for (var i = 0, l = keys.length; i < l; i++) {
+	        fn(el, keys[i]);
+	      }
+	    }
+	  }
+
+	  var historyBackends = {
+	    abstract: AbstractHistory,
+	    hash: HashHistory,
+	    html5: HTML5History
+	  };
+
+	  // late bind during install
+	  var Vue = undefined;
+
+	  /**
+	   * Router constructor
+	   *
+	   * @param {Object} [options]
+	   */
+
+	  var Router = (function () {
+	    function Router() {
+	      var _this = this;
+
+	      var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	      var _ref$hashbang = _ref.hashbang;
+	      var hashbang = _ref$hashbang === undefined ? true : _ref$hashbang;
+	      var _ref$abstract = _ref.abstract;
+	      var abstract = _ref$abstract === undefined ? false : _ref$abstract;
+	      var _ref$history = _ref.history;
+	      var history = _ref$history === undefined ? false : _ref$history;
+	      var _ref$saveScrollPosition = _ref.saveScrollPosition;
+	      var saveScrollPosition = _ref$saveScrollPosition === undefined ? false : _ref$saveScrollPosition;
+	      var _ref$transitionOnLoad = _ref.transitionOnLoad;
+	      var transitionOnLoad = _ref$transitionOnLoad === undefined ? false : _ref$transitionOnLoad;
+	      var _ref$suppressTransitionError = _ref.suppressTransitionError;
+	      var suppressTransitionError = _ref$suppressTransitionError === undefined ? false : _ref$suppressTransitionError;
+	      var _ref$root = _ref.root;
+	      var root = _ref$root === undefined ? null : _ref$root;
+	      var _ref$linkActiveClass = _ref.linkActiveClass;
+	      var linkActiveClass = _ref$linkActiveClass === undefined ? 'v-link-active' : _ref$linkActiveClass;
+	      babelHelpers.classCallCheck(this, Router);
+
+	      /* istanbul ignore if */
+	      if (!Router.installed) {
+	        throw new Error('Please install the Router with Vue.use() before ' + 'creating an instance.');
+	      }
+
+	      // Vue instances
+	      this.app = null;
+	      this._children = [];
+
+	      // route recognizer
+	      this._recognizer = new RouteRecognizer();
+	      this._guardRecognizer = new RouteRecognizer();
+
+	      // state
+	      this._started = false;
+	      this._startCb = null;
+	      this._currentRoute = {};
+	      this._currentTransition = null;
+	      this._previousTransition = null;
+	      this._notFoundHandler = null;
+	      this._notFoundRedirect = null;
+	      this._beforeEachHooks = [];
+	      this._afterEachHooks = [];
+
+	      // trigger transition on initial render?
+	      this._rendered = false;
+	      this._transitionOnLoad = transitionOnLoad;
+
+	      // history mode
+	      this._root = root;
+	      this._abstract = abstract;
+	      this._hashbang = hashbang;
+
+	      // check if HTML5 history is available
+	      var hasPushState = typeof window !== 'undefined' && window.history && window.history.pushState;
+	      this._history = history && hasPushState;
+	      this._historyFallback = history && !hasPushState;
+
+	      // create history object
+	      var inBrowser = Vue.util.inBrowser;
+	      this.mode = !inBrowser || this._abstract ? 'abstract' : this._history ? 'html5' : 'hash';
+
+	      var History = historyBackends[this.mode];
+	      this.history = new History({
+	        root: root,
+	        hashbang: this._hashbang,
+	        onChange: function onChange(path, state, anchor) {
+	          _this._match(path, state, anchor);
+	        }
+	      });
+
+	      // other options
+	      this._saveScrollPosition = saveScrollPosition;
+	      this._linkActiveClass = linkActiveClass;
+	      this._suppress = suppressTransitionError;
+	    }
+
+	    /**
+	     * Allow directly passing components to a route
+	     * definition.
+	     *
+	     * @param {String} path
+	     * @param {Object} handler
+	     */
+
+	    // API ===================================================
+
+	    /**
+	    * Register a map of top-level paths.
+	    *
+	    * @param {Object} map
+	    */
+
+	    Router.prototype.map = function map(_map) {
+	      for (var route in _map) {
+	        this.on(route, _map[route]);
+	      }
+	      return this;
+	    };
+
+	    /**
+	     * Register a single root-level path
+	     *
+	     * @param {String} rootPath
+	     * @param {Object} handler
+	     *                 - {String} component
+	     *                 - {Object} [subRoutes]
+	     *                 - {Boolean} [forceRefresh]
+	     *                 - {Function} [before]
+	     *                 - {Function} [after]
+	     */
+
+	    Router.prototype.on = function on(rootPath, handler) {
+	      if (rootPath === '*') {
+	        this._notFound(handler);
+	      } else {
+	        this._addRoute(rootPath, handler, []);
+	      }
+	      return this;
+	    };
+
+	    /**
+	     * Set redirects.
+	     *
+	     * @param {Object} map
+	     */
+
+	    Router.prototype.redirect = function redirect(map) {
+	      for (var path in map) {
+	        this._addRedirect(path, map[path]);
+	      }
+	      return this;
+	    };
+
+	    /**
+	     * Set aliases.
+	     *
+	     * @param {Object} map
+	     */
+
+	    Router.prototype.alias = function alias(map) {
+	      for (var path in map) {
+	        this._addAlias(path, map[path]);
+	      }
+	      return this;
+	    };
+
+	    /**
+	     * Set global before hook.
+	     *
+	     * @param {Function} fn
+	     */
+
+	    Router.prototype.beforeEach = function beforeEach(fn) {
+	      this._beforeEachHooks.push(fn);
+	      return this;
+	    };
+
+	    /**
+	     * Set global after hook.
+	     *
+	     * @param {Function} fn
+	     */
+
+	    Router.prototype.afterEach = function afterEach(fn) {
+	      this._afterEachHooks.push(fn);
+	      return this;
+	    };
+
+	    /**
+	     * Navigate to a given path.
+	     * The path can be an object describing a named path in
+	     * the format of { name: '...', params: {}, query: {}}
+	     * The path is assumed to be already decoded, and will
+	     * be resolved against root (if provided)
+	     *
+	     * @param {String|Object} path
+	     * @param {Boolean} [replace]
+	     */
+
+	    Router.prototype.go = function go(path) {
+	      var replace = false;
+	      var append = false;
+	      if (Vue.util.isObject(path)) {
+	        replace = path.replace;
+	        append = path.append;
+	      }
+	      path = this.stringifyPath(path);
+	      if (path) {
+	        this.history.go(path, replace, append);
+	      }
+	    };
+
+	    /**
+	     * Short hand for replacing current path
+	     *
+	     * @param {String} path
+	     */
+
+	    Router.prototype.replace = function replace(path) {
+	      if (typeof path === 'string') {
+	        path = { path: path };
+	      }
+	      path.replace = true;
+	      this.go(path);
+	    };
+
+	    /**
+	     * Start the router.
+	     *
+	     * @param {VueConstructor} App
+	     * @param {String|Element} container
+	     * @param {Function} [cb]
+	     */
+
+	    Router.prototype.start = function start(App, container, cb) {
+	      /* istanbul ignore if */
+	      if (this._started) {
+	        warn$1('already started.');
+	        return;
+	      }
+	      this._started = true;
+	      this._startCb = cb;
+	      if (!this.app) {
+	        /* istanbul ignore if */
+	        if (!App || !container) {
+	          throw new Error('Must start vue-router with a component and a ' + 'root container.');
+	        }
+	        /* istanbul ignore if */
+	        if (App instanceof Vue) {
+	          throw new Error('Must start vue-router with a component, not a ' + 'Vue instance.');
+	        }
+	        this._appContainer = container;
+	        var Ctor = this._appConstructor = typeof App === 'function' ? App : Vue.extend(App);
+	        // give it a name for better debugging
+	        Ctor.options.name = Ctor.options.name || 'RouterApp';
+	      }
+
+	      // handle history fallback in browsers that do not
+	      // support HTML5 history API
+	      if (this._historyFallback) {
+	        var _location = window.location;
+	        var _history = new HTML5History({ root: this._root });
+	        var path = _history.root ? _location.pathname.replace(_history.rootRE, '') : _location.pathname;
+	        if (path && path !== '/') {
+	          _location.assign((_history.root || '') + '/' + this.history.formatPath(path) + _location.search);
+	          return;
+	        }
+	      }
+
+	      this.history.start();
+	    };
+
+	    /**
+	     * Stop listening to route changes.
+	     */
+
+	    Router.prototype.stop = function stop() {
+	      this.history.stop();
+	      this._started = false;
+	    };
+
+	    /**
+	     * Normalize named route object / string paths into
+	     * a string.
+	     *
+	     * @param {Object|String|Number} path
+	     * @return {String}
+	     */
+
+	    Router.prototype.stringifyPath = function stringifyPath(path) {
+	      var generatedPath = '';
+	      if (path && typeof path === 'object') {
+	        if (path.name) {
+	          var extend = Vue.util.extend;
+	          var currentParams = this._currentTransition && this._currentTransition.to.params;
+	          var targetParams = path.params || {};
+	          var params = currentParams ? extend(extend({}, currentParams), targetParams) : targetParams;
+	          generatedPath = encodeURI(this._recognizer.generate(path.name, params));
+	        } else if (path.path) {
+	          generatedPath = encodeURI(path.path);
+	        }
+	        if (path.query) {
+	          // note: the generated query string is pre-URL-encoded by the recognizer
+	          var query = this._recognizer.generateQueryString(path.query);
+	          if (generatedPath.indexOf('?') > -1) {
+	            generatedPath += '&' + query.slice(1);
+	          } else {
+	            generatedPath += query;
+	          }
+	        }
+	      } else {
+	        generatedPath = encodeURI(path ? path + '' : '');
+	      }
+	      return generatedPath;
+	    };
+
+	    // Internal methods ======================================
+
+	    /**
+	    * Add a route containing a list of segments to the internal
+	    * route recognizer. Will be called recursively to add all
+	    * possible sub-routes.
+	    *
+	    * @param {String} path
+	    * @param {Object} handler
+	    * @param {Array} segments
+	    */
+
+	    Router.prototype._addRoute = function _addRoute(path, handler, segments) {
+	      guardComponent(path, handler);
+	      handler.path = path;
+	      handler.fullPath = (segments.reduce(function (path, segment) {
+	        return path + segment.path;
+	      }, '') + path).replace('//', '/');
+	      segments.push({
+	        path: path,
+	        handler: handler
+	      });
+	      this._recognizer.add(segments, {
+	        as: handler.name
+	      });
+	      // add sub routes
+	      if (handler.subRoutes) {
+	        for (var subPath in handler.subRoutes) {
+	          // recursively walk all sub routes
+	          this._addRoute(subPath, handler.subRoutes[subPath],
+	          // pass a copy in recursion to avoid mutating
+	          // across branches
+	          segments.slice());
+	        }
+	      }
+	    };
+
+	    /**
+	     * Set the notFound route handler.
+	     *
+	     * @param {Object} handler
+	     */
+
+	    Router.prototype._notFound = function _notFound(handler) {
+	      guardComponent('*', handler);
+	      this._notFoundHandler = [{ handler: handler }];
+	    };
+
+	    /**
+	     * Add a redirect record.
+	     *
+	     * @param {String} path
+	     * @param {String} redirectPath
+	     */
+
+	    Router.prototype._addRedirect = function _addRedirect(path, redirectPath) {
+	      if (path === '*') {
+	        this._notFoundRedirect = redirectPath;
+	      } else {
+	        this._addGuard(path, redirectPath, this.replace);
+	      }
+	    };
+
+	    /**
+	     * Add an alias record.
+	     *
+	     * @param {String} path
+	     * @param {String} aliasPath
+	     */
+
+	    Router.prototype._addAlias = function _addAlias(path, aliasPath) {
+	      this._addGuard(path, aliasPath, this._match);
+	    };
+
+	    /**
+	     * Add a path guard.
+	     *
+	     * @param {String} path
+	     * @param {String} mappedPath
+	     * @param {Function} handler
+	     */
+
+	    Router.prototype._addGuard = function _addGuard(path, mappedPath, _handler) {
+	      var _this2 = this;
+
+	      this._guardRecognizer.add([{
+	        path: path,
+	        handler: function handler(match, query) {
+	          var realPath = mapParams(mappedPath, match.params, query);
+	          _handler.call(_this2, realPath);
+	        }
+	      }]);
+	    };
+
+	    /**
+	     * Check if a path matches any redirect records.
+	     *
+	     * @param {String} path
+	     * @return {Boolean} - if true, will skip normal match.
+	     */
+
+	    Router.prototype._checkGuard = function _checkGuard(path) {
+	      var matched = this._guardRecognizer.recognize(path, true);
+	      if (matched) {
+	        matched[0].handler(matched[0], matched.queryParams);
+	        return true;
+	      } else if (this._notFoundRedirect) {
+	        matched = this._recognizer.recognize(path);
+	        if (!matched) {
+	          this.replace(this._notFoundRedirect);
+	          return true;
+	        }
+	      }
+	    };
+
+	    /**
+	     * Match a URL path and set the route context on vm,
+	     * triggering view updates.
+	     *
+	     * @param {String} path
+	     * @param {Object} [state]
+	     * @param {String} [anchor]
+	     */
+
+	    Router.prototype._match = function _match(path, state, anchor) {
+	      var _this3 = this;
+
+	      if (this._checkGuard(path)) {
+	        return;
+	      }
+
+	      var currentRoute = this._currentRoute;
+	      var currentTransition = this._currentTransition;
+
+	      if (currentTransition) {
+	        if (currentTransition.to.path === path) {
+	          // do nothing if we have an active transition going to the same path
+	          return;
+	        } else if (currentRoute.path === path) {
+	          // We are going to the same path, but we also have an ongoing but
+	          // not-yet-validated transition. Abort that transition and reset to
+	          // prev transition.
+	          currentTransition.aborted = true;
+	          this._currentTransition = this._prevTransition;
+	          return;
+	        } else {
+	          // going to a totally different path. abort ongoing transition.
+	          currentTransition.aborted = true;
+	        }
+	      }
+
+	      // construct new route and transition context
+	      var route = new Route(path, this);
+	      var transition = new RouteTransition(this, route, currentRoute);
+
+	      // current transition is updated right now.
+	      // however, current route will only be updated after the transition has
+	      // been validated.
+	      this._prevTransition = currentTransition;
+	      this._currentTransition = transition;
+
+	      if (!this.app) {
+	        (function () {
+	          // initial render
+	          var router = _this3;
+	          _this3.app = new _this3._appConstructor({
+	            el: _this3._appContainer,
+	            created: function created() {
+	              this.$router = router;
+	            },
+	            _meta: {
+	              $route: route
+	            }
+	          });
+	        })();
+	      }
+
+	      // check global before hook
+	      var beforeHooks = this._beforeEachHooks;
+	      var startTransition = function startTransition() {
+	        transition.start(function () {
+	          _this3._postTransition(route, state, anchor);
+	        });
+	      };
+
+	      if (beforeHooks.length) {
+	        transition.runQueue(beforeHooks, function (hook, _, next) {
+	          if (transition === _this3._currentTransition) {
+	            transition.callHook(hook, null, next, {
+	              expectBoolean: true
+	            });
+	          }
+	        }, startTransition);
+	      } else {
+	        startTransition();
+	      }
+
+	      if (!this._rendered && this._startCb) {
+	        this._startCb.call(null);
+	      }
+
+	      // HACK:
+	      // set rendered to true after the transition start, so
+	      // that components that are acitvated synchronously know
+	      // whether it is the initial render.
+	      this._rendered = true;
+	    };
+
+	    /**
+	     * Set current to the new transition.
+	     * This is called by the transition object when the
+	     * validation of a route has succeeded.
+	     *
+	     * @param {Transition} transition
+	     */
+
+	    Router.prototype._onTransitionValidated = function _onTransitionValidated(transition) {
+	      // set current route
+	      var route = this._currentRoute = transition.to;
+	      // update route context for all children
+	      if (this.app.$route !== route) {
+	        this.app.$route = route;
+	        this._children.forEach(function (child) {
+	          child.$route = route;
+	        });
+	      }
+	      // call global after hook
+	      if (this._afterEachHooks.length) {
+	        this._afterEachHooks.forEach(function (hook) {
+	          return hook.call(null, {
+	            to: transition.to,
+	            from: transition.from
+	          });
+	        });
+	      }
+	      this._currentTransition.done = true;
+	    };
+
+	    /**
+	     * Handle stuff after the transition.
+	     *
+	     * @param {Route} route
+	     * @param {Object} [state]
+	     * @param {String} [anchor]
+	     */
+
+	    Router.prototype._postTransition = function _postTransition(route, state, anchor) {
+	      // handle scroll positions
+	      // saved scroll positions take priority
+	      // then we check if the path has an anchor
+	      var pos = state && state.pos;
+	      if (pos && this._saveScrollPosition) {
+	        Vue.nextTick(function () {
+	          window.scrollTo(pos.x, pos.y);
+	        });
+	      } else if (anchor) {
+	        Vue.nextTick(function () {
+	          var el = document.getElementById(anchor.slice(1));
+	          if (el) {
+	            window.scrollTo(window.scrollX, el.offsetTop);
+	          }
+	        });
+	      }
+	    };
+
+	    return Router;
+	  })();
+
+	  function guardComponent(path, handler) {
+	    var comp = handler.component;
+	    if (Vue.util.isPlainObject(comp)) {
+	      comp = handler.component = Vue.extend(comp);
+	    }
+	    /* istanbul ignore if */
+	    if (typeof comp !== 'function') {
+	      handler.component = null;
+	      warn$1('invalid component for route "' + path + '".');
+	    }
+	  }
+
+	  /* Installation */
+
+	  Router.installed = false;
+
+	  /**
+	   * Installation interface.
+	   * Install the necessary directives.
+	   */
+
+	  Router.install = function (externalVue) {
+	    /* istanbul ignore if */
+	    if (Router.installed) {
+	      warn$1('already installed.');
+	      return;
+	    }
+	    Vue = externalVue;
+	    applyOverride(Vue);
+	    View(Vue);
+	    Link(Vue);
+	    exports$1.Vue = Vue;
+	    Router.installed = true;
+	  };
+
+	  // auto install
+	  /* istanbul ignore if */
+	  if (typeof window !== 'undefined' && window.Vue) {
+	    window.Vue.use(Router);
+	  }
+
+	  return Router;
+
+	}));
 
 /***/ }
 /******/ ]);
