@@ -42,3 +42,4 @@ lol.bat
 .idea
 
 build.js
+*.map
