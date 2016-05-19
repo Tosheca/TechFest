@@ -25,18 +25,14 @@ router.post('/api/register', function *() {
 		password: password
 	})
 
+	try {
+		yield user.save()
+		this.body = "Success"
+	}
+	catch(error) {
+		this.body = error.message
+	}
 
-		try {
-			yield user.save()
-			this.body = "Success"
-		}
-		catch(error) {
-			this.body = error.message
-		}
-	}
-	else {
-		this.body = "These passwords do not match!"
-	}
 })
 
 router.post('/api/login', function *() {
