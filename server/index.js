@@ -1,6 +1,7 @@
 var mongoose = require("mongoose")
 
 var koa = require("koa")
+var jwt = require('koa-jwt');
 var bodyParser = require('koa-bodyparser');
 var router = require('koa-router')();
 var serve = require('koa-static');
@@ -9,11 +10,12 @@ var User = require("./models/user.js")
 
 
 const crypto = require('crypto');
+const secret = "illuminati"
 
 mongoose.connect('mongodb://localhost/test');
 
 var app = koa()
-
+app.use(jwt({ secret }));
 
 router.post('/api/register', function *() {
 	let {username, password, confirmPassword} = this.request.body

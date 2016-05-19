@@ -12,7 +12,6 @@ UserSchema.pre('save', function(next) {
 
 	user.password = crypto.createHash('sha256').update(this.password).digest("base64")
 	next();
-
 });
 
 var UserModel = mongoose.model("User", UserSchema)
