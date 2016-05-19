@@ -5,25 +5,24 @@ var bodyParser = require('koa-bodyparser');
 var router = require('koa-router')();
 var serve = require('koa-static');
 
+var User = require("./models/user.js")
+
+
 const crypto = require('crypto');
 
 mongoose.connect('mongodb://localhost/test');
 
 var app = koa()
 
-var User = mongoose.model("User", {
-	name: { type: String, index: { unique: true }, required: true },
-	password: { type: String, required: true }
-})
 
 router.post('/api/register', function *() {
 	let {username, password, confirmPassword} = this.request.body
 
-	if (confirmPassword == password) {
-		let user = new User({
-			name: username,
-			password: crypto.createHash('sha256').update(password).digest("base64")
-		})
+	let user = new User({
+		name: username,
+		password: password
+	})
+
 
 		try {
 			yield user.save()

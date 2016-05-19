@@ -24,7 +24,7 @@ export default {
 
 	methods: {
 			
-				addUser: function() {
+			addUser: function() {
 					var name = this.newUsername.trim()
 					var pass = this.newPassword.trim()
 
@@ -55,7 +55,20 @@ export default {
 
 <style>
 	#app {
+		text-align: center;
+
+	}
+
+	ul {
 		display: flex;
 		justify-content: center;
+		flex-direction: column;
+
+	}
+
+
+	ul li {
+		text-align: center;
+		list-style: none;
 	}
 </style>
