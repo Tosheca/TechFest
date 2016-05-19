@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 let router = new VueRouter()
 
 router.map({
-    '/login': {
+    '/': {
         component: Login
     },
     '/register': {

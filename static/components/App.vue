@@ -1,30 +1,40 @@
 <template>
 
+
+
 <div id="app">
-	<nav>
+	<div id="left"><!-- logo -->
+		
+	</div>
+	<div id="right">
+		<div class="content">
+			<router-view></router-view>
+		</div>
+	</div>
+
+	<!-- <nav>
 		<div class="right">
 			<a v-link="{ path: '/' }">Home</a>
 		</div>
 
 		<div class="left">
-			<a v-link="{ path: '/register' }">Register</a>
 			<a v-link="{ path: '/login' }">Login</a>
 		</div>
-	</nav>
+	</nav> -->
 
-	<input v-model="username" v-on:keyup.enter="addUser(username, password)" placeholder="username">
-	<input v-model="password" v-on:keyup.enter="addUser(username, password)" placeholder="password">
+	<!-- 
 
 
 		<ul>
-		<li v-for="user in users">
-			<span>{{ user.name }} : {{user.pass}}</span>
-			<button v-on:click="removeUser($index)">X</button>
-		</li>
+			<li v-for="user in users">
+				<span>{{ user.name }} : {{user.pass}}</span>
+				<button v-on:click="removeUser($index)">X</button>
+			</li>
 		</ul>
+-->
 </div>
 
-<router-view></router-view>
+
 
 
 </template>
@@ -62,41 +72,76 @@ export default {
 </script>
 
 <style>
-	#app {
-		text-align: center;
-	}
+#right {
+	border-left: 65vh solid transparent;
+	border-right: 0vh solid transparent;
+	border-bottom: 100vh solid lightblue;
+	height: 0;
+	width: 37%;
+	z-index: 0;
+	position: fixed;
+    right: 0px;
+}
 
-	ul {
-		display: flex;
+#right .content {
+	display: flex;
+	align-items: center;
+	height: 100vh;
+}
 
-		justify-content: center;
-		flex-direction: column;
-	}
+#right .content .form {
+	display: flex;
+	flex-direction: column;
 
-	nav {
-		display: flex;
+	border-color: white;
+	border-style: solid;
+	transition: all 0.4s ease-in-out;
+	border-radius: 0px;
 
-		width: 100vw;
-		background-color: #3467af;
-		
-		justify-content: space-between;
-	}
+}
 
-	nav div > a {
-		color: white;
+#right .content .form legend {
+	color: white;
+	text-align: center;
+}
 
-		padding: 10px;
-		display: inline-block;
-		width: 80px;
-		text-decoration: none;
-	}
+input[type=text] {
+	font-size: 15px;
+	background: white; 
+	border: 1px double #DDD; 
+	box-shadow: inset 0 0 5px #333; 
+	color: #666; 
+	outline: none; 
+	height: 25px; 
+	width: 350px; 
+	text-align: left;
+	display: block; 
+	margin: 10px auto 10px auto;
+	padding-left: 10px;
+}
 
-	nav div > a:hover {
-		background-color: #4077bf;
-	}
+input[type=button], button, .button {
+	border: none;
+	background-color: white;
+	padding: 5px 15px;
+	text-decoration: none;
 
-	ul li {
-		text-align: center;
-		list-style: none;
-	}
+	color: lightblue;
+	transition: all 0.2s ease-in;
+	box-shadow: 0 0 0px #666;
+	cursor: pointer;
+	width: 20%;
+    text-align: center;
+}
+
+input[type=button]:hover, button:hover, .button:hover{
+	background-color: white;
+	color: #666;
+	box-shadow: 0 0 8px #666;
+}
+
+input[type=button]:active, button:active, .button:active {
+	background: lightblue;
+	transition: all 0.2s ease-in;
+}
 </style>
