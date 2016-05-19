@@ -9,6 +9,8 @@
       <button v-on:click="removeUser($index)">X</button>
     </li>
   	</ul>
+
+    <router-view></router-view>
   	
 
 </div>
