@@ -15,6 +15,7 @@
 
 </template>
 
+
 <script>
 
 export default {
@@ -58,6 +59,9 @@ export default {
 
 <style>
 
+	#app{
+		text-align: center;
+	}
 
 
 </style>

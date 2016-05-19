@@ -14933,7 +14933,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n", ""]);
+	exports.push([module.id, "\n\n#app{\n\ttext-align: center;\n}\n\n\n", ""]);
 
 	// exports
 
