@@ -8,17 +8,16 @@ var serve = require('koa-static');
 
 var User = require("./models/user.js")
 
-
 const crypto = require('crypto');
 const secret = "illuminati"
 
 mongoose.connect('mongodb://localhost/test');
 
 var app = koa()
-app.use(jwt({ secret: secret, passthrough: true }));
+app.use(jwt( { secret: secret, passthrough: true } ));
 
 router.post('/api/register', function *() {
-	let {username, password, confirmPassword} = this.request.body
+	let { username, password, confirmPassword } = this.request.body
 
 	let user = new User({
 		name: username,
@@ -36,7 +35,7 @@ router.post('/api/register', function *() {
 })
 
 router.post('/api/login', function *() {
-	let {username, password} = this.request.body
+	let { username, password } = this.request.body
 
 	var Users = yield User.find( { name: username, password: crypto.createHash('sha256').update(password).digest("base64") } ).exec()
 
