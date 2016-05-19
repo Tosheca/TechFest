@@ -40,3 +40,6 @@ lol.bat
 *.txt
 
 .idea
+
+build.js
+*.map

@@ -11,8 +11,7 @@ module.exports = {
 		// `loaders` is an array of loaders to use.
 		// here we are only configuring vue-loader
 		loaders: [
-
-				{ 
+			{ 
 				test: /\.js$/,
 				exclude: /node_modules/,
 				loader: "babel",
@@ -22,12 +21,16 @@ module.exports = {
 					presets: ["es2015"]
 				}
 			},
-
 			{
-
 				test: /\.vue$/, // a regex for matching all files that end in `.vue`
 				loader: 'vue'   // loader to use for matched files
 			}
 		]
-	}
+	},
+	vue: {
+		autoprefixer: true
+	},
+	autoprefixer: {
+		browsers: ['last 2 versions']
+	},
 }

@@ -3,15 +3,15 @@
 <div id="app">
 	<input v-model="newUsername" v-on:keyup.enter="addUser" placeholder="username">
 	<input v-model="newPassword" v-on:keyup.enter="addUser" placeholder="password">
-  	<ul>
-    <li v-for="user in users">
-      <span>{{ user.name }}:{{user.pass}}</span>
-      <button v-on:click="removeUser($index)">X</button>
-    </li>
-  	</ul>
+		<ul>
+		<li v-for="user in users">
+			<span>{{ user.name }}:{{user.pass}}</span>
+			<button v-on:click="removeUser($index)">X</button>
+		</li>
+		</ul>
 
-    <router-view></router-view>
-  	
+		<router-view></router-view>
+		
 
 </div>
 
@@ -23,25 +23,25 @@
 export default {
 
 	methods: {
-    	
-      	addUser: function() {
-      		var name = this.newUsername.trim()
-      		var pass = this.newPassword.trim()
+			
+				addUser: function() {
+					var name = this.newUsername.trim()
+					var pass = this.newPassword.trim()
 
-      		if (name != "" && pass != ""){
+					if (name != "" && pass != ""){
 
-      			this.users.push({name: name, pass: pass})
-      			this.newUsername = ""
-      			this.newPassword = ""
-      		}
+						this.users.push({name: name, pass: pass})
+						this.newUsername = ""
+						this.newPassword = ""
+					}
 
-     	 },
+			 },
 
-     	removeUser: function(index) {
-      		this.users.splice(index, 1)
-   		}
-    
-  	},
+			removeUser: function(index) {
+					this.users.splice(index, 1)
+			}
+		
+		},
 
 	data() {
 		return {
@@ -54,10 +54,8 @@ export default {
 </script>
 
 <style>
-
-	#app{
-		text-align: center;
+	#app {
+		display: flex;
+		justify-content: center;
 	}
-
-
 </style>
