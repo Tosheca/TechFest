@@ -1,19 +1,34 @@
 <template>
 
 <div id="app">
-	<input v-model="newUsername" v-on:keyup.enter="addUser" placeholder="username">
-	<input v-model="newPassword" v-on:keyup.enter="addUser" placeholder="password">
+	<nav>
+		<div class="right">
+			<a v-link="{ path: '/' }">Home</a>
+
+		</div>
+		<div class="left">
+			<a v-link="{ path: '/register' }">Register</a>
+			<a v-link="{ path: '/login' }">Login</a>
+		</div>
+
+	</nav>
+	<input v-model="username" v-on:keyup.enter="addUser(username, password)" placeholder="username">
+	<input v-model="password" v-on:keyup.enter="addUser(username, password)" placeholder="password">
+
+
 		<ul>
 		<li v-for="user in users">
-			<span>{{ user.name }}:{{user.pass}}</span>
+			<span>{{ user.name }} : {{user.pass}}</span>
 			<button v-on:click="removeUser($index)">X</button>
 		</li>
 		</ul>
 
-		<router-view></router-view>
 		
 
 </div>
+
+<router-view></router-view>
+
 
 </template>
 
@@ -24,17 +39,15 @@ export default {
 
 	methods: {
 			
-			addUser: function() {
-					var name = this.newUsername.trim()
-					var pass = this.newPassword.trim()
+			addUser: function(name, pass) {
+					var name = name.trim()
+					var pass = pass.trim()
 
 					if (name != "" && pass != ""){
-
-						this.users.push({name: name, pass: pass})
-						this.newUsername = ""
-						this.newPassword = ""
+						this.users.push({name, pass})
+						this.username = ""
+						this.password = ""
 					}
-
 			 },
 
 			removeUser: function(index) {
@@ -45,8 +58,8 @@ export default {
 
 	data() {
 		return {
-			newUsername: "", 
-			newPassword: "",
+			username: "", 
+			password: "",
 			users: [],   
 		}
 	}
@@ -61,11 +74,29 @@ export default {
 
 	ul {
 		display: flex;
+
 		justify-content: center;
 		flex-direction: column;
 
 	}
 
+	nav {
+		display: flex;
+
+		width: 100vw;
+		background-color: #3467af;
+		
+		justify-content: space-between;
+	}
+
+	nav div > a {
+		padding: 10px;
+		display: inline-block;
+	}
+
+	nav div > a:hover {
+		background-color: red;
+	}
 
 	ul li {
 		text-align: center;

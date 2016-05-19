@@ -1,5 +1,6 @@
 <template>
 Register
+<button v-on:click="submit">Submit</button>
 
 </template>
 
@@ -8,7 +9,9 @@ Register
 
 export default {
 	methods: {  
-
+		submit(){
+			this.$parent.addUser("Hello", "World")
+		}
 	},
 	data() {
 		return {

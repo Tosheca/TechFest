@@ -15,7 +15,7 @@ const secret = "illuminati"
 mongoose.connect('mongodb://localhost/test');
 
 var app = koa()
-app.use(jwt({ secret }));
+app.use(jwt({ secret: secret, passthrough: true }));
 
 router.post('/api/register', function *() {
 	let {username, password, confirmPassword} = this.request.body

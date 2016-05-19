@@ -1,6 +1,6 @@
 <template>
 Login
-
+<button v-on:click="submit">Submit</button>
 </template>
 
 
@@ -8,7 +8,9 @@ Login
 
 export default {
 	methods: {  
-
+		submit(){
+			console.log(this.$parent)
+		}
 	},
 	data() {
 		return {
