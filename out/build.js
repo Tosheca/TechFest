@@ -14933,7 +14933,7 @@
 
 
 	// module
-	exports.push([module.id, "\n", ""]);
+	exports.push([module.id, "\n\n\n\n", ""]);
 
 	// exports
 
@@ -15223,21 +15223,45 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	exports.default = {
-		data: function data() {
-			return {
-				name: "TechFest"
-			};
-		}
+
+	  methods: {
+
+	    addUser: function addUser() {
+	      var name = this.newUsername.trim();
+	      var pass = this.newPassword.trim();
+
+	      if (name != "" && pass != "") {
+
+	        this.users.push({ name: name, pass: pass });
+	        this.newUsername = "";
+	        this.newPassword = "";
+	      }
+	    },
+
+	    removeUser: function removeUser(index) {
+	      this.users.splice(index, 1);
+	    }
+
+	  },
+
+	  data: function data() {
+	    return {
+	      newUsername: "",
+	      newPassword: "",
+	      users: []
+
+	    };
+	  }
 	};
 
 /***/ },
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n<div id=\"app\">\n\t<h1>Hello {{name}}</h1>\n\t<input v-model=\"name\">\n</div>\n\n";
+	module.exports = "\n\n<div id=\"app\">\n\t<input v-model=\"newUsername\" v-on:keyup.enter=\"addUser\" placeholder=\"username\">\n\t<input v-model=\"newPassword\" v-on:keyup.enter=\"addUser\" placeholder=\"password\">\n  \t<ul>\n    <li v-for=\"user in users\">\n      <span>{{ user.name }}:{{user.pass}}</span>\n      <button v-on:click=\"removeUser($index)\">X</button>\n    </li>\n  \t</ul>\n  \t\n\n</div>\n\n";
 
 /***/ }
 /******/ ]);
