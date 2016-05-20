@@ -1,11 +1,12 @@
 var mongoose = require("mongoose")
 var Schema = mongoose.Schema
 var crypto = require('crypto');
+import { isEmail } from 'validator';
 
 var UserSchema = new Schema({
 	name: { type: String, index: { unique: true }, required: true },
 	pass: { type: String, required: true },
-	email: { type: String, required: false },
+	email: { type: String, required: false, validate: [ isEmail, 'invalid email'] },
 
 })
 
