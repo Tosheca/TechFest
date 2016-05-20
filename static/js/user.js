@@ -1,16 +1,30 @@
-import http from "http" 
+import http from "axios" 
+window.h = http
 
 export default class User {
 	constructor(){
-		axios.interceptors.response.use(function (response) {
+		http.interceptors.response.use((response) => {
 			return response;
-		}, function (error) {
+		}, (error) => {
 			return new Promise((resolve, reject) => {
-				if(error.status = 401){
+				if(error.status == 401){
 					this.logout()
+					console.log("Logout: Session expired")
+				}else{
+					console.log("Broke")
 				}
 			});
 		});
+
+		this.setToken()
+	}
+
+	setToken(token){
+		if(token){
+			localStorage["token"] = token;
+		}
+		http.defaults.headers.common['Authorization'] = "BEARER "  + localStorage["token"];
+
 	}
 
 	install(Vue, options){
@@ -18,23 +32,30 @@ export default class User {
 		Vue.prototype.$user = this
 	}
 
-	login(name, pass){
-
+	login({name, pass}){
+		http.post("/api/login", {name, pass}).then(response => {
+			console.log("Succes: ", response)
+			this.setToken(response.data.token)
+		}).catch((e) => {
+			console.log("Unsuccesfull: ", e)
+		})
 	}
 
 	logout(){
+		localStorage["token"] = null;
+		http.defaults.headers.common['Authorization'] = null;
 
 	}
 
-	register({name, pass, passrep}){
-		if(pass == passrep){
-
-		}else{
-			
-		}
+	register({name, pass, passrep, email}){
+		http.post("/api/register", {name, pass, passrep, email}).then(response => {
+			console.log("Succes: ", response)
+		}).catch((e) => {
+			console.log("Unsuccesfull: ", e)
+		})
 	}
 
 	check(){
-
+		return false
 	}
 }

@@ -2,6 +2,6 @@ import axios from "axios"
 
 let http = axios.create()
 
-http.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+http.defaults.headers.common['Authorization'] = "";
 
 export default http

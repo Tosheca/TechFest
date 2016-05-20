@@ -1,16 +1,19 @@
 var mongoose = require("mongoose")
 var Schema = mongoose.Schema
+var crypto = require('crypto');
 
 var UserSchema = new Schema({
 	name: { type: String, index: { unique: true }, required: true },
-	password: { type: String, required: true }
+	pass: { type: String, required: true },
+	email: { type: String, required: false },
+
 })
 
 UserSchema.pre('save', function(next) {
 	// only hashes the password if it has been modified (or is new)
-	if (!this.isModified('password')) return next();
+	if (!this.isModified('pass')) return next();
 
-	user.password = crypto.createHash('sha256').update(this.password).digest("base64")
+	this.pass = crypto.createHash('sha256').update(this.pass).digest("base64")
 	next();
 });
 
