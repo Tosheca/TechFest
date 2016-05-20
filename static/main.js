@@ -6,17 +6,26 @@ import Register from './components/Register.vue'
 
 import VueRouter from 'vue-router'
 
+import User from './js/user.js'
+
 Vue.use(VueRouter)
 
 let router = new VueRouter()
 
 router.map({
-    '/': {
-        component: Login
-    },
-    '/register': {
-        component: Register
-    }
+	'/login': {
+		component: {
+			template: `<router-view></router-view>`
+		},
+		subRoutes: {
+			'/' : {
+				component: Login
+			},
+			'/register': {
+				component: Register
+			}
+		}
+	},
 })
 
 router.start(App, '#app')
