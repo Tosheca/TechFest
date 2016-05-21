@@ -39,13 +39,13 @@ router.post('/api/register', function *() {
 router.post('/api/login', function *() {
 	let { name, pass } = this.request.body
 
-	var Users = yield User.find( { name: name, pass: crypto.createHash('sha256').update(pass).digest("base64") } ).exec()
-
-	if (Users.length == 0) {
+	var user = yield User.findOne( { name: name, pass: crypto.createHash('sha256').update(pass).digest("base64") } ).exec()
+	console.log(user)
+	if (user == null) {
 		this.body = "Your username and/or password is incorrect!"
 	}
 	else {
-		this.body = { message: "You are logged in successfully.", token: jwt.sign( { name }, secret) }
+		this.body = { message: "You are logged in successfully.", token: jwt.sign({ naem: name, id: user._id }, secret) }
 	}
 	
 })
