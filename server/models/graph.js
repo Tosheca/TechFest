@@ -9,7 +9,7 @@ var GraphSchema = new Schema({
 GraphSchema.pre('save', function(next) {
 	if (!this.isModified('edges') || !this.isModified('ribs')) return next();
 	
-	this.save(callback)
+	this.save()
 
 	next();
 });
