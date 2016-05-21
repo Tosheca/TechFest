@@ -1,15 +1,15 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var Graph = require("./graph.js");
 var crypto = require('crypto');
+//var { isEmail } = require('validator');
 
-import { isEmail } from 'validator';
+var Graph = require("./graph.js");
 
 var UserSchema = new Schema({
 	name: { type: String, index: { unique: true }, required: true },
 	pass: { type: String, index: { unique: false }, required: true },
-	email: { type: String, index: { unique: true }, required: true, validate: [ isEmail, 'invalid email'] },
-	graph: { type: [ Graph ] }
+	email: { type: String, index: { unique: true }, required: true/*, validate: [ isEmail, 'invalid email'] */},
+	programs: { type: [[ Graph ]] }
 })
 
 UserSchema.pre('save', function(next) {

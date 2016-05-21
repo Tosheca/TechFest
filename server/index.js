@@ -1,5 +1,4 @@
 var mongoose = require("mongoose")
-
 var koa = require("koa")
 var jwt = require('koa-jwt');
 var bodyParser = require('koa-bodyparser');
@@ -18,7 +17,9 @@ app.use(jwt( { secret: secret, passthrough: true } ));
 
 router.post('/api/register', function *() {
 	let { name, email, pass, passrep } = this.request.body
+	
 	console.log({name, email})
+	
 	let user = new User({
 		name: name,
 		email: email,
