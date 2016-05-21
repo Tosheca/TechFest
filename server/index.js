@@ -16,7 +16,7 @@ var app = koa()
 app.use(jwt( { secret: secret, passthrough: true } ));
 
 router.post('/api/register', function *() {
-	let { name, email, pass, passrep } = this.request.body
+	let { name, email, pass } = this.request.body
 	
 	console.log({name, email})
 	
@@ -45,16 +45,14 @@ router.post('/api/login', function *() {
 		this.body = "Your username and/or password is incorrect!"
 	}
 	else {
-		this.body = { message: "You are logged in successfully.", token: jwt.sign({ name }, secret) }
+		this.body = { message: "You are logged in successfully.", token: jwt.sign( { name }, secret) }
 	}
 	
 })
 
 router.get('/api/hello', function *() {
 	console.log(this.state)
-	//User.find().remove().exec()
-
-	this.body = this.staet
+	this.body = this.state
 })
 
 app.use(bodyParser());
