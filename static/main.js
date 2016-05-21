@@ -4,13 +4,16 @@ import App from './components/App.vue'
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 import UserComponent from "./components/User.vue"
+
 import VueRouter from 'vue-router'
+import VueValidator from 'vue-validator'
 
 import User from './js/user.js'
 
 var user = new User();
 
 Vue.use(VueRouter)
+Vue.use(VueValidator)
 Vue.use(user)
 
 
