@@ -58,12 +58,17 @@ router.alias({
 router.beforeEach(function ({ from, to, next, redirect }) {
 	console.log(from, to, next, redirect)
 	if (to.auth === true) {
+		if(user.check()){
+			next()
+			return true
+		}
+
 		if(from.component == null){
 			redirect("/user/")
 		}
-		console.log(to)
-		// return a Promise that resolves to true or false
-		return user.check()
+		return false
+
+
 	} else {
 		next()
 	}

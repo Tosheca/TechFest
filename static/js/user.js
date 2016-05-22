@@ -16,13 +16,15 @@ export default class User {
 			})
 		})
 
+
+		this.logedin = localStorage["token"] != ""
+		
 		this.setToken()
 	}
 
 	setToken(token){
 		if(token){
-			localStorage["token"] = token
-		}
+			localStorage["token"] = token		}
 		http.defaults.headers.common['Authorization'] = "BEARER "  + localStorage["token"]
 
 	}
@@ -34,15 +36,20 @@ export default class User {
 
 	login({name, pass}){
 		http.post("/api/login", {name, pass}).then(response => {
-			console.log("Succes: ", response)
-			this.setToken(response.data.token)
+			console.log("Succes: ", response.data)
+			if(response.data.token != null){
+				this.setToken(response.data.token)
+				this.logedin = true	
+			}else{
+				localStorage["token"] = ""
+			}
 		}).catch((e) => {
 			console.log("Unsuccesfull: ", e)
 		})
 	}
 
 	logout(){
-		localStorage["token"] = null
+		localStorage["token"] = ""
 		http.defaults.headers.common['Authorization'] = null
 
 	}
@@ -56,6 +63,7 @@ export default class User {
 	}
 
 	check(){
-		return false
+		console.log(this.logedin)
+		return this.logedin
 	}
 }
