@@ -29,7 +29,7 @@ export default class User {
 		})
 
 
-		this.logedin = localStorage["token"] != ""
+		this.logedin = localStorage["token"] != "" && localStorage["token"] != null
 		if(this.logedin){
 			this.status = getContent(localStorage["token"])
 		}
