@@ -12,29 +12,61 @@ import VueValidator from 'vue-validator'
 import AllPrograms from './components/AllPrograms.vue'
 import CurrentProgram from './components/CurrentProgram.vue'
 
+import User from "./js/user.js"
+
+let user = new User()
 
 Vue.use(VueRouter)
 
 Vue.use(VueValidator)
 Vue.use(user)
 
-
-
 let router = new VueRouter()
 
 router.map({
-    '/': {
-        component: Login
-    },
-    '/register': {
-        component: Register
-    },
-    '/currentprogram': {
-    	component: CurrentProgram
-    },
-    '/allprograms': {
-    	component: AllPrograms
-    }
+	'/user': {
+		component: UserComponent,
+		subRoutes: {
+			'/login': {
+				component: Login
+			},
+			'/register': {
+				component: Register
+			}
+		}
+	},
+	'/currentprogram': {
+		component: CurrentProgram,
+		auth: true
+	},
+	'/allprograms': {
+		component: AllPrograms,
+		auth: true
+	},
+	'/' : {
+		component: function(callback) {
+
+		},
+		auth: true
+	}
+})
+
+router.alias({
+	"/user/": "/user/login"
+})
+
+router.beforeEach(function ({ from, to, next, redirect }) {
+	console.log(from, to, next, redirect)
+	if (to.auth === true) {
+		if(from.component == null){
+			redirect("/user/")
+		}
+		console.log(to)
+		// return a Promise that resolves to true or false
+		return user.check()
+	} else {
+		next()
+	}
 })
 
 router.start(App, '#app')
