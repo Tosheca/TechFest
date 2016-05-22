@@ -11,7 +11,6 @@
 			<router-view></router-view>
 		</div>
 	</div>
-
 	<!-- <nav>
 		<div class="right">
 			<a v-link="{ path: '/' }">Home</a>
@@ -21,10 +20,7 @@
 			<a v-link="{ path: '/login' }">Login</a>
 		</div>
 	</nav> -->
-
 	<!-- 
-
-
 		<ul>
 			<li v-for="user in users">
 				<span>{{ user.name }} : {{user.pass}}</span>
@@ -33,8 +29,6 @@
 		</ul>
 -->
 </div>
-
-
 
 
 </template>
@@ -100,12 +94,13 @@ export default {
 		border-radius: 0px;
 
 	}
-
+	
 	#right .content .form legend {
 		color: white;
 		text-align: center;
+		font-size: 1.5em;
 	}
-
+	
 	input[type=text],input[type=password] {
 		font-size: 15px;
 		background: white; 
@@ -121,7 +116,7 @@ export default {
 		padding-left: 10px;
 	}
 
-	input[type=button], button, .button {
+	.button {
 		border: none;
 		background-color: white;
 		padding: 5px 15px;
@@ -135,13 +130,13 @@ export default {
 		text-align: center;
 	}
 
-	input[type=button]:hover, button:hover, .button:hover{
+	.button:hover{
 		background-color: white;
 		color: #666;
 		box-shadow: 0 0 8px #666;
 	}
 
-	input[type=button]:active, button:active, .button:active {
+	.button:active {
 		background: lightblue;
 		transition: all 0.2s ease-in;
 	}
@@ -158,7 +153,8 @@ export default {
 		position: fixed;
 		right: 0px;
 		width: 100vw;
-		transition: all 0.2s ;
+		transition: all 0.2s;
+
 	}
 	#right .content {
 		display: flex;
@@ -181,6 +177,7 @@ export default {
 	#right .content .form legend {
 		color: white;
 		text-align: center;
+		font-size: 1.5em;
 	}
 
 	input[type=text],input[type=password] {
@@ -198,7 +195,7 @@ export default {
 		padding-left: 10px;
 	}
 
-	input[type=button], button, .button {
+	.button {
 		border: none;
 		background-color: white;
 		padding: 5px 15px;
@@ -212,16 +209,16 @@ export default {
 		text-align: center;
 	}
 
-	input[type=button]:hover, button:hover, .button:hover{
+	.button:hover{
 		background-color: white;
 		color: #666;
 		box-shadow: 0 0 8px #666;
 	}
 	
-	input[type=button]:active, button:active, .button:active {
+	.button:active {
 		background: lightblue;
 		transition: all 0.2s ease-in;
 	}
-}
 
+}
 </style>

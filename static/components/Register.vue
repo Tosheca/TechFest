@@ -7,7 +7,7 @@
 		<input type="password" v-model="user.passrep" placeholder="Confirm Password">
 		
 		<div class="row inline">
-			<a v-link="{ path: '/user/' }">Back</a>
+			<a class="button" v-link="{ path: '/user/' }">Back</a>
 			<a v-on:click="submit" class="button">Submit</a>
 		</div>
 
