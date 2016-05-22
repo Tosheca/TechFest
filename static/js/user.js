@@ -1,5 +1,17 @@
 import http from "axios" 
 window.h = http
+// random function found on the web 
+// TODO: if problems rewrite
+function getContent(token) {
+	let segments = token.split(".")
+	
+	if (!segments instanceof Array || segments.length !== 3) {
+		throw new Error("Invalid token")
+	}
+	
+	var claims = segments[1];
+	return JSON.parse(decodeURIComponent(escape(window.atob(claims))));
+}
 
 export default class User {
 	constructor(){
@@ -18,13 +30,17 @@ export default class User {
 
 
 		this.logedin = localStorage["token"] != ""
-		
+		if(this.logedin){
+			this.status = getContent(localStorage["token"])
+		}
 		this.setToken()
 	}
 
 	setToken(token){
 		if(token){
-			localStorage["token"] = token		}
+			localStorage["token"] = token		
+			this.status = getContent(token)
+		}
 		http.defaults.headers.common['Authorization'] = "BEARER "  + localStorage["token"]
 
 	}
