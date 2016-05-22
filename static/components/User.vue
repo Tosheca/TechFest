@@ -66,9 +66,6 @@ export default {
 
 <style>
 @media screen and (min-width: 1000px) {
-	legend{
-		font-size: 1.5em;
-	}
 	#right {
 		border-left: 65vh solid transparent;
 		border-right: 0vh solid transparent;
@@ -101,6 +98,7 @@ export default {
 	#right .content .form legend {
 		color: white;
 		text-align: center;
+		font-size: 1.5em;
 	}
 	
 	input[type=text],input[type=password] {
@@ -118,7 +116,7 @@ export default {
 		padding-left: 10px;
 	}
 
-	input[type=button], button, .button {
+	.button {
 		border: none;
 		background-color: white;
 		padding: 5px 15px;
@@ -132,22 +130,19 @@ export default {
 		text-align: center;
 	}
 
-	input[type=button]:hover, button:hover, .button:hover{
+	.button:hover{
 		background-color: white;
 		color: #666;
 		box-shadow: 0 0 8px #666;
 	}
 
-	input[type=button]:active, button:active, .button:active {
+	.button:active {
 		background: lightblue;
 		transition: all 0.2s ease-in;
 	}
 } 
 
 @media screen and (max-width: 999px){
-	legend{
-		font-size: 1.5em;
-	}
 	#right {
 		border-left: 65vh solid transparent;
 		border-right: 0vh solid transparent;
@@ -182,6 +177,7 @@ export default {
 	#right .content .form legend {
 		color: white;
 		text-align: center;
+		font-size: 1.5em;
 	}
 
 	input[type=text],input[type=password] {
@@ -199,7 +195,7 @@ export default {
 		padding-left: 10px;
 	}
 
-	input[type=button], button, .button {
+	.button {
 		border: none;
 		background-color: white;
 		padding: 5px 15px;
@@ -213,16 +209,16 @@ export default {
 		text-align: center;
 	}
 
-	input[type=button]:hover, button:hover, .button:hover{
+	.button:hover{
 		background-color: white;
 		color: #666;
 		box-shadow: 0 0 8px #666;
 	}
 	
-	input[type=button]:active, button:active, .button:active {
+	.button:active {
 		background: lightblue;
 		transition: all 0.2s ease-in;
 	}
-	
+
 }
 </style>
