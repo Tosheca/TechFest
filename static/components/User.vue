@@ -11,7 +11,6 @@
 			<router-view></router-view>
 		</div>
 	</div>
-
 	<!-- <nav>
 		<div class="right">
 			<a v-link="{ path: '/' }">Home</a>
@@ -21,10 +20,7 @@
 			<a v-link="{ path: '/login' }">Login</a>
 		</div>
 	</nav> -->
-
 	<!-- 
-
-
 		<ul>
 			<li v-for="user in users">
 				<span>{{ user.name }} : {{user.pass}}</span>
@@ -33,8 +29,6 @@
 		</ul>
 -->
 </div>
-
-
 
 
 </template>
@@ -72,6 +66,9 @@ export default {
 
 <style>
 @media screen and (min-width: 1000px) {
+	legend{
+		font-size: 1.5em;
+	}
 	#right {
 		border-left: 65vh solid transparent;
 		border-right: 0vh solid transparent;
@@ -100,12 +97,12 @@ export default {
 		border-radius: 0px;
 
 	}
-
+	
 	#right .content .form legend {
 		color: white;
 		text-align: center;
 	}
-
+	
 	input[type=text],input[type=password] {
 		font-size: 15px;
 		background: white; 
@@ -148,6 +145,9 @@ export default {
 } 
 
 @media screen and (max-width: 999px){
+	legend{
+		font-size: 1.5em;
+	}
 	#right {
 		border-left: 65vh solid transparent;
 		border-right: 0vh solid transparent;
@@ -158,7 +158,8 @@ export default {
 		position: fixed;
 		right: 0px;
 		width: 100vw;
-		transition: all 0.2s ;
+		transition: all 0.2s;
+
 	}
 	#right .content {
 		display: flex;
@@ -222,6 +223,6 @@ export default {
 		background: lightblue;
 		transition: all 0.2s ease-in;
 	}
+	
 }
-
 </style>

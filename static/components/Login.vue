@@ -4,7 +4,7 @@
 		<input type="text" v-model="user.name" placeholder="Username">
 		<input type="password" v-model="user.pass" placeholder="Password">
 		<div class="row inline">
-			<a v-link="{ path: '/user/register' }">Register</a>
+			<a id="register" class="button" v-link="{ path: '/user/register' }">Register</a>
 			<a v-on:click="submit" class="button">Submit</a>
 		</div>
 	</fieldset>
