@@ -1,7 +1,7 @@
 var mongoose = require("mongoose")
 var Schema = mongoose.Schema
 
-var { Graph } = require("./graph.js")
+var { Graph } = require("./graph_simple.js")
 
 var ProgramSchema = new Schema({
 	graphs: { type: [ Graph.schema ] },

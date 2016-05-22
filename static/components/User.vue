@@ -43,8 +43,6 @@
 <script>
 
 export default {
-
-	methods: {
 			addUser: function(name, pass) {
 				var name = name.trim()
 				var pass = pass.trim()
@@ -217,10 +215,11 @@ input[type=button]:hover, button:hover, .button:hover{
 	color: #666;
 	box-shadow: 0 0 8px #666;
 }
+	
+	input[type=button]:active, button:active, .button:active {
+		background: lightblue;
+		transition: all 0.2s ease-in;
+	}
+}
 
-input[type=button]:active, button:active, .button:active {
-	background: lightblue;
-	transition: all 0.2s ease-in;
-}
-}
 </style>
