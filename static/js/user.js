@@ -80,6 +80,7 @@ export default class User {
 
 	check(){
 		console.log(this.logedin)
+		return true
 		return this.logedin
 	}
 }
