@@ -6,16 +6,21 @@ Register
 
 
 <script>
-
-export default {
-	methods: {  
-		submit(){
-			this.$parent.addUser("Hello", "World")
-		}
-	},
-	data() {
-		return {
- 
+	export default {
+		methods: {  
+			submit(){
+				this.$user.register(this.user)
+			}
+		},
+		data() {
+			return {
+				user: {
+					name: "",
+					email: "",
+					pass: "",
+					passrep: ""
+				}
+			}
 		}
 	}
 }

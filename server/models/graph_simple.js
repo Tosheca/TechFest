@@ -3,30 +3,34 @@ var Schema = mongoose.Schema
 
 
 var GraphSchema = new Schema({
-	edges: [  { left: Number, right: Number } ],
-	vertices: [ 
+	edges: [  
 		{ 
+			_id: false,
+			left: Number, 
+			right: Number 
+		} 
+	],
+	vertices: [ 
+		{
+			_id: false,
 			value: Number, 
-			props: [
-				{ 
-					key: String, 
-					value: Schema.Types.Mixed 
-				}
-			] 
+			props: [ Schema.Types.Mixed ] 
 		}
 	] 
 })
 
+/*
 GraphSchema.pre('save', function(next) {
 	if (!this.isModified('edges') || !this.isModified('vertices')) return next()
 	next()
 })
+*/
 
-GraphSchema.methods.addEdge = (edge) => {
+GraphSchema.methods.addEdge = function(edge){
 	this.edges.push({left: edge[0],right: edge[1]})
 }
 
-GraphSchema.methods.addVertex = (props, value) => {
+GraphSchema.methods.addVertex = function(props, value){
 	if(value == null){
 		// the length is equal to the value of the next index, which is the value of the last item + 1, thus used insted for optimisation
 		value = this.vertices.length 
@@ -36,11 +40,23 @@ GraphSchema.methods.addVertex = (props, value) => {
 
 var GraphModel = mongoose.model("Graph", GraphSchema)
 
-GraphModel.findOne({}).populate("vertices edges").then(r => {
-	var out = {}
-	out.vertices = r.vertices.map(i => [ i.left.value, i.right.value ] )
-	out.edges = r.edges.map(i => i.value)
-	console.log(out)
-})
 
+var graph = new GraphModel()
+
+// console.log(graph)
+
+// graph.addEdge([ 5, 6 ])
+
+// graph.save().then(() => {
+// 	GraphModel.find({}).then(r => {
+// 		console.log(r)
+// 		r.forEach(e => {
+// 			var out = {}
+// 			out.vertices = e.vertices.map(i => [ i.left.value, i.right.value ] )
+// 			out.edges = e.edges.map(i => i.value)
+// 			console.log(out.vertices, out.edges)
+// 		})
+// 	})
+
+// })
 module.exports = {Graph: GraphModel}

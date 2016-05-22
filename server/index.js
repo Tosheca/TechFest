@@ -10,6 +10,8 @@ var bodyParser = require('koa-bodyparser')
 var router = require('koa-router')({ prefix: '/api' })
 var serve = require('koa-static')
 
+var socketio = require('socket.io')
+
 var secret = "illuminati"
 
 
@@ -103,4 +105,9 @@ app.use(bodyParser())
 app.use(serve("../static/out"))
 app.use(router.routes())
 
-app.listen(3000)
+var server = require('http').Server(app.callback())
+var io = socketio(server)
+
+app.context.io = io 
+
+server.listen(3000)
