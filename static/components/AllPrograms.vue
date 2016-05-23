@@ -3,7 +3,7 @@
 <div id="up">
 <nav id="top">
 <h3>My programs</h3> 
-<p class="UI">Welcome, *name*</p>
+<p class="UI">Welcome, {{username}}</p>
 <button id="logout" class="button" v-on:click="logout">Logout</button>
 </nav>
 <nav id="nav2">  
@@ -39,13 +39,14 @@ export default {
 	route: {
 		async data({ next }) {
 			let list = await this.$programs.getList()
-			next({programs: list})
+			next({programs: list, username:  this.$user.status.name})
 		}
 	},
 	data() {
 		return {
 			programs: [],
-			name: ""
+			name: "",
+			username: ""
 		}
 	}
 }
@@ -101,7 +102,8 @@ h3 {
     padding-left: 2vw;
     font-size: 3em;
     color: white;
-    font-weight: bold
+    font-weight: bold;
+    line-height: 64px;
 }
 #up {
 	height: 100%;
@@ -113,6 +115,7 @@ h3 {
 	font-size: 1.2em;
 	height: 40px;
 	display: block;
+	box-sizing: border-box;
 	text-align: center;
 }
 #create:focus, #logout:focus, #X:focus{
@@ -148,7 +151,16 @@ h3 {
 	margin-top: 0px;
 	margin-bottom: 0px;
 	display: flex;
+	box-shadow: none;
+	box-sizing: border-box;
 }
+
+input#text-create:focus {
+    box-shadow: inset 0 0 5px #333;
+}
+
+
+
 #logout{
 	width: 7%;
 	color: lightblue;
