@@ -17,6 +17,7 @@
 <script>
 
 import vis from "vis"
+
 var options = {
     nodes: {
         scaling: {
@@ -25,7 +26,6 @@ var options = {
         }
     },
     edges: {
-        color: "#777",
         smooth: false
     },
     physics: {
@@ -38,23 +38,42 @@ var options = {
     }
 }
 
+let state = {
+
+}
+window.s = state
+
 export default {
 	methods: {  
 		submit(){
-			this.clicked = "smth1"
+			state.graph.nodes.update({ id: 1, color: "red", size: 60, shape: "star"})
 		}
 	},
 	route: {
 		async data({ next }) {
 			let program = await this.$programs.getId(this.$route.params.id)
-			console.log(program)
+			console.log(program.graphs[0])
+
+			if(program.graphs[0] != null){
+				if(program.graphs[0].edges.length > 0 && program.graphs[0].vertices.length > 0){
+					state.graph.nodes.clear()
+					state.graph.edges.clear()
+
+					state.graph.nodes.add(program.graphs[0].vertices)
+					state.graph.edges.add(program.graphs[0].edges)
+				}
+			}
+
+
 			next({ program })
 		},
 		async activate(){
+			state = {} // needed because had problems with the tracked vue state. //TODO: find a way to fix it
+
 			let nodes = new vis.DataSet([
 				{id:1, value: 1},
-				{id:2, value: 12},
-				{id:3, value: 3}
+				{id:2, value: 12, color: "#FF0000"},
+				{id:3, value: 3, shape: 'star'}
 			])
 
 			let edges = new vis.DataSet([
@@ -63,18 +82,29 @@ export default {
 				{id:3, from:2, to: 3}
 			])
 
-			window.d = { nodes, edges }
-			this.graph = { nodes, edges }
-			this.network = new vis.Network(this.$els.visContainer, { nodes, edges }, options)
+	// console.log(this.program)
+	// 		let nodes = new vis.DataSet(this.program.graphs[0].edges)
+	// 		let edges = new vis.DataSet(this.program.graphs[0].edges)
+
+			state.graph = { nodes, edges }
+			state.network = new vis.Network(this.$els.visContainer, { nodes, edges }, options)
 			
-			window.n = this.network
 		}
+	},
+	computed: {
+
 	},
 	data() {
 		return {
- 			graph: {
- 				nodes: [],
- 				edges: []
+
+ 			program: {
+ 				name: "",
+ 				graphs: [
+ 					{
+ 						nodes: [],
+ 						edges: []
+ 					}
+ 				]
  			},
  			network: {},
 			clicked: ""

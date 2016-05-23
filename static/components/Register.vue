@@ -10,7 +10,6 @@
 			<a class="button" v-link="{ path: '/user/' }">Back</a>
 			<a v-on:click="submit" class="button">Submit</a>
 		</div>
-
 	</div>
 </template>
 
