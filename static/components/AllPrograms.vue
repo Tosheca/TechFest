@@ -54,9 +54,17 @@ export default {
 
 </script>
 <style>
+#app{
+	height: 100vh;
+	width: 100vw;
+	background-color: lightblue;
+	transition: all 0.1s ease-in;
+}
 .programs-mom{
 	background-color: lightblue;
 	padding-top: 1vh;
+	padding-bottom: 1vh;
+	transition: all 0.2s ease-in;
 }
 .UI{
 	color: white;
@@ -99,10 +107,14 @@ export default {
 	display: flex;
 	margin: auto;
     justify-content: center;
+    transition: all 0.15s ease-in;
 }
 .programs:hover{
 	background-color: #666;
-	box-shadow: 0 0 60px #666;
+	box-shadow: 0 0 15px #666;
+}
+.programs:active{
+	box-shadow: 0 0 0 #666;
 }
 #nav2 {
 	padding-top: 50px;
@@ -111,8 +123,11 @@ export default {
     align-content: center;
 }
 h3 {
+	margin-top: -0.5vh;
 	text-align: left;
-    margin: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
     text-shadow: 0 0 5px #666;
     padding-top: 0;
     padding-bottom: 0; 
@@ -165,14 +180,11 @@ h3 {
 	display: flex;
 	box-shadow: none;
 	box-sizing: border-box;
+	transition: all 0.25s ease-in;
 }
-
 input#text-create:focus {
     box-shadow: inset 0 0 5px #333;
 }
-
-
-
 #logout{
 	width: 7%;
 	color: lightblue;
