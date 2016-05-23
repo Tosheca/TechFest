@@ -6,7 +6,7 @@ module.exports = {
 		path: __dirname + '/out',
 		filename: 'build.js'
 	},
-	devtool: "source-map",
+	devtool: "eval-source-map",
 	module: {
 		// `loaders` is an array of loaders to use.
 		// here we are only configuring vue-loader

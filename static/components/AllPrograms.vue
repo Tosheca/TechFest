@@ -11,6 +11,15 @@
 <br>
 <input id="text-create" type="text" v-model="name">
 <div v-for="program in programs">
+<div>
+	<a v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
+	<button>X</button>
+</div>
+
+</nav>
+<button v-on:click="add">Create program</button>
+<button v-on:click="logout">Logout</button>
+<input type="text" v-model="name">
 
 <div><a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a></div>
 </div>
