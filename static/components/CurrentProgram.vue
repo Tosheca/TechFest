@@ -33,7 +33,7 @@ var options = {
             gravitationalConstant: -30000
         },
         stabilization: {
-            iterations: 2500
+            iterations: 3000
         }
     }
 }
@@ -51,23 +51,32 @@ export default {
 			next({ program })
 		},
 		async activate(){
-			window.n = new vis.Network(this.$els.visContainer, {} /* data */, options)
-			n.setData({ 
-				nodes: [
-					{id:1, value: 1},
-					{id:2, value: 12},
-					{id:3, value: 3}
-				],
-				edges: [
-					{id:1, from:1, to: 2},
-					{id:2, from:1, to: 3},
-					{id:3, from:2, to: 3}
-				]})
+			let nodes = new vis.DataSet([
+				{id:1, value: 1},
+				{id:2, value: 12},
+				{id:3, value: 3}
+			])
+
+			let edges = new vis.DataSet([
+				{id:1, from:1, to: 2},
+				{id:2, from:1, to: 3},
+				{id:3, from:2, to: 3}
+			])
+
+			window.d = { nodes, edges }
+			this.graph = { nodes, edges }
+			this.network = new vis.Network(this.$els.visContainer, { nodes, edges }, options)
+			
+			window.n = this.network
 		}
 	},
 	data() {
 		return {
- 
+ 			graph: {
+ 				nodes: [],
+ 				edges: []
+ 			},
+ 			network: {},
 			clicked: ""
 		}
 	}

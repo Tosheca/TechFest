@@ -6,14 +6,14 @@ var GraphSchema = new Schema({
 	edges: [  
 		{ 
 			_id: false,
-			left: Number, 
-			right: Number 
+			from: Number, 
+			to: Number 
 		} 
 	],
 	vertices: [ 
 		{
 			_id: false,
-			value: Number, 
+			id: Number, 
 			props: [ Schema.Types.Mixed ] 
 		}
 	] 
@@ -30,12 +30,12 @@ GraphSchema.methods.addEdge = function(edge){
 	this.edges.push({left: edge[0],right: edge[1]})
 }
 
-GraphSchema.methods.addVertex = function(props, value){
-	if(value == null){
+GraphSchema.methods.addVertex = function(props, id){
+	if(id == null){
 		// the length is equal to the value of the next index, which is the value of the last item + 1, thus used insted for optimisation
-		value = this.vertices.length 
+		id = this.vertices.length 
 	}
-	this.vertices.push({ value, props })
+	this.vertices.push({ id, props })
 }
 
 var GraphModel = mongoose.model("Graph", GraphSchema)
