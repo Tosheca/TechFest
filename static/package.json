@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "vis": "^4.16.1",
     "vue": "^1.0.24-csp",
     "vue-loader": "^8.3.1"
   },
