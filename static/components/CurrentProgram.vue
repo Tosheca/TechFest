@@ -2,9 +2,9 @@
 
 <h1>Current program: {{program.name}}</h1>
 <nav>
-	<div>
-		<a v-on:click="submit">Submit</a>
-	</div>
+	<a v-on:click="submit">Submit</a>
+	<a v-on:click="addEdge">Add edge</a>
+	<a v-on:click="addVertex">Add vertex</a>
 </nav>
 
 <div id="network"  v-el:vis-container></div>
