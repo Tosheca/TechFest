@@ -18,6 +18,8 @@ export default class User {
 		http.interceptors.response.use((response) => {
 			return response
 		}, (error) => {
+
+
 			return new Promise((resolve, reject) => {
 				if(error.status == 401){
 					this.logout()
@@ -50,19 +52,7 @@ export default class User {
 		Vue.prototype.$user = this
 	}
 
-	login({name, pass}){
-		http.post("/api/login", {name, pass}).then(response => {
-			console.log("Succes: ", response.data)
-			if(response.data.token != null){
-				this.setToken(response.data.token)
-				this.logedin = true	
-			}else{
-				localStorage["token"] = ""
-			}
-		}).catch((e) => {
-			console.log("Unsuccesfull: ", e)
-		})
-	}
+
 
 	logout(){
 		localStorage["token"] = ""
@@ -70,12 +60,31 @@ export default class User {
 
 	}
 
-	register({name, pass, passrep, email}){
-		http.post("/api/register", {name, pass, passrep, email}).then(response => {
+	async login({name, pass}){
+		try{
+			let response = await http.post("/api/login", {name, pass})
+			console.log("Success: ", response.data)
+
+			if(response.data.token != null){
+				this.setToken(response.data.token)
+				this.logedin = true	
+			}else{
+				localStorage["token"] = ""
+			}
+
+		}catch(error){
+			console.log("Unsuccessfull: ", e)
+		}
+	}
+
+	async register({name, pass, passrep, email}){
+		try{
+			let response = await http.post("/api/register", {name, pass, passrep, email})
 			console.log("Success: ", response)
-		}).catch((e) => {
-			console.log("Unsuccesfull: ", e)
-		})
+			return response.data
+		}catch(error){
+			console.log("Unsuccessfull: ", e)
+		}
 	}
 
 	check(){

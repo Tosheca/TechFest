@@ -11,19 +11,34 @@ router.use("*", function *(next) {
 })
 
 router.get('/user/program/:id/graph', function *() {
-	let program = yield Program.findByID(this.id)
+	let program = yield Program.findById(this.id)
 	this.body = program.graph
 })
 
+router.get('/user/program/:id', function *() {
+	let program = yield Program.findById(this.params.id)
+	this.body = program
+})
+
+router.delete('/user/program/:id', function *() {
+	try{
+		yield Program.findById(this.params.id).remove()
+	}catch(error){
+		this.body = { message: error.message, state: "fucked up" }
+		return -1
+	}
+	this.body = { message: "Program removed", state: "ok" }
+})
+
 router.post('/user/program/:id/graph/addVertex', function *() {
-	let program = yield Program.findByID(this.id)
+	let program = yield Program.findById(this.id)
 	let { ops } = this.body
 	program.addVertex(ops)
 	this.body = { message: "Vertex added" }
 })
 
 router.post('/user/program/:id/graph/addEdge', function *() {
-	let program = yield Program.findByID(this.id)
+	let program = yield Program.findById(this.id)
 	let { ops } = this.body
 	program.addEdge(ops)
 	program.save()
@@ -33,8 +48,7 @@ router.post('/user/program/:id/graph/addEdge', function *() {
 router.post('/user/programs', function *() {
 	var { name } = this.request.body
 
-	var user = yield User.findOne({id: this.state.id })
-	console.log(user)
+	var user = yield User.findById(this.state.user.id)
 	let program = new Program({ name })
 	program.save()
 	user.programs.push(program.id)
@@ -44,8 +58,10 @@ router.post('/user/programs', function *() {
 })
 
 router.get('/user/programs', function *() {
-	var user = yield User.findById(this.state.id, {lean: true}).populate("programs")
+	var user = yield User.findById(this.state.user.id).populate("programs")
 	this.body = user.programs
 })
+
+
 
 module.exports = router

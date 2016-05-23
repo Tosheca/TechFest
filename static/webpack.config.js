@@ -17,7 +17,7 @@ module.exports = {
 				loader: "babel",
 				query: {
 					cacheDirectory: true,
-					plugins: ["transform-runtime"],
+					plugins: ["syntax-async-functions","transform-regenerator","transform-runtime"],
 					presets: ["es2015"]
 				}
 			},

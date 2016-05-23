@@ -13,13 +13,17 @@ import AllPrograms from './components/AllPrograms.vue'
 import CurrentProgram from './components/CurrentProgram.vue'
 
 import User from "./js/user.js"
+import Programs from "./js/programs.js"
 
 let user = new User()
+let programs = new Programs()
+
 
 Vue.use(VueRouter)
 
 Vue.use(VueValidator)
 Vue.use(user)
+Vue.use(programs)
 
 let router = new VueRouter()
 
@@ -36,6 +40,11 @@ router.map({
 		}
 	},
 	'/currentprogram': {
+		component: CurrentProgram,
+		auth: true
+	},
+	'/program/:id': {
+		name: "program",
 		component: CurrentProgram,
 		auth: true
 	},
