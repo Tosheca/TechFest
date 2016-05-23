@@ -12,16 +12,8 @@
 <input id="text-create" type="text" v-model="name">
 <div v-for="program in programs">
 <div>
-	<a v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
-	<button>X</button>
-</div>
-
-</nav>
-<button v-on:click="add">Create program</button>
-<button v-on:click="logout">Logout</button>
-<input type="text" v-model="name">
-
-<div><a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a></div>
+	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
+	<button class="button" id="X">X</button>
 </div>
 </div>
 </template>
@@ -80,15 +72,22 @@ h3:hover,h1:hover {
 	width: 100vw;
 	background-color: lightblue;
 }
-#create, #logout {
+#create, #logout{
 	display: block;
 	margin: auto;
 	text-align: center;
+}
+#create:focus, #logout:focus, #X:focus{
+	outline: none;
+}
+#X{
+	margin: auto;
+	display: block;
+	width: auto;
 }
 #programl{
 	text-align: center;
 	display: block;
 	margin: auto;
 }
-
 </style>
