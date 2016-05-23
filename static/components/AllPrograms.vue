@@ -55,8 +55,8 @@ export default {
 </script>
 <style> 
 #app{
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
+	width: 100%;
 	transition: all 0.1s ease-in;
 }
 .programs-mom{
