@@ -3,13 +3,14 @@
 <h1>Current program: {{program.name}}</h1>
 <nav>
 	<a v-on:click="submit">Submit</a>
-	<a v-on:click="addEdge">Add edge</a>
-	<a v-on:click="addVertex">Add vertex</a>
+	<a v-on:click="orderFunc">Order</a>
+	<a v-on:click="stepFunc">Step</a>
+	<a v-on:click="continueFunc">Continue</a>
+	<a v-on:click="edgeFunc">Edge</a>
+	<a v-on:click="removeFunc">Remove</a>
 </nav>
 
 <div id="network"  v-el:vis-container></div>
-
-<span>{{clicked}}</span>
 
 </template>
 
@@ -49,7 +50,28 @@ export default {
 	methods: {  
 		submit(){
 			state.graph.nodes.update({ id: 1, color: "red", size: 100})
+		},
+		orderFunc(){
+			console.log("Order")
+
+		},
+		stepFunc(){
+			console.log("Step")
+
+		},
+		continueFunc(){
+			console.log("Continue")
+
+		},
+		edgeFunc(){
+			console.log("Edge")
+
+		},
+		removeFunc(){
+			console.log("Remove")
+
 		}
+
 	},
 	route: {
 		async data({ next }) {
@@ -108,7 +130,6 @@ export default {
  				]
  			},
  			network: {},
-			clicked: ""
 		}
 	}
 }
