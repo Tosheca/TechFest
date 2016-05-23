@@ -21,6 +21,7 @@ export default {
 	methods: {  
 		async submit(){
 			let success = await this.$user.login(this.user)
+			console.log(success)
 			if(success){
 				this.$router.go({ name: "programs" })
 			}else{

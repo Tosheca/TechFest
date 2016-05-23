@@ -9,6 +9,7 @@
 
 </nav>
 <button v-on:click="add">Create program</button>
+<button v-on:click="logout">Logout</button>
 <input type="text" v-model="name">
 
 </template>
@@ -24,6 +25,10 @@ export default {
 			let list = await this.$programs.getList()
 			this.programs = list
 			console.log(res)
+		},
+		logout() {
+			this.$user.logout()
+			console.log("logout")
 		}
 	},
 	route: {

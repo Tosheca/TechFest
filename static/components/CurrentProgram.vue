@@ -17,8 +17,9 @@
 <script>
 
 import vis from "vis"
-import io from "socket.io-client"
-var socket = io("/")
+//import io from "socket.io-client"
+
+//var socket = io("/")
 var options = {
     nodes: {
         scaling: {
@@ -47,7 +48,7 @@ window.s = state
 export default {
 	methods: {  
 		submit(){
-			state.graph.nodes.update({ id: 1, color: "red", size: 60, shape: "star"})
+			state.graph.nodes.update({ id: 1, color: "red", size: 100})
 		}
 	},
 	route: {
@@ -60,7 +61,7 @@ export default {
 					state.graph.nodes.clear()
 					state.graph.edges.clear()
 
-					state.graph.nodes.add(program.graphs[0].vertices)
+					state.graph.nodes.add(program.graphs[0].vertices.map(e => {e.label = e.id; return e}))
 					state.graph.edges.add(program.graphs[0].edges)
 				}
 			}

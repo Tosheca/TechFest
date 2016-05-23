@@ -1,7 +1,4 @@
 <template>
-
-
-
 <div>
 	<div id="left"><!-- logo -->
 		
@@ -29,8 +26,6 @@
 		</ul>
 -->
 </div>
-
-
 </template>
 
 

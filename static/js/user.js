@@ -57,6 +57,7 @@ export default class User {
 	logout(){
 		localStorage["token"] = ""
 		http.defaults.headers.common['Authorization'] = null
+		this.logedin = false
 
 	}
 
@@ -83,6 +84,7 @@ export default class User {
 			if(response.data.token != null){
 				this.setToken(response.data.token)
 				this.logedin = true	
+				next()
 				return true
 			}else{
 				return false
@@ -90,7 +92,7 @@ export default class User {
 			}
 
 		}catch(error){
-			console.log("Unsuccessfull: ", e)
+			console.log("Unsuccessfull: ", error)
 		}
 		return false
 	}
@@ -101,7 +103,7 @@ export default class User {
 			console.log("Success: ", response)
 			return response.data
 		}catch(error){
-			console.log("Unsuccessfull: ", e)
+			console.log("Unsuccessfull: ", error)
 		}
 	}
 
