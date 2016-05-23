@@ -5,7 +5,10 @@
 
 <nav v-for="program in programs">
 
-<div><a v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a></div>
+<div>
+	<a v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
+	<button>X</button>
+</div>
 
 </nav>
 <button v-on:click="add">Create program</button>
@@ -46,7 +49,6 @@ export default {
 }
 
 </script>
--->
 <style>
  h1, h3, nav{
  	text-align: center;

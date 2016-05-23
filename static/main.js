@@ -74,6 +74,7 @@ router.beforeEach(function ({ from, to, next, redirect }) {
 		if(from.component == null){
 			redirect("/user/")
 		}
+		
 		return false
 
 
