@@ -49,6 +49,7 @@ router.map({
 		auth: true
 	},
 	'/allprograms': {
+		name: "programs",
 		component: AllPrograms,
 		auth: true
 	},
@@ -65,7 +66,6 @@ router.alias({
 })
 
 router.beforeEach(function ({ from, to, next, redirect }) {
-	console.log(from, to, next, redirect)
 	if (to.auth === true) {
 		if(user.check()){
 			next()
@@ -79,6 +79,12 @@ router.beforeEach(function ({ from, to, next, redirect }) {
 
 
 	} else {
+		if(user.check()){
+			if(from.component == null){
+				redirect({ name: "programs" })
+			}
+			return false
+		}
 		next()
 	}
 })

@@ -33,8 +33,14 @@ export default class User {
 
 		this.logedin = localStorage["token"] != "" && localStorage["token"] != null
 		if(this.logedin){
-			this.status = getContent(localStorage["token"])
+			this.reauth()
 		}
+
+		if(this.logedin){
+			this.status = getContent(localStorage["token"])
+			console.log(this.status)
+		}
+
 		this.setToken()
 	}
 
@@ -60,6 +66,22 @@ export default class User {
 
 	}
 
+	async reauth(){
+		try{
+			let response = await http.post("/api/reauth")
+			console.log(response.data.token)
+
+			if(response.data.token != null){
+				this.setToken(response.data.token)
+				this.logedin = true
+			}
+			
+			this.logedin = false
+		}catch(error){
+			console.log(error)
+		}
+	}
+
 	async login({name, pass}){
 		try{
 			let response = await http.post("/api/login", {name, pass})
@@ -68,13 +90,16 @@ export default class User {
 			if(response.data.token != null){
 				this.setToken(response.data.token)
 				this.logedin = true	
+				return true
 			}else{
+				return false
 				localStorage["token"] = ""
 			}
 
 		}catch(error){
 			console.log("Unsuccessfull: ", e)
 		}
+		return false
 	}
 
 	async register({name, pass, passrep, email}){

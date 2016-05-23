@@ -3,10 +3,14 @@
 		<legend>Login</legend>
 		<input type="text" v-model="user.name" placeholder="Username">
 		<input type="password" v-model="user.pass" placeholder="Password">
+		<div v-if="!success">
+			Wrong username or password.
+		</div>
 		<div class="row inline">
 			<a id="register" class="button" v-link="{ path: '/user/register' }">Register</a>
 			<a v-on:click="submit" class="button">Submit</a>
 		</div>
+
 	</fieldset>
 </template>
 
@@ -15,8 +19,13 @@
 
 export default {
 	methods: {  
-		submit(){
-			this.$user.login(this.user)
+		async submit(){
+			let success = await this.$user.login(this.user)
+			if(success){
+				this.$router.go({ name: "programs" })
+			}else{
+				this.success = false
+			}
 			console.log(this.$parent)
 		}
 	},
@@ -25,7 +34,8 @@ export default {
 			user: {
 				name: "",
 				pass: ""
-			}
+			},
+			success: true
 		}
 	}
 }
