@@ -117,7 +117,7 @@ export default {
 		padding: 5px 15px;
 		text-decoration: none;
 
-		color: lightblue;
+		color: #6f93c3;
 		transition: all 0.2s ease-in;
 		box-shadow: 0 0 0px #666;
 		cursor: pointer;

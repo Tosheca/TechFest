@@ -1,34 +1,34 @@
 <template>
+<div id="up">
 <h1>All programs view</h1>
 <h3>My programs</h3>
 
 
-<nav v-for="program in programs">
 
-<div><a v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a></div>
+<button id="create" class="button" v-on:click="add">Create program</button>
+<br>
+<button id="logout" class="button" v-on:click="logout">Logout</button>
+<br>
+<input id="text-create" type="text" v-model="name">
+<div v-for="program in programs">
 
-</nav>
-<button v-on:click="add">Create program</button>
-<button v-on:click="logout">Logout</button>
-<input type="text" v-model="name">
-
+<div><a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a></div>
+</div>
+</div>
 </template>
 <script>
-
-
 // console.log(list)
-
 export default {
 	methods: {  
+		logout() {
+   			this.$user.logout()
+   			console.log("logout")
+  		},
 		async add() {
 			let res = await this.$programs.create({name: this.name})
 			let list = await this.$programs.getList()
 			this.programs = list
 			console.log(res)
-		},
-		logout() {
-			this.$user.logout()
-			console.log("logout")
 		}
 	},
 	route: {
@@ -46,25 +46,40 @@ export default {
 }
 
 </script>
--->
 <style>
  h1, h3, nav{
- 	text-align: center;
+	text-align: center;
 }
-#list {
-width: ;
-	box-shadow: 0 0 5px #666;
-	color: white;
-	text-decoration: none;
+h3, h1 {
+			font: 2em arial, serif;
+            text-align: center;
+            color: transparent;
+            background: linear-gradient(#eee, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 1px white;
+            transition: text-shadow 0.3s;
+            cursor: default;
+}
+h3:hover,h1:hover {
+	 text-shadow: 0 0 2px white;
+            color: black;
+}
+#up {
+	margin-top: -25px;
+	height: 100vh;
+	width: 100vw;
 	background-color: lightblue;
 }
-#list:hover{
-	box-shadow: 0 0 10px #FFF;
+#create, #logout {
+	display: block;
+	margin: auto;
+	text-align: center;
 }
-#list:active{
-	box-shadow: 0 0 0 #666;
+#programl{
+	text-align: center;
+	display: block;
+	margin: auto;
 }
-#list:visited {
-	color: white;
-}
+
 </style>
