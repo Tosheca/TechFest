@@ -18,7 +18,11 @@ export default class Programs {
 	async create({ name }){
 		let res = await http.post("/api/user/programs", { name })
 		return res.data
+	}
 
+	async delete(id){
+		let res = await http.post("/api/user/programs", { name })
+		return res.data
 	}
 
 	install(Vue, options){

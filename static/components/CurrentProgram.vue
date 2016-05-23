@@ -2,14 +2,17 @@
 
 <h1>Current program: {{program.name}}</h1>
 <nav>
-	<div>
-		<a v-on:click="submit">Submit</a>
-	</div>
+	<a v-on:click="submit">Submit</a>
+
+	<a v-on:click="order">Order</a>
+	<a v-on:click="step">Step</a>
+	<a v-on:click="continue">Continue</a>
+	<a v-on:click="addEdge">AddEdge</a>
+	<a v-on:click="addVertex">addVertex</a>
+	<a v-on:click="remove">Remove</a>
 </nav>
 
 <div id="network"  v-el:vis-container></div>
-
-<span>{{clicked}}</span>
 
 </template>
 
@@ -28,7 +31,7 @@ var options = {
         }
     },
     edges: {
-        smooth: false
+        smooth: true
     },
     physics: {
         barnesHut: {
@@ -49,7 +52,31 @@ export default {
 	methods: {  
 		submit(){
 			state.graph.nodes.update({ id: 1, color: "red", size: 100})
+		},
+		order(){
+			console.log("Order")
+
+		},
+		step(){
+			console.log("Step")
+
+		},
+		continue(){
+			console.log("Continue")
+
+		},
+		addEdge(){
+			state.network.addEdgeMode()
+		},
+		addVertex(){
+			state.network.addNodeMode()
+		
+		},
+		remove(){
+			console.log("Remove")
+
 		}
+
 	},
 	route: {
 		async data({ next }) {
@@ -108,7 +135,6 @@ export default {
  				]
  			},
  			network: {},
-			clicked: ""
 		}
 	}
 }
