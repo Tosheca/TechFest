@@ -7,7 +7,7 @@
 <button id="logout" class="button" v-on:click="logout">Logout</button>
 </nav>
 <nav id="nav2">  
-<button id="create" class="button" v-on:click="add">Create program</button>
+<button id="create" class="button" v-on:click="add">Create a program</button>
 <input id="text-create" type="text" v-model="name">
 </nav>
 
