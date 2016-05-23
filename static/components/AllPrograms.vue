@@ -3,7 +3,7 @@
 <h3>My programs</h3>
 <nav v-for="program in allPrograms" style="width:100px;">
 
-<div><a id="list" v-link="{ path: '/currentprogram' }">{{program.programName}}</a></div>
+<div><a type="button" id="list" v-link="{ path: '/currentprogram' }">{{program.programName}}</a></div>
 
 </nav>
 </template>
@@ -22,13 +22,13 @@ export default {
 }
 
 </script>
-
+-->
 <style>
  h1, h3, nav{
  	text-align: center;
 }
 #list {
-
+width: ;
 	box-shadow: 0 0 5px #666;
 	color: white;
 	text-decoration: none;
