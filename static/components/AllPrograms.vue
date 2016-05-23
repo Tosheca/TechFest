@@ -1,21 +1,25 @@
 <template>
+<div id="full">
 <div id="up">
-<h1>All programs view</h1>
-<h3>My programs</h3>
-
-
-
-<button id="create" class="button" v-on:click="add">Create program</button>
-<br>
+<nav id="top">
+<h3>My programs</h3> 
+<p class="UI">Welcome, *name*</p>
 <button id="logout" class="button" v-on:click="logout">Logout</button>
-<br>
+</nav>
+<nav id="nav2">  
+<button id="create" class="button" v-on:click="add">Create program</button>
 <input id="text-create" type="text" v-model="name">
+</nav>
+
 <div v-for="program in programs">
-<div>
+<div class="programs">
 	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
 	<button class="button" id="X">X</button>
 </div>
 </div>
+</div>
+
+
 </template>
 <script>
 // console.log(list)
@@ -48,46 +52,111 @@ export default {
 
 </script>
 <style>
- h1, h3, nav{
-	text-align: center;
+.UI{
+	color: white;
+	font-size: 1.5em;
+	margin-left: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: 1%;
 }
-h3, h1 {
-			font: 2em arial, serif;
-            text-align: center;
-            color: transparent;
-            background: linear-gradient(#eee, #333);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 1px white;
-            transition: text-shadow 0.3s;
-            cursor: default;
+#full {
+
+	display: block;
+	background-attachment: scroll;
+	position: fixed;
+	color: lightblue;
+	height: 100%;
+	width: 100% ;
 }
-h3:hover,h1:hover {
-	 text-shadow: 0 0 2px white;
-            color: black;
+#top {
+	font-family: arial;
+	cursor: default;
+	height: 6.5vh;
+	background-color: #63b4cf;
+	display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.programs {
+	font-family: arial;
+	padding: 5px;
+	width: 25vw;
+	display: flex;
+	margin: auto;
+    columns: 2;
+}
+#nav2 {
+	padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+h3 {
+	text-align: left;
+    margin: 0px;
+    text-shadow: 0 0 5px #666;
+    padding-top: 0;
+    padding-bottom: 0; 
+    padding-left: 2vw;
+    font-size: 3em;
+    color: white;
+    font-weight: bold
 }
 #up {
-	margin-top: -25px;
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
+	width: 100%;
 	background-color: lightblue;
 }
-#create, #logout{
+#create {
+	width: 250px;
+	font-size: 1.2em;
+	height: 40px;
 	display: block;
-	margin: auto;
 	text-align: center;
 }
 #create:focus, #logout:focus, #X:focus{
 	outline: none;
 }
-#X{
+#X {
+	height: 25px;
+	width: 25px;
+	padding: 7px;
+	font-size: 1em;
+	line-height: 5px;
+	text-align: center;
 	margin: auto;
 	display: block;
 	width: auto;
+	border-radius: 25px;
+}
+#X:hover{
+
+	color: red;
+	box-shadow: 0 0 2px red;
 }
 #programl{
 	text-align: center;
 	display: block;
 	margin: auto;
+}
+#text-create{
+	font-size: 1.2em;
+	height: 40px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	display: flex;
+}
+#logout{
+	width: 7%;
+	color: lightblue;
+	font-size: 1.5em;
+	background-color: #63b4cf;
+}
+#logout:hover{
+	color: white;
+	box-shadow: 0 0 60px #666;
 }
 </style>
