@@ -17,7 +17,8 @@
 <script>
 
 import vis from "vis"
-
+import io from "socket.io-client"
+var socket = io("/")
 var options = {
     nodes: {
         scaling: {
@@ -63,7 +64,6 @@ export default {
 					state.graph.edges.add(program.graphs[0].edges)
 				}
 			}
-
 
 			next({ program })
 		},
@@ -121,7 +121,6 @@ export default {
 
 	.vis-network {
 		height: 80vh
-
 	}
 
 	.vis-network canvas {
