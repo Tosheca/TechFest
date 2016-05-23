@@ -1,7 +1,7 @@
 <template>
-<div id="full">
 <div id="up">
 <nav id="top">
+
 <h3>My programs</h3> 
 <p class="UI">Welcome, {{username}}</p>
 <button id="logout" class="button" v-on:click="logout">Logout</button>
@@ -11,16 +11,17 @@
 <input id="text-create" type="text" v-model="name">
 </nav>
 
-<div v-for="program in programs">
+<div class="programs-mom" v-for="program in programs">
+
 <div class="programs">
 	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
 	<button class="button" id="X">X</button>
 </div>
 </div>
-</div>
 
 
 </template>
+
 <script>
 // console.log(list)
 export default {
@@ -53,6 +54,10 @@ export default {
 
 </script>
 <style>
+.programs-mom{
+	background-color: lightblue;
+	padding-top: 1vh;
+}
 .UI{
 	color: white;
 	font-size: 1.5em;
@@ -65,7 +70,7 @@ export default {
 
 	display: block;
 	background-attachment: scroll;
-	position: fixed;
+	position: absolute;
 	color: lightblue;
 	height: 100%;
 	width: 100% ;
@@ -79,13 +84,25 @@ export default {
     justify-content: center;
     align-content: center;
 }
+#programl{
+	color: white;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+	margin: auto;
+}
 .programs {
+	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
 	width: 25vw;
 	display: flex;
 	margin: auto;
-    columns: 2;
+    justify-content: center;
+}
+.programs:hover{
+	background-color: #666;
+	box-shadow: 0 0 60px #666;
 }
 #nav2 {
 	padding-top: 50px;
@@ -137,11 +154,6 @@ h3 {
 
 	color: red;
 	box-shadow: 0 0 2px red;
-}
-#programl{
-	text-align: center;
-	display: block;
-	margin: auto;
 }
 #text-create{
 	font-size: 1.2em;
