@@ -18,8 +18,6 @@ export default class User {
 		http.interceptors.response.use((response) => {
 			return response
 		}, (error) => {
-
-
 			return new Promise((resolve, reject) => {
 				if(error.status == 401){
 					this.logout()
@@ -32,13 +30,9 @@ export default class User {
 
 
 		this.logedin = localStorage["token"] != "" && localStorage["token"] != null
-		if(this.logedin){
-			this.reauth()
-		}
 
 		if(this.logedin){
 			this.status = getContent(localStorage["token"])
-			console.log(this.status)
 		}
 
 		this.setToken()
@@ -69,7 +63,6 @@ export default class User {
 	async reauth(){
 		try{
 			let response = await http.post("/api/reauth")
-			console.log(response.data.token)
 
 			if(response.data.token != null){
 				this.setToken(response.data.token)
@@ -113,7 +106,6 @@ export default class User {
 	}
 
 	check(){
-		console.log(this.logedin)
 		return this.logedin
 	}
 }

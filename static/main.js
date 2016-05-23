@@ -65,10 +65,9 @@ router.alias({
 	"/user/": "/user/login"
 })
 
-router.beforeEach(function ({ from, to, next, redirect }) {
+router.beforeEach(function ({ from, to, redirect }) {
 	if (to.auth === true) {
 		if(user.check()){
-			next()
 			return true
 		}
 
@@ -85,7 +84,6 @@ router.beforeEach(function ({ from, to, next, redirect }) {
 			}
 			return false
 		}
-		next()
 	}
 })
 
