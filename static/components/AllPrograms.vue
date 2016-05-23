@@ -2,13 +2,10 @@
 <h1>All programs view</h1>
 <h3>My programs</h3>
 
-<<<<<<< HEAD
-<div><a type="button" id="list" v-link="{ path: '/currentprogram' }">{{program.programName}}</a></div>
-=======
+
 <nav v-for="program in programs">
 
 <div><a v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a></div>
->>>>>>> origin/master
 
 </nav>
 <button v-on:click="add">Create program</button>
