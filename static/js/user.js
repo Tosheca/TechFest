@@ -84,11 +84,10 @@ export default class User {
 			if(response.data.token != null){
 				this.setToken(response.data.token)
 				this.logedin = true	
-				next()
 				return true
 			}else{
-				return false
 				localStorage["token"] = ""
+				return false
 			}
 
 		}catch(error){

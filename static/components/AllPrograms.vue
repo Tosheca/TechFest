@@ -11,12 +11,13 @@
 <br>
 <input id="text-create" type="text" v-model="name">
 <div v-for="program in programs">
-<div>
-	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
-	<button class="button" id="X">X</button>
-</div>
+	<div>
+		<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
+		<button class="button" id="X">X</button>
+	</div>
 </div>
 </template>
+
 <script>
 // console.log(list)
 export default {

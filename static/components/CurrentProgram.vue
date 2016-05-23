@@ -2,9 +2,7 @@
 
 <h1>Current program: {{program.name}}</h1>
 <nav>
-	<div>
-		<a v-on:click="submit">Submit</a>
-	</div>
+	<a v-on:click="submit">Submit</a>
 </nav>
 
 <div id="network"  v-el:vis-container></div>
@@ -28,7 +26,7 @@ var options = {
         }
     },
     edges: {
-        smooth: false
+        smooth: true
     },
     physics: {
         barnesHut: {
