@@ -53,11 +53,10 @@ export default {
 }
 
 </script>
-<style>
+<style> 
 #app{
 	height: 100vh;
 	width: 100vw;
-	background-color: lightblue;
 	transition: all 0.1s ease-in;
 }
 .programs-mom{
@@ -138,8 +137,8 @@ h3 {
     line-height: 64px;
 }
 #up {
-	height: 100%;
-	width: 100%;
+	height: 100vh;
+	width: 100vw;
 	background-color: lightblue;
 }
 #create {
