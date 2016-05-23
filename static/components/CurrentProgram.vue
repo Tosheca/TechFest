@@ -8,7 +8,7 @@
 	<a v-on:click="step">Step</a>
 	<a v-on:click="continue">Continue</a>
 	<a v-on:click="addEdge">AddEdge</a>
-	<a v-on:click="addNode">AddNode</a>
+	<a v-on:click="addVertex">addVertex</a>
 	<a v-on:click="remove">Remove</a>
 </nav>
 
@@ -66,10 +66,10 @@ export default {
 
 		},
 		addEdge(){
-			console.log("Edge")
-
+			state.network.addEdgeMode()
 		},
-		addNode(){
+		addVertex(){
+			state.network.addNodeMode()
 		
 		},
 		remove(){
