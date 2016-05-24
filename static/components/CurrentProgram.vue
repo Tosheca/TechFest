@@ -2,7 +2,7 @@
 
 <nav id="hud">
 <h1 id="currentl">Current program: {{program.name}}</h1>
-<button id="logout2" class="button" v-on:click="allprograms">My programs</button>
+<button id="logout2" class="button" v-on:click="back">My programs</button>
 </nav>
 <nav id="hud2">
 	<a class="button" id="submit" v-on:click="submit">Submit</a>
@@ -81,6 +81,9 @@ export default {
 		smooth(){
 			options.edges.smooth = !options.edges.smooth
 			state.network.setOptions(options)
+		},
+		back(){
+			this.$router.go({ name: "programs" })
 		}
 
 	},
