@@ -220,7 +220,7 @@ window.s = state
     justify-content: flex-start;
     transition: all 0.2s ease-in;
     z-index: 1;
-    padding: 10px;
+    padding: 5px;
     box-sizing: border-box;
 }
 #submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve{
@@ -229,7 +229,7 @@ window.s = state
 	color: white;
 	font-size: 1.5em;
 	transition: all 0.2s ease-in;
-	line-height: 20px;
+	line-height: 30px;
 	flex: 0 0 120px;
 	margin-left: 10px;
 }
