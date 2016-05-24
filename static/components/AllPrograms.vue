@@ -130,7 +130,6 @@ export default {
 	width: 93%;
 }
 .program {
-	padding-right: 10px;
 	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
