@@ -120,7 +120,7 @@ export default {
 #top {
 	font-family: arial;
 	cursor: default;
-	height: 6.5vh;
+	height: 65px;
 	background-color: #63b4cf;
 	display: flex;
 	justify-content: center;
