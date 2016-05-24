@@ -224,7 +224,7 @@ window.s = state
     transition: all 0.2s ease-in;
 }
 	#network {
-		height: calc(88vh - 50px);
+		height: calc(100vh - 115px);
 	}	
 	.vis-network, canvas {
 		height: 92vh;
