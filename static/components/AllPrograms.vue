@@ -8,7 +8,7 @@
 </nav>
 <nav id="nav2">  
 <button id="create" class="button" v-on:click="add">Create a program</button>
-<input id="text-create" type="text" maxlength="18" v-model="name" placeholder="Program name">
+<input id="text-create" type="text" maxlength="27" v-model="name" placeholder="Program name">
 </nav>
 
 
@@ -17,7 +17,7 @@
 	<a class="programl" v-link="{ name: 'program', params: { id: program.id } }"> 
 	<span class="name">{{program.name}}</span>
 	<span class="when">{{fomrtedDate(program.created)}}</span></a>
-	<button class="button close" v-on:click="remove(program._id, $index)">X</button>
+	<button class="button close" v-on:click="remove(program.id, $index)">X</button>
 </div>
 </div>
 
