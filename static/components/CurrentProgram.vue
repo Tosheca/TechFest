@@ -198,10 +198,10 @@ window.s = state
     transition: all 0.2s ease-in;
 }
 	#network {
-		height: 86vh;
+		height: 87vh;
 	}	
 	.vis-network, canvas {
-		height: 100vh
+		height: 92vh;
 	}
 	.vis-network canvas:focus {
 		outline: none;
@@ -210,20 +210,23 @@ window.s = state
 		outline: none;
 	}
 #hud2{
+
+	margin-right: 30vw;
 	font-family: arial;
 	cursor: default;
-	height: 65px;
+	height: 50px;
 	background-color: #63b4cf;
 	display: flex;
     justify-content: center;
     transition: all 0.2s ease-in;
+    z-index: 1;
 }
 #submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve{
 	background-color: #3691b0;
 	text-align: center;
 	color: white;
 	vertical-align: center;
-	padding-top: 20px;
+	padding-top: 10px;
 	font-size: 1.5em;
 	transition: all 0.2s ease-in;
 }
