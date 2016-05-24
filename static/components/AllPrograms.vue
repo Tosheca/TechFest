@@ -12,8 +12,8 @@
 </nav>
 
 
-<div v-for="program in programs" class="programs" track-by="id">
-<div class="program">
+<div class="programs">
+<div class="program"  v-for="program in programs" track-by="id">
 	<a class="programl" v-link="{ name: 'program', params: { id: program.id } }"> 
 	<span class="name">{{program.name}}</span>
 	<span class="when">{{fomrtedDate(program.created)}}</span></a>
@@ -98,6 +98,7 @@ export default {
 	padding-top: 1vh;
 	padding-bottom: 1vh;
 	transition: all 0.2s ease-in;
+
 }
 .UI{
 	color: white;
@@ -139,14 +140,14 @@ export default {
 	padding: 5px;
 	width: 591.3px;
 	display: flex;
-	margin-top: auto;
+	margin-top: 1vh;
 	margin-bottom: auto;
 	margin-right: auto;
 	margin-left: auto;
 	padding-right: 15px;
 	justify-content: center;
 	transition: all 0.15s ease-in;
-
+	
 	line-height: 30px;
     padding-left: 15px;
 }
@@ -218,13 +219,14 @@ h3 {
 	font-size: 1.2em;
 	height: 40px;
 	margin-left: 10px;
-	margin-right: 10px;
+	margin-right: 0px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 	display: flex;
 	box-shadow: none;
 	box-sizing: border-box;
 	transition: all 0.25s ease-in;
+	width: 360px;
 }
 input#text-create:focus {
 	box-shadow: inset 0 0 5px #333;

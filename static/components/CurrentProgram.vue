@@ -87,7 +87,8 @@ export default {
 		
 		},
 		remove(){
-			console.log("Remove")
+			let node = state.network.getSelectedNodes()[0]
+			state.graph.nodes.remove(node)
 		},
 		smooth(){
 			options.edges.smooth = !options.edges.smooth
