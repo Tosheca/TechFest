@@ -10,6 +10,8 @@
 	<a v-on:click="addEdge">AddEdge</a>
 	<a v-on:click="addVertex">addVertex</a>
 	<a v-on:click="remove">Remove</a>
+	<a v-on:click="smooth">Curve</a>
+
 </nav>
 
 <div id="network"  v-el:vis-container></div>
@@ -31,11 +33,11 @@ var options = {
         }
     },
     edges: {
-        smooth: true
+        smooth: false
     },
     physics: {
         barnesHut: {
-            gravitationalConstant: -30000
+            gravitationalConstant: -10000
         },
         stabilization: {
             iterations: 3000
@@ -46,7 +48,6 @@ var options = {
 let state = {
 
 }
-window.s = state
 
 export default {
 	methods: {  
@@ -74,13 +75,16 @@ export default {
 		},
 		remove(){
 			console.log("Remove")
-
+		},
+		smooth(){
+			options.edges.smooth = !options.edges.smooth
+			state.network.setOptions(options)
 		}
 
 	},
 	route: {
 		async data({ next }) {
-			let program = await this.$programs.getId(this.$route.params.id)
+			let program = await this.$programs.get(this.$route.params.id)
 			console.log(program.graphs[0])
 
 			if(program.graphs[0] != null){
@@ -116,6 +120,7 @@ export default {
 
 			state.graph = { nodes, edges }
 			state.network = new vis.Network(this.$els.visContainer, { nodes, edges }, options)
+window.s = state
 			
 		}
 	},

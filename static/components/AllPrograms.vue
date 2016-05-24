@@ -11,10 +11,10 @@
 <input id="text-create" type="text" v-model="name">
 </nav>
 
-<div v-for="program in programs">
+<div v-for="program in programs" track-by="_id">
 <div class="programs">
 	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
-	<button class="button" id="X">X</button>
+	<button class="button close" v-on:click="remove(program._id, $index)">X</button>
 </div>
 </div>
 </div>
@@ -31,9 +31,19 @@ export default {
   		},
 		async add() {
 			let res = await this.$programs.create({name: this.name})
-			let list = await this.$programs.getList()
-			this.programs = list
 			console.log(res)
+			this.programs.push(res.res)
+
+		},
+		async remove(id, index){
+			try{
+				let res = await this.$programs.remove(id)
+				this.programs.splice(index, 1)
+			}catch(error){
+
+			}
+			//let list = await this.$programs.getList()
+			
 		}
 	},
 	route: {
@@ -44,7 +54,9 @@ export default {
 	},
 	data() {
 		return {
-			programs: [],
+			programs: [
+				{ _id: "" }
+			],
 			name: "",
 			username: ""
 		}
@@ -121,7 +133,8 @@ h3 {
 #create:focus, #logout:focus, #X:focus{
 	outline: none;
 }
-#X {
+
+.close {
 	height: 25px;
 	width: 25px;
 	padding: 7px;
@@ -133,7 +146,8 @@ h3 {
 	width: auto;
 	border-radius: 25px;
 }
-#X:hover{
+
+.close:hover{
 
 	color: red;
 	box-shadow: 0 0 2px red;
