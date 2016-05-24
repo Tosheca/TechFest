@@ -210,14 +210,14 @@ window.s = state
 		outline: none;
 	}
 #hud2{
-
-	margin-right: 30vw;
+	
+	margin-right: 0vw;
 	font-family: arial;
 	cursor: default;
 	height: 50px;
-	background-color: #63b4cf;
+	background-color: #3691b0;
 	display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     transition: all 0.2s ease-in;
     z-index: 1;
 }
@@ -229,6 +229,7 @@ window.s = state
 	padding-top: 10px;
 	font-size: 1.5em;
 	transition: all 0.2s ease-in;
+	flex: 0 0 120px;
 }
 #submit:hover, #order:hover, #step:hover, #continue:hover, #addedge:hover, #addvertex:hover, #remove:hover, #curve:hover{
 	color: #666;
