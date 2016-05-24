@@ -55,8 +55,8 @@ var options = {
     },
     manipulation: {
 		addNode: function(node, callback) {
-			let nodes = state.graph.nodes.get()
-			node.id =  (nodes[nodes.length - 1].id || 0)  + 1
+			node.id =  (state.graph.nodes.max("id") || { id: 0 }).id  + 1
+
 			node.label = node.id
 			callback(node)
 		}
