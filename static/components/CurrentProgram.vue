@@ -1,15 +1,10 @@
 <template>
 
-<h1>Current program: {{program.name}}</h1>
-<nav>
-	<a v-on:click="submit">Submit</a>
 
-	<a v-on:click="order">Order</a>
-	<a v-on:click="step">Step</a>
-	<a v-on:click="continue">Continue</a>
-	<a v-on:click="addEdge">AddEdge</a>
-	<a v-on:click="addVertex">addVertex</a>
-	<a v-on:click="remove">Remove</a>
+<nav id="hud">
+<h1 id="currentl">Current program: {{program.name}}</h1>
+	
+
 </nav>
 
 <div id="network"  v-el:vis-container></div>
@@ -142,15 +137,41 @@ export default {
 </script>
 
 <style>
+
+
+
+#hud{
+	font-family: arial;
+	cursor: default;
+	height: 65px;
+	background-color: #63b4cf;
+	display: flex;
+    align-content: center;
+}
+#currentl{
+	margin-top: auto;
+	margin-bottom: auto;
+    text-shadow: 0 0 5px #666;
+    padding-top: 0;
+    padding-bottom: 0; 
+    padding-left: 2vw;
+    font-size: 2.7em;
+    color: white;
+    font-weight: bold;
+    line-height: 64px;
+    text-align: left;
+}
 	#network {
-		height: 80vh
+		height: calc(90vh - 65px);
 	}	
-
-	.vis-network {
-		height: 80vh
+	.vis-network, canvas {
+		height: 100vh
+	}
+	.vis-network canvas:focus {
+		outline: none;
+	}
+	.vis-network canvas:active {
+		outline: none;
 	}
 
-	.vis-network canvas {
-		height: 80vh
-	}
 </style>

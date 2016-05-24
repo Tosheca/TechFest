@@ -8,13 +8,14 @@
 </nav>
 <nav id="nav2">  
 <button id="create" class="button" v-on:click="add">Create a program</button>
-<input id="text-create" type="text" v-model="name">
+<input id="text-create" type="text" maxlength="18" v-model="name">
 </nav>
 
 <div class="programs-mom" v-for="program in programs">
 
 <div class="programs">
-	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }">{{program.name}}, when: {{program.created}}, id: {{program._id}}</a>
+	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }"><span class="name">{{program.name}}</span>
+	<span class="when"> {{program.created}}</span></a>
 	<button class="button" id="X">X</button>
 </div>
 </div>
@@ -54,6 +55,9 @@ export default {
 
 </script>
 <style> 
+.name{
+	columns: 2;
+}
 #app{
 	height: 100%;
 	width: 100%;
@@ -95,7 +99,7 @@ export default {
 	color: white;
 	text-decoration: none;
 	text-align: center;
-	display: block;
+	display: flex;
 	margin: auto;
 }
 .programs {
@@ -153,6 +157,8 @@ h3 {
 	outline: none;
 }
 #X {
+
+	margin-left: 1vw;
 	height: 25px;
 	width: 25px;
 	padding: 7px;
@@ -160,7 +166,7 @@ h3 {
 	line-height: 5px;
 	text-align: center;
 	margin: auto;
-	display: block;
+	display: flex;
 	width: auto;
 	border-radius: 25px;
 }
