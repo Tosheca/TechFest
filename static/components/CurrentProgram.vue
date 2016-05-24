@@ -56,7 +56,7 @@ var options = {
     manipulation: {
 		addNode: function(node, callback) {
 			let nodes = state.graph.nodes.get()
-			node.id =  nodes[nodes.length - 1].id  +1
+			node.id =  (nodes[nodes.length - 1].id || 0)  + 1
 			node.label = node.id
 			callback(node)
 		}
@@ -249,21 +249,24 @@ window.s = state
     padding: 5px;
     box-sizing: border-box;
 }
-#submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve, #hud2 .button{
+
+#hud2 .button{
 	background-color: #3691b0;
 	text-align: center;
 	color: white;
 	font-size: 1.5em;
 	transition: all 0.2s ease-in;
 	line-height: 30px;
-	flex: 0 0 120px;
+	flex: 0 0 8vw;
 	margin-left: 10px;
 }
-#submit:hover, #order:hover, #step:hover, #continue:hover, #addedge:hover, #addvertex:hover, #remove:hover, #curve:hover{
+
+#hud2 .button:hover{
 	color: #666;
 	transition: all 0.2s ease-in;
 }
-#submit:active, #order:active, #step:active, #continue:active, #addedge:active, #addvertex:active, #remove:active, #curve:active{
+
+#hud2 .button:active{
 	box-shadow: inset 0 0 10px #666;
 	transition: all 0.2s ease-in;
 }
