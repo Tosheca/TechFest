@@ -232,10 +232,10 @@ input#text-create:focus {
 	box-shadow: inset 0 0 5px #333;
 }
 #logout{
-	width: 7%;
 	color: lightblue;
 	font-size: 1.5em;
 	background-color: #63b4cf;
+	flex: 0 0 100px;
 }
 #logout:hover{
 	color: white;
