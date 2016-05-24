@@ -30,6 +30,7 @@ let router = new VueRouter()
 router.map({
 	'/user': {
 		component: UserComponent,
+		name: "user",
 		subRoutes: {
 			'/login': {
 				component: Login
@@ -54,9 +55,7 @@ router.map({
 		auth: true
 	},
 	'/' : {
-		component: function(callback) {
-
-		},
+		component: AllPrograms,
 		auth: true
 	}
 })
@@ -74,7 +73,7 @@ router.beforeEach(function ({ from, to, next, redirect }) {
 		if(from.component == null){
 			redirect("/user/")
 		}
-		
+
 		return false
 
 

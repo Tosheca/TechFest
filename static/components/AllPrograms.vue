@@ -32,6 +32,8 @@ export default {
 	methods: {  
 		logout() {
 			this.$user.logout()
+			this.$router.go({ name: "user" })
+
 			console.log("logout")
 		},
 		async add() {
