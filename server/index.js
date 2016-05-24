@@ -22,10 +22,10 @@ app.use(jwt( { secret: secret, passthrough: true } ))
 
 router.post('/register', function *() {
 	let { name, email, pass } = this.request.body
-	
+	let programs = []
 	console.log("Register: ", {name, email})
 
-	let user = new User({ name, email, pass })
+	let user = new User({ name, email, pass, programs })
 
 	try {
 		yield user.save()

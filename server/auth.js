@@ -16,7 +16,23 @@ router.use(function *(next) {
 })
 
 router.get('/user/program/:id/graph', function *() {
-	let program = yield Program.findById(this.id)
+	let program = yield Program.findById(this.params.id)
+	this.body = program.graph
+})
+
+router.post('/user/program/:id/graph', function *() {
+	let program = yield Program.findById(this.params.id)
+	let {edges, vertices} = this.request.body
+	
+	program.graphs.push({edges, vertices})
+	
+	try{
+		yield program.save()
+		//console.log(program.graphs, edges, vertices)
+
+	}catch(error){
+		console.log("Can't add graph: ", error)
+	}
 	this.body = program.graph
 })
 
@@ -53,9 +69,8 @@ router.post('/user/program/:id/graph/addEdge', function *() {
 
 router.post('/user/programs', function *() {
 	var { name } = this.request.body
-
 	var user = yield User.findById(this.state.user.id)
-	let program = new Program({ name })
+	let program = new Program({ name: name, graphs: [] })
 	user.programs.push(program.id)
 	try{
 		yield program.save()

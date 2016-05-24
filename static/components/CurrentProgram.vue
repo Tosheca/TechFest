@@ -6,11 +6,13 @@
 </nav>
 <nav id="hud2">
 	<a class="button" id="submit" v-on:click="submit">Submit</a>
-	<a class="button" id="order" v-on:click="order">Order</a>
+	<a class="button" id="clear" v-on:click="clear">Clear</a>
+	<a class="button" id="save" v-on:click="save">Save</a>
+<!-- 	<a class="button" id="order" v-on:click="order">Order</a>
 	<a class="button" id="step" v-on:click="step">Step</a>
 	<a class="button" id="continue" v-on:click="continue">Continue</a>
-	<a class="button" id="addedge" v-on:click="addEdge">AddEdge</a>
-	<a class="button" id="addvertex" v-on:click="addVertex">addVertex</a>
+ -->	<a class="button" id="addedge" v-on:click="addEdge">Add Edge</a>
+	<a class="button" id="addvertex" v-on:click="addVertex">Add Vertex</a>
 	<a class="button" id="remove" v-on:click="remove">Remove</a>
 	<a class="button" id="curve" v-on:click="smooth">Curve</a>
 
@@ -27,6 +29,12 @@ import vis from "vis"
 //import io from "socket.io-client"
 
 //var socket = io("/")
+
+
+let state = {
+
+}
+
 var options = {
     nodes: {
         scaling: {
@@ -44,11 +52,14 @@ var options = {
         stabilization: {
             iterations: 3000
         }
-    }
-}
-
-let state = {
-
+    },
+    manipulation: {
+		addNode: function(node, callback) {
+			node.id = state.graph.nodes.get().length +  1
+			node.label = node.id
+			callback(node)
+		}
+	}
 }
 
 export default {
@@ -84,21 +95,34 @@ export default {
 		},
 		back(){
 			this.$router.go({ name: "programs" })
+		},
+		clear(){
+			state.graph.edges.clear()
+			state.graph.nodes.clear()
+
+		},
+		save(){
+			let graph = {
+				vertices: state.graph.nodes.get(),
+				edges: state.graph.edges.get()
+			}
+			this.program.addGraph(graph)
 		}
 
 	},
 	route: {
 		async data({ next }) {
 			let program = await this.$programs.get(this.$route.params.id)
-			console.log(program.graphs[0])
+			console.log(program.graphs)
 
-			if(program.graphs[0] != null){
-				if(program.graphs[0].edges.length > 0 && program.graphs[0].vertices.length > 0){
+			if(program.graphs.length != 0){
+				if(program.graphs[program.graphs.length - 1].edges.length > 0 && program.graphs[program.graphs.length-1].vertices.length > 0){
+					console.log(program.graphs)
 					state.graph.nodes.clear()
 					state.graph.edges.clear()
 
-					state.graph.nodes.add(program.graphs[0].vertices.map(e => {e.label = e.id; return e}))
-					state.graph.edges.add(program.graphs[0].edges)
+					state.graph.nodes.add(program.graphs[program.graphs.length - 1].vertices.map(e => {e.label = e.id; return e}))
+					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges)
 				}
 			}
 
@@ -223,7 +247,7 @@ window.s = state
     padding: 5px;
     box-sizing: border-box;
 }
-#submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve{
+#submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve, #hud2 .button{
 	background-color: #3691b0;
 	text-align: center;
 	color: white;

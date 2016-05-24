@@ -12,9 +12,9 @@
 </nav>
 
 
-<div v-for="program in programs" class="programs" track-by="_id">
+<div v-for="program in programs" class="programs" track-by="id">
 <div class="program">
-	<a class="programl" v-link="{ name: 'program', params: { id: program._id } }"> 
+	<a class="programl" v-link="{ name: 'program', params: { id: program.id } }"> 
 	<span class="name">{{program.name}}</span>
 	<span class="when">{{fomrtedDate(program.created)}}</span></a>
 	<button class="button close" v-on:click="remove(program._id, $index)">X</button>
@@ -37,10 +37,10 @@ export default {
 			console.log("logout")
 		},
 		async add() {
-			let res = await this.$programs.create({name: this.name})
-			console.log(res)
-			if(res.res){
-				this.programs.push(res.res)
+			let program = await this.$programs.create({name: this.name})
+			console.log(program)
+			if(program){
+				this.programs.push(program)
 				this.name = ""
 			}else{
 
