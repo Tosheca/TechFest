@@ -79,7 +79,8 @@ export default {
 }
 
 .when{
-	flex: 2;
+	flex: 2.1;
+	text-align: right;
 }
 #app{
 	height: 100%;
@@ -124,7 +125,7 @@ export default {
 	text-decoration: none;
 	text-align: left;
 	display: flex;
-	width: 80%;
+	width: 93%;
 }
 .program {
 	background-color: #63b4cf;
@@ -135,6 +136,9 @@ export default {
 	margin: auto;
 	justify-content: center;
 	transition: all 0.15s ease-in;
+
+	line-height: 30px;
+    padding-left: 15px;
 }
 .program:hover{
 	background-color: #666;
@@ -182,7 +186,6 @@ h3 {
 }
 .close {
 	height: 25px;
-	width: 25px;
 	padding: 7px;
 	font-size: 1em;
 	line-height: 5px;
@@ -191,6 +194,7 @@ h3 {
 	display: flex;
 	width: auto;
 	border-radius: 25px;
+	flex: 0 0 25px; /* викторе като ползваш flex така се задава width */
 }
 .close:hover{
 

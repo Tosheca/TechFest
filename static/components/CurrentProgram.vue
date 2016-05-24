@@ -38,7 +38,7 @@ var options = {
     },
     physics: {
         barnesHut: {
-            gravitationalConstant: -10000
+            gravitationalConstant: -5000
         },
         stabilization: {
             iterations: 3000
