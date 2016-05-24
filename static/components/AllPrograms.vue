@@ -207,6 +207,9 @@ h3 {
 	color: white;
 	box-shadow: 0 0 2px red;
 }
+.close:active{
+	outline: none;
+}
 #text-create{
 	font-size: 1.2em;
 	height: 40px;
