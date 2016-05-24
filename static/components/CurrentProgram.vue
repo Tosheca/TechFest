@@ -220,16 +220,18 @@ window.s = state
     justify-content: flex-start;
     transition: all 0.2s ease-in;
     z-index: 1;
+    padding: 10px;
+    box-sizing: border-box;
 }
 #submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve{
 	background-color: #3691b0;
 	text-align: center;
 	color: white;
-	vertical-align: center;
-	padding-top: 10px;
 	font-size: 1.5em;
 	transition: all 0.2s ease-in;
+	line-height: 20px;
 	flex: 0 0 120px;
+	margin-left: 10px;
 }
 #submit:hover, #order:hover, #step:hover, #continue:hover, #addedge:hover, #addvertex:hover, #remove:hover, #curve:hover{
 	color: #666;
