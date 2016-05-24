@@ -39,8 +39,9 @@ export default {
 		async add() {
 			let res = await this.$programs.create({name: this.name})
 			console.log(res)
-			this.programs.push(res.res)
-
+			if(res.res){
+				this.programs.push(res.res)
+			}
 		},
 		async remove(id, index){
 			try{

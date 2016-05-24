@@ -56,10 +56,15 @@ router.post('/user/programs', function *() {
 
 	var user = yield User.findById(this.state.user.id)
 	let program = new Program({ name })
-	program.save()
 	user.programs.push(program.id)
-	user.save()
-	
+	try{
+		yield program.save()
+		yield user.save()
+	}catch(error){
+		console.log(error.message)
+		this.body = { state: "fucked up", message: error.message}
+		return -1
+	}
 	this.body = { state: "ok", message: "Success", res: program}
 })
 
