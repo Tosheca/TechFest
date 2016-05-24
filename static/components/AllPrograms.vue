@@ -199,11 +199,11 @@ h3 {
 	display: flex;
 	width: auto;
 	border-radius: 25px;
-	flex: 0 0 25px; /* викторе като ползваш flex така се задава width */
+	flex: 0 0 25px;
 }
 .close:hover{
-
-	color: red;
+	background-color: #cc0000;
+	color: white;
 	box-shadow: 0 0 2px red;
 }
 #text-create{
