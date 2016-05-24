@@ -170,7 +170,6 @@ h3 {
 	outline: none;
 }
 .close {
->>>>>>> origin/master
 	height: 25px;
 	width: 25px;
 	padding: 7px;
