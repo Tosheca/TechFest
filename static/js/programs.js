@@ -9,7 +9,7 @@ export default class Programs {
 		return res.data
 	}
 
-	async getId(id){
+	async get(id){
 		let res =  await http.get("/api/user/program/" + id)
 		return res.data
 
@@ -20,8 +20,8 @@ export default class Programs {
 		return res.data
 	}
 
-	async delete(id){
-		let res = await http.post("/api/user/programs", { name })
+	async remove(id){
+		let res =  await http.delete("/api/user/program/" + id)
 		return res.data
 	}
 

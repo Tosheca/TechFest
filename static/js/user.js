@@ -33,6 +33,10 @@ export default class User {
 
 		if(this.logedin){
 			this.status = getContent(localStorage["token"])
+			if(this.status.exp < Date.now){
+				this.logedin = false
+				localStorage["token"] = ""
+			}
 		}
 
 		this.setToken()

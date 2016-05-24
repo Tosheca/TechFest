@@ -11,12 +11,13 @@
 <input id="text-create" type="text" maxlength="18" v-model="name">
 </nav>
 
-<div class="programs-mom" v-for="program in programs">
 
-<div class="programs">
-	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }"><span class="name">{{program.name}}</span>
-	<span class="when"> {{program.created}}</span></a>
-	<button class="button" id="X">X</button>
+<div v-for="program in programs" class="programs" track-by="_id">
+<div class="program">
+	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }"> 
+	<span class="name">{{program.name}}<span>, 
+	<span class="when">{{program.created}}</span></a>
+	<button class="button close" v-on:click="remove(program._id, $index)">X</button>
 </div>
 </div>
 
@@ -33,9 +34,19 @@ export default {
   		},
 		async add() {
 			let res = await this.$programs.create({name: this.name})
-			let list = await this.$programs.getList()
-			this.programs = list
 			console.log(res)
+			this.programs.push(res.res)
+
+		},
+		async remove(id, index){
+			try{
+				let res = await this.$programs.remove(id)
+				this.programs.splice(index, 1)
+			}catch(error){
+
+			}
+			//let list = await this.$programs.getList()
+			
 		}
 	},
 	route: {
@@ -46,7 +57,9 @@ export default {
 	},
 	data() {
 		return {
-			programs: [],
+			programs: [
+				{ _id: "" }
+			],
 			name: "",
 			username: ""
 		}
@@ -63,7 +76,7 @@ export default {
 	width: 100%;
 	transition: all 0.1s ease-in;
 }
-.programs-mom{
+.programs{
 	background-color: lightblue;
 	padding-top: 1vh;
 	padding-bottom: 1vh;
@@ -102,7 +115,7 @@ export default {
 	display: flex;
 	margin: auto;
 }
-.programs {
+.program {
 	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
@@ -112,11 +125,11 @@ export default {
     justify-content: center;
     transition: all 0.15s ease-in;
 }
-.programs:hover{
+.program:hover{
 	background-color: #666;
 	box-shadow: 0 0 15px #666;
 }
-.programs:active{
+.program:active{
 	box-shadow: 0 0 0 #666;
 }
 #nav2 {
@@ -156,9 +169,8 @@ h3 {
 #create:focus, #logout:focus, #X:focus{
 	outline: none;
 }
-#X {
-
-	margin-left: 1vw;
+.close {
+>>>>>>> origin/master
 	height: 25px;
 	width: 25px;
 	padding: 7px;
@@ -170,7 +182,7 @@ h3 {
 	width: auto;
 	border-radius: 25px;
 }
-#X:hover{
+.close:hover{
 
 	color: red;
 	box-shadow: 0 0 2px red;
