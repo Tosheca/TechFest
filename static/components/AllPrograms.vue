@@ -130,12 +130,16 @@ export default {
 	width: 93%;
 }
 .program {
+	padding-right: 10px;
 	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
-	width: 30vw;
+	width: 30.8vw;
 	display: flex;
-	margin: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: auto;
+	margin-left: 33.8vw;
 	justify-content: center;
 	transition: all 0.15s ease-in;
 
