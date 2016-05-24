@@ -133,7 +133,7 @@ export default {
 	display: flex;
 	width: 93%;
 }
-.program {
+.program { /*result*/
 	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
@@ -142,7 +142,8 @@ export default {
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-right: auto;
-	margin-left: 649px;
+	margin-left: auto;
+	padding-right: 15px;
 	justify-content: center;
 	transition: all 0.15s ease-in;
 
