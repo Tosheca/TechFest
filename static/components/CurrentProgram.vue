@@ -2,16 +2,17 @@
 
 <nav id="hud">
 <h1 id="currentl">Current program: {{program.name}}</h1>
+<button id="logout2" class="button" v-on:click="allprograms">My programs</button>
 </nav>
-<nav>
-	<a v-on:click="submit">Submit</a>
-	<a v-on:click="order">Order</a>
-	<a v-on:click="step">Step</a>
-	<a v-on:click="continue">Continue</a>
-	<a v-on:click="addEdge">AddEdge</a>
-	<a v-on:click="addVertex">addVertex</a>
-	<a v-on:click="remove">Remove</a>
-	<a v-on:click="smooth">Curve</a>
+<nav id="hud2">
+	<a class="button" id="submit" v-on:click="submit">Submit</a>
+	<a class="button" id="order" v-on:click="order">Order</a>
+	<a class="button" id="step" v-on:click="step">Step</a>
+	<a class="button" id="continue" v-on:click="continue">Continue</a>
+	<a class="button" id="addedge" v-on:click="addEdge">AddEdge</a>
+	<a class="button" id="addvertex" v-on:click="addVertex">addVertex</a>
+	<a class="button" id="remove" v-on:click="remove">Remove</a>
+	<a class="button" id="curve" v-on:click="smooth">Curve</a>
 
 </nav>
 
@@ -148,7 +149,26 @@ window.s = state
 </script>
 
 <style>
+#logout2{
+	margin-left: 65%;
+	width: 10%;
+	color: lightblue;
+	font-size: 1.5em;
+	background-color: #63b4cf;
+	transition: all 0.2s ease-in;
 
+}
+#logout2:hover{
+	color: white;
+	box-shadow: 0 0 60px #666;
+}
+#logout2:active{
+	box-shadow: inset 0 0 10px #666;
+	
+}
+#logout2:focus{
+	outline: none;
+}
 
 
 #hud{
@@ -158,6 +178,7 @@ window.s = state
 	background-color: #63b4cf;
 	display: flex;
     align-content: center;
+    transition: all 0.2s ease-in;
 }
 #currentl{
 	margin-top: auto;
@@ -171,9 +192,10 @@ window.s = state
     font-weight: bold;
     line-height: 64px;
     text-align: left;
+    transition: all 0.2s ease-in;
 }
 	#network {
-		height: calc(90vh - 65px);
+		height: 86vh;
 	}	
 	.vis-network, canvas {
 		height: 100vh
@@ -184,5 +206,31 @@ window.s = state
 	.vis-network canvas:active {
 		outline: none;
 	}
+#hud2{
+	font-family: arial;
+	cursor: default;
+	height: 65px;
+	background-color: #63b4cf;
+	display: flex;
+    justify-content: center;
+    transition: all 0.2s ease-in;
+}
+#submit, #order, #step, #continue, #addedge, #addvertex, #remove, #curve{
+	background-color: #3691b0;
+	text-align: center;
+	color: white;
+	vertical-align: center;
+	padding-top: 20px;
+	font-size: 1.5em;
+	transition: all 0.2s ease-in;
+}
+#submit:hover, #order:hover, #step:hover, #continue:hover, #addedge:hover, #addvertex:hover, #remove:hover, #curve:hover{
+	color: #666;
+	transition: all 0.2s ease-in;
+}
+#submit:active, #order:active, #step:active, #continue:active, #addedge:active, #addvertex:active, #remove:active, #curve:active{
+	box-shadow: inset 0 0 10px #666;
+	transition: all 0.2s ease-in;
+}
 
 </style>
