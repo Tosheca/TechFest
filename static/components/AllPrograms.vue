@@ -137,12 +137,12 @@ export default {
 	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
-	width: 30.8vw;
+	width: 591.3px;
 	display: flex;
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-right: auto;
-	margin-left: 33.8vw;
+	margin-left: 649px;
 	justify-content: center;
 	transition: all 0.15s ease-in;
 
@@ -209,6 +209,9 @@ h3 {
 	background-color: #cc0000;
 	color: white;
 	box-shadow: 0 0 2px red;
+}
+.close:active{
+	outline: none;
 }
 #text-create{
 	font-size: 1.2em;
