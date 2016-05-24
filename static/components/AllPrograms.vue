@@ -41,6 +41,9 @@ export default {
 			console.log(res)
 			if(res.res){
 				this.programs.push(res.res)
+				this.name = ""
+			}else{
+
 			}
 		},
 		async remove(id, index){
