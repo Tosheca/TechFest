@@ -14,9 +14,9 @@
 
 <div v-for="program in programs" class="programs" track-by="_id">
 <div class="program">
-	<a id="programl" v-link="{ name: 'program', params: { id: program._id } }"> 
-	<span class="name">{{program.name}}<span>, 
-	<span class="when">{{program.created}}</span></a>
+	<a class="programl" v-link="{ name: 'program', params: { id: program._id } }"> 
+	<span class="name">{{program.name}}</span>
+	<span class="when">{{fomrtedDate(program.created)}}</span></a>
 	<button class="button close" v-on:click="remove(program._id, $index)">X</button>
 </div>
 </div>
@@ -25,13 +25,15 @@
 </template>
 
 <script>
+
+import moment from "moment"
 // console.log(list)
 export default {
 	methods: {  
 		logout() {
-   			this.$user.logout()
-   			console.log("logout")
-  		},
+			this.$user.logout()
+			console.log("logout")
+		},
 		async add() {
 			let res = await this.$programs.create({name: this.name})
 			console.log(res)
@@ -47,11 +49,15 @@ export default {
 			}
 			//let list = await this.$programs.getList()
 			
+		},
+		fomrtedDate(date){
+			return moment(new Date(date)).fromNow()
 		}
 	},
 	route: {
 		async data({ next }) {
 			let list = await this.$programs.getList()
+			console.log(list[0 ])
 			next({programs: list, username:  this.$user.status.name})
 		}
 	},
@@ -69,7 +75,11 @@ export default {
 </script>
 <style> 
 .name{
-	columns: 2;
+	flex: 5;
+}
+
+.when{
+	flex: 2;
 }
 #app{
 	height: 100%;
@@ -105,25 +115,26 @@ export default {
 	height: 6.5vh;
 	background-color: #63b4cf;
 	display: flex;
-    justify-content: center;
-    align-content: center;
+	justify-content: center;
+	align-content: center;
 }
-#programl{
+
+.programl{
 	color: white;
 	text-decoration: none;
-	text-align: center;
+	text-align: left;
 	display: flex;
-	margin: auto;
+	width: 80%;
 }
 .program {
 	background-color: #63b4cf;
 	font-family: arial;
 	padding: 5px;
-	width: 25vw;
+	width: 30vw;
 	display: flex;
 	margin: auto;
-    justify-content: center;
-    transition: all 0.15s ease-in;
+	justify-content: center;
+	transition: all 0.15s ease-in;
 }
 .program:hover{
 	background-color: #666;
@@ -134,24 +145,24 @@ export default {
 }
 #nav2 {
 	padding-top: 50px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
+	display: flex;
+	justify-content: center;
+	align-content: center;
 }
 h3 {
 	margin-top: -0.5vh;
 	text-align: left;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    margin-right: 0px;
-    text-shadow: 0 0 5px #666;
-    padding-top: 0;
-    padding-bottom: 0; 
-    padding-left: 2vw;
-    font-size: 3em;
-    color: white;
-    font-weight: bold;
-    line-height: 64px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	text-shadow: 0 0 5px #666;
+	padding-top: 0;
+	padding-bottom: 0; 
+	padding-left: 2vw;
+	font-size: 3em;
+	color: white;
+	font-weight: bold;
+	line-height: 64px;
 }
 #up {
 	height: 100vh;
@@ -199,7 +210,7 @@ h3 {
 	transition: all 0.25s ease-in;
 }
 input#text-create:focus {
-    box-shadow: inset 0 0 5px #333;
+	box-shadow: inset 0 0 5px #333;
 }
 #logout{
 	width: 7%;
