@@ -153,7 +153,7 @@ window.s = state
 
 <style>
 #logout2{
-	margin-left: 65%;
+	margin-left: auto;
 	width: 10%;
 	color: lightblue;
 	font-size: 1.5em;
