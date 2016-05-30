@@ -6,8 +6,6 @@ var Program = require("./models/program.js")
 
 router.use(function *(next) {
 	if(this.state.user){
-		console.log("Auth:", this.state.user.name)
-
 		yield next
 	}else{
 		this.status = 401
@@ -84,7 +82,7 @@ router.post('/user/programs', function *() {
 })
 
 router.get('/user/programs', function *() {
-	var user = yield User.findById(this.state.user.id).populate("programs")
+	var user = yield User.findById(this.state.user.id).populate("programs","_id created modified name", null, { sort: { "created": -1 } })
 	this.body = user.programs
 })
 

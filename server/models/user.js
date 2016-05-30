@@ -2,13 +2,12 @@ var mongoose = require("mongoose")
 var Schema = mongoose.Schema
 
 var crypto = require('crypto')
-//var { isEmail } = require('validator');
-
+var { isEmail } = require('validator')
 
 var UserSchema = new Schema({
 	name: { type: String, index: { unique: true }, required: true },
 	pass: { type: String, index: { unique: false }, required: true },
-	email: { type: String, index: { unique: true }, required: true/*, validate: [ isEmail, 'invalid email'] */},
+	email: { type: String, validate: [ (value) => { let res = isEmail(value); console.log(res); return res }, "Email not valid" ], index: { unique: true }, required: true },
 	programs: { type: [ { type: Schema.Types.ObjectId, ref: 'Program'} ] }
 
 })

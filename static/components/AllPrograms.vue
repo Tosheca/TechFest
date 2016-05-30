@@ -40,7 +40,7 @@ export default {
 			let program = await this.$programs.create({name: this.name})
 			console.log(program)
 			if(program){
-				this.programs.push(program)
+				this.programs.unshift(program)
 				this.name = ""
 			}else{
 
@@ -63,7 +63,7 @@ export default {
 	route: {
 		async data({ next }) {
 			let list = await this.$programs.getList()
-			console.log(list[0 ])
+			console.log(list)
 			next({programs: list, username:  this.$user.status.name})
 		}
 	},
@@ -148,7 +148,7 @@ export default {
 	justify-content: center;
 	transition: all 0.15s ease-in;
 	
-	line-height: 30px;
+	line-height: 40px;
     padding-left: 15px;
 }
 .program:hover{
@@ -206,6 +206,7 @@ h3 {
 	width: auto;
 	border-radius: 25px;
 	flex: 0 0 25px;
+	margin-left: 17px;
 }
 .close:hover{
 	background-color: #cc0000;

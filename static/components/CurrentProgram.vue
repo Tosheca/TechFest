@@ -37,17 +37,23 @@ let state = {
 
 var options = {
     nodes: {
+    	size: 60,
         scaling: {
             min: 16,
-            max: 32
+            max: 42
         }
     },
     edges: {
         smooth: false
     },
     physics: {
+	    solver: "forceAtlas2Based",
         barnesHut: {
             gravitationalConstant: -5000
+        },
+        forceAtlas2Based:{
+            gravitationalConstant: -200,
+            avoidOverlap: 1
         },
         stabilization: {
             iterations: 3000

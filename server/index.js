@@ -28,10 +28,12 @@ router.post('/register', function *() {
 	let user = new User({ name, email, pass, programs })
 
 	try {
-		yield user.save()
+		let wtf = yield user.save()
+		console.log(wtf)
 		this.body = "Success"
 	}
 	catch(error) {
+		console.log(error)
 		this.body = error.message
 	}
 
