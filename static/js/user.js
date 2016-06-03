@@ -1,5 +1,4 @@
 import http from "axios" 
-window.h = http
 // random function found on the web 
 // TODO: if problems rewrite
 function getContent(token) {

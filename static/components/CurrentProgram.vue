@@ -26,19 +26,23 @@
 <script>
 
 import vis from "vis"
-import io from "socket.io-client"
+import socket from "socket.io-client"
 
-var socket = io("/")
+var io = socket("/")
 
-socket.on("connect", (arg) => {
-	console.log("Connected: ", arg)
-})
 
-window.soc = socket
+
+window.io = io
 
 let state = {
 
 }
+
+
+io.on("vertex", (data) => {
+	console.log(data)
+	state.graph.nodes.update(data)
+})
 
 var options = {
     nodes: {
@@ -139,7 +143,12 @@ export default {
 				}
 			}
 			
-			socket.emit("open", {id: program.id})
+			io.on("connect", (arg) => {
+				console.log("Connected: ", arg)
+				io.emit("open", {id: program.id})
+			})
+
+
 
 
 			next({ program })

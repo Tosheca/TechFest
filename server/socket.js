@@ -24,8 +24,16 @@ module.exports = function(io) {
 		})
 
 		socket.on('vertex', function (data) {
-			let recv = recv = io.sockets.in(room).sockets.filter((sock) => sock.program == client)
-			console.log(recv)
+			for(let key in io.sockets.in(room).sockets){
+				let sock = io.sockets.in(room).sockets[key]
+		//		console.log(sock)
+				if(sock.program == client){
+					console.log("Send to: ", key)
+					sock.emit("vertex", data)
+				}
+			}
+
+			//console.log(recv)
 			console.log(data)
 		})
 	})
