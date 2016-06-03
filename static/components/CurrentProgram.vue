@@ -26,10 +26,15 @@
 <script>
 
 import vis from "vis"
-//import io from "socket.io-client"
+import io from "socket.io-client"
 
-//var socket = io("/")
+var socket = io("/")
 
+socket.on("connect", (arg) => {
+	console.log("Connected: ", arg)
+})
+
+window.soc = socket
 
 let state = {
 
@@ -133,6 +138,9 @@ export default {
 					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges)
 				}
 			}
+			
+			socket.emit("open", {id: program.id})
+
 
 			next({ program })
 		},
