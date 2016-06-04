@@ -20,6 +20,12 @@
 
 <div id="network"  v-el:vis-container></div>
 
+<nav id="ctrls">
+	<div v-on:click="play">play</div>
+	<div v-on:click="pause">pause</div>
+	<div v-on:click="step">step</div>
+</nav>
+
 </template>
 
 
@@ -124,6 +130,15 @@ export default {
 				edges: state.graph.edges.get()
 			}
 			this.program.addGraph(graph)
+		},
+		play(){
+
+		},
+		pause(){
+
+		},
+		step(){
+			
 		}
 
 	},
@@ -176,7 +191,12 @@ export default {
 			state.network = new vis.Network(this.$els.visContainer, { nodes, edges }, options)
 window.s = state
 			
+		},
+		
+		deactivate(){
+			io.disconnect()
 		}
+
 	},
 	computed: {
 

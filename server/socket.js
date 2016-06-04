@@ -36,5 +36,10 @@ module.exports = function(io) {
 			//console.log(recv)
 			console.log(data)
 		})
+
+		socket.on("disconnect", (data) => {
+			console.log("disconnected", socket.id)
+
+		})
 	})
 }
