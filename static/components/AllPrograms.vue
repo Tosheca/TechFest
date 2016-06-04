@@ -107,6 +107,7 @@ export default {
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-right: 1%;
+	white-space: nowrap;
 }
 #full {
 
@@ -174,10 +175,11 @@ h3 {
 	padding-top: 0;
 	padding-bottom: 0; 
 	padding-left: 2vw;
-	font-size: 3em;
+	font-size: 300%;
 	color: white;
 	font-weight: bold;
 	line-height: 64px;
+	white-space: nowrap;
 }
 #up {
 	height: 100vh;
@@ -186,7 +188,7 @@ h3 {
 }
 #create {
 	width: 250px;
-	font-size: 1.2em;
+	font-size: 120%;
 	height: 40px;
 	display: block;
 	box-sizing: border-box;
@@ -241,5 +243,21 @@ input#text-create:focus {
 #logout:hover{
 	color: white;
 	box-shadow: 0 0 60px #666;
+}
+@media screen and (max-width: 620px){
+	.program {
+		width: 420px ;
+	}
+	#text-create {
+		width: 260px;
+	}
+	#create {
+		font-size: 100%;
+		white-space: nowrap;
+		width: 160px;
+	}
+	#top {
+
+	}
 }
 </style>
