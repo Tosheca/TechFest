@@ -8,7 +8,7 @@
 </nav>
 <nav id="nav2">  
 <button id="create" class="button" v-on:click="add">Create a program</button>
-<input id="text-create" type="text" maxlength="27" v-model="name" placeholder="Program name">
+<input id="text-create" type="text" maxlength="18" v-model="name" placeholder="Program name">
 </nav>
 
 

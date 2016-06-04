@@ -258,6 +258,7 @@ window.s = state
     white-space: nowrap;
 }
 #currentl{
+	display: flex;
 	margin-top: auto;
 	margin-bottom: auto;
     text-shadow: 0 0 5px #666;
@@ -377,5 +378,33 @@ transform: rotate(315deg);
 }
 #stepbackward:active{
 transform: rotate(calc(315deg + 180deg));
+}
+										@media screen and (max-width: 750px) {
+											#hud2 .button{
+		background-color: #3691b0;
+		text-align: center;
+		color: white;
+		font-size: 110%;
+		transition: all 0.2s ease-in;
+		line-height: 30px;
+		flex: 0 0 5vw;
+		margin-left: 10px;
+		white-space: nowrap;
+	}
+		#currentl{
+		display: flex;
+		margin-top: auto;
+		margin-bottom: auto;
+	    text-shadow: 0 0 5px #666;
+	    padding-top: 0;
+	    padding-bottom: 0; 
+	    padding-left: 2vw;
+	    font-size: 160%;
+	    color: white;
+	    font-weight: bold;
+	    line-height: 64px;
+	    text-align: left;
+	    transition: all 0.2s ease-in;
+}
 }
 </style>
