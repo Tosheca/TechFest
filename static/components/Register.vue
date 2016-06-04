@@ -1,11 +1,20 @@
 <template>
 	<fieldset class="form">
 		<legend>Register</legend>
-		<input type="text" v-model="user.name" placeholder="Username">
-		<input type="text" v-model="user.email" placeholder="E-mail">
-		<input type="password" v-model="user.pass" placeholder="Password">
-		<input type="password" v-model="user.passrep" placeholder="Confirm Password">
-		
+		<validator name="validation">
+			
+			<!--<input type="text" v-model="user.name" placeholder="Username" v-validate="maxLength: 10">
+			-->
+			<input type="text" v-model="user.name" placeholder="Username" v-validate:usernamevalidation="{ minlength: 8 , maxlength: 32}">
+    			<span v-if="$validation.usernamevalidation.minlength">Your username is too short.</span>
+    			<span v-if="$validation.usernamevalidation.maxlength">Your username is too long.</span>
+			<input type="text" v-model="user.email" placeholder="E-mail">
+			<input type="password" v-model="user.pass" placeholder="Password" v-validate:passwordvalidation="{ minlength: 8 , maxlength: 32}">
+				<span v-if="$validation.passwordvalidation.minlength">Your password is too short.</span>
+    			<span v-if="$validation.passwordvalidation.maxlength">Your password is too long.</span>
+			<input type="password" v-model="user.passrep" placeholder="Confirm Password"
+			
+		</validator>
 		<div class="row inline">
 			<a class="button" v-link="{ path: '/user/' }">Back</a>
 			<a v-on:click="submit" class="button">Submit</a>
