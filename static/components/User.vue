@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div id="left"><!-- logo -->
-		
+		<img id="logon" src="/logo.png"></img>
 	</div>
 	<div id="right">
 		<div class="content">
@@ -61,6 +61,16 @@ export default {
 
 <style>
 @media screen and (min-width: 1000px) {
+	#logon {
+		position: fixed;
+		height: auto;;
+	    width: auto;
+	    margin-top: -5vh;
+	    max-width: 120vh; 
+	    max-height: 120vw;
+	    z-index: -1;
+	    transition: all 0.3s ease-in-out;
+	}
 	#right {
 		border-left: 65vh solid transparent;
 		border-right: 0vh solid transparent;
@@ -138,6 +148,16 @@ export default {
 } 
 
 @media screen and (max-width: 999px){
+	#logon {
+		position: fixed;
+		height: auto;;
+	    width: auto;
+	    margin-top: -5vh;
+	    max-width: 0;
+	    max-height: 0;
+	    z-index: -1;
+	    transition: all 0.3s ease-in-out;
+	}
 	#right {
 		border-left: 65vh solid transparent;
 		border-right: 0vh solid transparent;
