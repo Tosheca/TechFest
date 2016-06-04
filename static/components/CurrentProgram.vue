@@ -20,14 +20,13 @@
 </nav>
 
 <div id="network"  v-el:vis-container></div>
-<div id="controls_bg">
 <nav id="controls">
-	<div id="playpause" v-on:click="pp" v-bind:class="play"></div>
-	<div id="stepbackward" v-on:click="step_backword"></div>
-	<div id="stepforward" v-on:click="step_forward"></div>
-	
+	<div id="parent_step">
+	<div class="stepcontrols" id="playpause" v-on:click="pp" v-bind:class="play"></div>
+	<div class="stepcontrols" id="stepbackward" v-on:click="step_backword"></div>
+	<div class="stepcontrols" id="stepforward" v-on:click="step_forward"></div>
+	</div>
 </nav>
-</div>
 
 </template>
 
@@ -342,51 +341,58 @@ window.s = state
 #controls > * {
 	/*display: inline-block;*/
 }
-
-#playpause {
-
+#parent_step{
+	display: flex;
+	width: auto;
+	height: 60px;
+}
+.stepcontrols {
+	position: relative;
+	width: 50px;
+	height: 50px;
+}
+#playpause{
+	height: 0;
+	width: 0;
 	transform: rotate(calc(360deg + 90deg));
-	border-left: 30px solid transparent;
-	border-right: 30px solid transparent;
-	border-bottom: 45px solid #3691b0;
-	margin-right: 15px;
-	transition: all 0.2s ease-in-out;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 45px solid #3691b0;
+    margin-right: 15px;
+    transition: all 0.2s ease-in-out;
 }
-#playpause.active {
+#playpause.active{
+	height: 50px;
 	transform: none;
-	width: 10px;
-	border-right: 10px solid #3691b0;
-	border-left: 10px solid #3691b0;
-	border-bottom: none;
-	margin: 0px 30px 0px 15px;
-}
-#playpause:hover{
-
+    width: 10px;
+    border-right: 10px solid #3691b0;
+    border-left: 10px solid #3691b0;
+    border-bottom: none;
+    margin: 0px 30px 0px 15px;
 }
 #stepforward {
 	margin-left: auto;
 	border-right: 10px solid #3691b0; 
-	border-bottom: 10px solid #3691b0;
-	width: 30px; height: 30px;
-	transform: rotate(-45deg);
+    border-bottom: 10px solid #3691b0;
+    width: 30px; height: 30px;
+    transform: rotate(-45deg);
 }
 #stepbackward {
 	margin-left: auto;
 	border-right: 10px solid #3691b0; 
-	border-bottom: 10px solid #3691b0;
-	width: 30px; height: 30px;
-	transform: rotate(135deg);
-}
-#stepforward, #stepbackward {
-	transition: all 0.1s ease-in-out;
-	height: 31.5px;
-}
-#stepforward:active {
-	transform: rotate(315deg);
+    border-bottom: 10px solid #3691b0;
+    width: 30px; height: 30px;
+    transform: rotate(135deg);
+
 }
 #stepbackward:active{
-	transform: rotate(calc(315deg + 180deg));
+
 }
+#stepforward:active{
+
+}
+
+
 
 @media screen and (max-width: 750px) {
 	#hud2 .button{
