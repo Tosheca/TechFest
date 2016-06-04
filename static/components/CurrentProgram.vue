@@ -132,9 +132,8 @@ export default {
 			let story = this.program.graphs[this.program.graphs.length - 1].story
 			if(this.step != 0){
 				this.step -= 1
-			}			
-
-
+			}
+			
 			let step = story[this.step]
 			step.color = "#97C2FC"
 			state.graph.nodes.update(step)

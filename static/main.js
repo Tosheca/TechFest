@@ -15,6 +15,8 @@ import CurrentProgram from './components/CurrentProgram.vue'
 import User from "./js/user.js"
 import Programs from "./js/programs.js"
 
+import Home from "./components/Home.vue"
+
 let user = new User()
 let programs = new Programs()
 
@@ -55,8 +57,8 @@ router.map({
 		auth: true
 	},
 	'/' : {
-		component: AllPrograms,
-		auth: true
+		component: Home,
+		auth: false
 	}
 })
 
