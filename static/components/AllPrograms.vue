@@ -234,7 +234,7 @@ input#text-create:focus {
 }
 #logout{
 	color: lightblue;
-	font-size: 1.5em;
+	font-size: 130%;
 	background-color: #63b4cf;
 	flex: 0 0 100px;
 }

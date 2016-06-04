@@ -222,10 +222,11 @@ window.s = state
 
 <style>
 #logout2{
+	padding: 0px;
 	margin-left: auto;
-	width: 10%;
+	width: 16%;
 	color: lightblue;
-	font-size: 1.5em;
+	font-size: 150%;
 	background-color: #63b4cf;
 	transition: all 0.2s ease-in;
 
@@ -241,7 +242,6 @@ window.s = state
 #logout2:focus{
 	outline: none;
 }
-
 
 #hud{
 	font-family: arial;
@@ -259,7 +259,7 @@ window.s = state
     padding-top: 0;
     padding-bottom: 0; 
     padding-left: 2vw;
-    font-size: 2.7em;
+    font-size: 230%;
     color: white;
     font-weight: bold;
     line-height: 64px;
@@ -279,7 +279,7 @@ window.s = state
 		outline: none;
 	}
 #hud2{
-	
+
 	margin-right: 0vw;
 	font-family: arial;
 	cursor: default;
@@ -288,7 +288,6 @@ window.s = state
 	display: flex;
     justify-content: flex-start;
     transition: all 0.2s ease-in;
-    z-index: 1;
     padding: 5px;
     box-sizing: border-box;
 }
@@ -297,7 +296,7 @@ window.s = state
 	background-color: #3691b0;
 	text-align: center;
 	color: white;
-	font-size: 1.5em;
+	font-size: 130%;
 	transition: all 0.2s ease-in;
 	line-height: 30px;
 	flex: 0 0 8vw;
