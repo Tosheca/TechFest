@@ -37,14 +37,19 @@ module.exports = function(io) {
 			})
 		})
 
+		socket.on("save", function(data) {
+			prog.save()
+
+		})
+
 		socket.on('vertex', function (data, fn) {
 			prog.graphs[prog.graphs.length - 1].story.push({
 				id: data.id,
 				props: data.props
 			})
-			console.log(data)
+
+			// console.log(data)
 			
-			prog.save()
 
 
 			for(let key in io.sockets.in(room).sockets){
@@ -59,7 +64,7 @@ module.exports = function(io) {
 				}
 			}
 
-			//console.log(recv)
+			//console.log(prog.graphs[prog.graphs.length - 1].story)
 		})
 
 		socket.on("disconnect", (data) => {

@@ -12,7 +12,7 @@
 	<a class="button" id="step" v-on:click="step">Step</a>
 	<a class="button" id="continue" v-on:click="continue">Continue</a>
  -->	
- 	<a class="button" id="addedge" v-on:click="addEdge">Add Edge</a>
+	<a class="button" id="addedge" v-on:click="addEdge">Add Edge</a>
 	<a class="button" id="addvertex" v-on:click="addVertex">Add Vertex</a>
 	<a class="button" id="remove" v-on:click="remove">Remove</a>
 	<a class="button" id="curve" v-on:click="smooth">Curve</a>
@@ -23,8 +23,8 @@
 <div id="controls_bg">
 <nav id="controls">
 	<div id="playpause" v-on:click="pp" v-bind:class="play"></div>
-	<div id="stepbackward" v-on:click=""></div>
-	<div id="stepforward" v-on:click="step"></div>
+	<div id="stepbackward" v-on:click="step_backword"></div>
+	<div id="stepforward" v-on:click="step_forward"></div>
 	
 </nav>
 </div>
@@ -49,33 +49,31 @@ let state = {
 }
 
 
-
-
 var options = {
-    nodes: {
-    	size: 60,
-        scaling: {
-            min: 16,
-            max: 42
-        }
-    },
-    edges: {
-        smooth: false
-    },
-    physics: {
-	    solver: "forceAtlas2Based",
-        barnesHut: {
-            gravitationalConstant: -5000
-        },
-        forceAtlas2Based:{
-            gravitationalConstant: -200,
-            avoidOverlap: 1
-        },
-        stabilization: {
-            iterations: 3000
-        }
-    },
-    manipulation: {
+	nodes: {
+		size: 60,
+		scaling: {
+			min: 16,
+			max: 42
+		}
+	},
+	edges: {
+		smooth: false
+	},
+	physics: {
+		solver: "forceAtlas2Based",
+		barnesHut: {
+			gravitationalConstant: -5000
+		},
+		forceAtlas2Based:{
+			gravitationalConstant: -200,
+			avoidOverlap: 1
+		},
+		stabilization: {
+			iterations: 3000
+		}
+	},
+	manipulation: {
 		addNode: function(node, callback) {
 			node.id =  (state.graph.nodes.max("id") || { id: 0 }).id  + 1
 
@@ -94,20 +92,14 @@ export default {
 			console.log("Order")
 
 		},
-		step(){
-			console.log("Step")
-
-		},
 		continue(){
 			console.log("Continue")
-
 		},
 		addEdge(){
 			state.network.addEdgeMode()
 		},
 		addVertex(){
 			state.network.addNodeMode()
-		
 		},
 		remove(){
 			let node = state.network.getSelectedNodes()[0]
@@ -137,15 +129,24 @@ export default {
 		pp(){
 			this.play.active = !this.play.active
 		},
-		step(){
+		step_backword(){
+			
+			
+		},
+		step_forward(){
+			console.log(this)
 
+			let step = this.program.story[this.step]
+			step.color = "red"
+			state.graph.nodes.update(step)
+			this.step += 1
 		}
 
 	},
 	route: {
 		async data({ next }) {
 			let program = await this.$programs.get(this.$route.params.id)
-			console.log(program.graphs)
+			console.log(program.story)
 
 			if(program.graphs.length != 0){
 				if(program.graphs[program.graphs.length - 1].edges.length > 0 && program.graphs[program.graphs.length-1].vertices.length > 0){
@@ -212,16 +213,18 @@ window.s = state
 			play: {
 				'active': false
 			},
- 			program: {
- 				name: "",
- 				graphs: [
- 					{
- 						nodes: [],
- 						edges: []
- 					}
- 				]
- 			},
- 			network: {},
+			program: {
+				name: "",
+				graphs: [
+					{
+						nodes: [],
+						edges: []
+					}
+				],
+				story: []
+			},
+			network: {},
+			step: 0
 		}
 	}
 }
@@ -258,24 +261,24 @@ window.s = state
 	height: 65px;
 	background-color: #63b4cf;
 	display: flex;
-    align-content: center;
-    transition: all 0.2s ease-in;
-    white-space: nowrap;
+	align-content: center;
+	transition: all 0.2s ease-in;
+	white-space: nowrap;
 }
 #currentl{
 	display: flex;
 	margin-top: auto;
 	margin-bottom: auto;
-    text-shadow: 0 0 5px #666;
-    padding-top: 0;
-    padding-bottom: 0; 
-    padding-left: 2vw;
-    font-size: 230%;
-    color: white;
-    font-weight: bold;
-    line-height: 64px;
-    text-align: left;
-    transition: all 0.2s ease-in;
+	text-shadow: 0 0 5px #666;
+	padding-top: 0;
+	padding-bottom: 0; 
+	padding-left: 2vw;
+	font-size: 230%;
+	color: white;
+	font-weight: bold;
+	line-height: 64px;
+	text-align: left;
+	transition: all 0.2s ease-in;
 }
 	#network {
 		height: calc(100vh - 115px);
@@ -297,10 +300,10 @@ window.s = state
 	height: 50px;
 	background-color: #3691b0;
 	display: flex;
-    justify-content: flex-start;
-    transition: all 0.2s ease-in;
-    padding: 5px;
-    box-sizing: border-box;
+	justify-content: flex-start;
+	transition: all 0.2s ease-in;
+	padding: 5px;
+	box-sizing: border-box;
 }
 
 #hud2 .button{
@@ -326,7 +329,7 @@ window.s = state
 }
 #controls {
 	transform: scale(0.7);
-	padding-left: 50px;
+	/*padding-left: 50px;*/
 	position: fixed;
 	left: calc(50% - 100px);
 	width: auto;
@@ -343,19 +346,19 @@ window.s = state
 #playpause {
 
 	transform: rotate(calc(360deg + 90deg));
-    border-left: 30px solid transparent;
-    border-right: 30px solid transparent;
-    border-bottom: 45px solid #3691b0;
-    margin-right: 15px;
-    transition: all 0.2s ease-in-out;
+	border-left: 30px solid transparent;
+	border-right: 30px solid transparent;
+	border-bottom: 45px solid #3691b0;
+	margin-right: 15px;
+	transition: all 0.2s ease-in-out;
 }
 #playpause.active {
 	transform: none;
-    width: 10px;
-    border-right: 10px solid #3691b0;
-    border-left: 10px solid #3691b0;
-    border-bottom: none;
-    margin: 0px 30px 0px 15px;
+	width: 10px;
+	border-right: 10px solid #3691b0;
+	border-left: 10px solid #3691b0;
+	border-bottom: none;
+	margin: 0px 30px 0px 15px;
 }
 #playpause:hover{
 
@@ -363,29 +366,30 @@ window.s = state
 #stepforward {
 	margin-left: auto;
 	border-right: 10px solid #3691b0; 
-    border-bottom: 10px solid #3691b0;
-    width: 30px; height: 30px;
-    transform: rotate(-45deg);
+	border-bottom: 10px solid #3691b0;
+	width: 30px; height: 30px;
+	transform: rotate(-45deg);
 }
 #stepbackward {
 	margin-left: auto;
 	border-right: 10px solid #3691b0; 
-    border-bottom: 10px solid #3691b0;
-    width: 30px; height: 30px;
-    transform: rotate(135deg);
+	border-bottom: 10px solid #3691b0;
+	width: 30px; height: 30px;
+	transform: rotate(135deg);
 }
 #stepforward, #stepbackward {
-	transition: all 0.2s ease-in-out;
+	transition: all 0.1s ease-in-out;
 	height: 31.5px;
 }
 #stepforward:active {
-transform: rotate(315deg);
+	transform: rotate(315deg);
 }
 #stepbackward:active{
-transform: rotate(calc(315deg + 180deg));
+	transform: rotate(calc(315deg + 180deg));
 }
-										@media screen and (max-width: 750px) {
-											#hud2 .button{
+
+@media screen and (max-width: 750px) {
+	#hud2 .button{
 		background-color: #3691b0;
 		text-align: center;
 		color: white;
@@ -400,16 +404,16 @@ transform: rotate(calc(315deg + 180deg));
 		display: flex;
 		margin-top: auto;
 		margin-bottom: auto;
-	    text-shadow: 0 0 5px #666;
-	    padding-top: 0;
-	    padding-bottom: 0; 
-	    padding-left: 2vw;
-	    font-size: 160%;
-	    color: white;
-	    font-weight: bold;
-	    line-height: 64px;
-	    text-align: left;
-	    transition: all 0.2s ease-in;
+		text-shadow: 0 0 5px #666;
+		padding-top: 0;
+		padding-bottom: 0; 
+		padding-left: 2vw;
+		font-size: 160%;
+		color: white;
+		font-weight: bold;
+		line-height: 64px;
+		text-align: left;
+		transition: all 0.2s ease-in;
 }
 }
 </style>

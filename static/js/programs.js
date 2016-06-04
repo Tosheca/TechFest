@@ -42,12 +42,14 @@ export default class Programs {
 }
 
 class Program {
-	constructor({_id, name, graphs, created, modified}){
+	constructor({_id, name, graphs, created, modified, story}){
 		this.id =  _id
 		this.name = name
 		this.graphs = graphs
 		this.created = created
 		this.modified = modified
+		this.story = story
+		console.log(story)
 	}
 
 	async addGraph(graph){

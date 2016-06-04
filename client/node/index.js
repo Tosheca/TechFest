@@ -18,6 +18,8 @@ io.on("connect", () => {
 			io.emit("vertex", { id: 3, props: { level: 2 } })
 
 			io.emit("vertex", { id: 4, props: { level: 2 } })
+
+			io.emit("save")
 		})
 
 
