@@ -11,11 +11,12 @@
 <!-- 	<a class="button" id="order" v-on:click="order">Order</a>
 	<a class="button" id="step" v-on:click="step">Step</a>
 	<a class="button" id="continue" v-on:click="continue">Continue</a>
- -->	<a class="button" id="addedge" v-on:click="addEdge">Add Edge</a>
+ -->	
+ 	<a class="button" id="addedge" v-on:click="addEdge">Add Edge</a>
 	<a class="button" id="addvertex" v-on:click="addVertex">Add Vertex</a>
 	<a class="button" id="remove" v-on:click="remove">Remove</a>
 	<a class="button" id="curve" v-on:click="smooth">Curve</a>
-
+	
 </nav>
 
 <div id="network"  v-el:vis-container></div>
@@ -138,7 +139,7 @@ export default {
 
 		},
 		step(){
-			
+
 		}
 
 	},

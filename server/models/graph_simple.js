@@ -16,7 +16,8 @@ var GraphSchema = new Schema({
 			id: Number, 
 			props: [ Schema.Types.Mixed ] 
 		}
-	] 
+	],
+	story: [ Number ]
 })
 
 /*
