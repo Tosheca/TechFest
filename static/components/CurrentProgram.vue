@@ -30,15 +30,15 @@
 
 </template>
 
-
-
 <script>
 
 import vis from "vis"
 import socket from "socket.io-client"
 
-
-
+function pad(s, size) {
+	while (s.length < size) s = "0" + s;
+	return s;
+}
 
 var io
 window.io = io
@@ -47,6 +47,7 @@ let state = {
 
 }
 
+let maxLevel
 
 var options = {
 	nodes: {
@@ -60,7 +61,7 @@ var options = {
 		smooth: false
 	},
 	physics: {
-		solver: "forceAtlas2Based",
+		solver: "barnesHut",
 		barnesHut: {
 			gravitationalConstant: -5000
 		},
@@ -133,16 +134,25 @@ export default {
 			if(this.step != 0){
 				this.step -= 1
 			}
-			
+
 			let step = story[this.step]
 			step.color = "#97C2FC"
 			state.graph.nodes.update(step)
 		},
 		step_forward(){
 			let story = this.program.graphs[this.program.graphs.length - 1].story
-
+			//let maxLevel = 4
+			console.log("maxlvl: ", maxLevel)
 			let step = story[this.step]
-			step.color = "red"
+			console.log(step)
+			if(maxLevel != undefined){
+				let color = ( (step.props.level) / maxLevel )
+				console.log(color, maxLevel)
+				step.color = "#"+ pad((color * 255).toString(16), 2) + "2255"
+				console.log(step.color)
+			}else{
+				step.color = "red"
+			}
 			state.graph.nodes.update(step)
 			if(this.step != story.length){
 				this.step += 1
@@ -153,25 +163,44 @@ export default {
 	route: {
 		async data({ next }) {
 			let program = await this.$programs.get(this.$route.params.id)
-			console.log(program.story)
+			
 
+			console.log("maxlvl: ", maxLevel)
 			if(program.graphs.length != 0){
 				if(program.graphs[program.graphs.length - 1].edges.length > 0 && program.graphs[program.graphs.length-1].vertices.length > 0){
+					maxLevel = program.graphs[program.graphs.length - 1].story.map(e => e.props.level).reduce((a,b) => a > b ? a : b)
+
+
 					console.log(program.graphs)
 					state.graph.nodes.clear()
 					state.graph.edges.clear()
 
 					state.graph.nodes.add(program.graphs[program.graphs.length - 1].vertices.map(e => {e.label = e.id; return e}))
-					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges)
+					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges.map(e => {e.label = e.weight; return e}))
+
+					console.log(program.graphs[program.graphs.length - 1].vertices)
 				}
 			}
 			io = socket("/")
 			window.io = io
-			io.on("vertex", (data) => {
-				console.log(data)
-				state.graph.nodes.update(data)
+			io.on("story", (data) => {
+				console.log("Story: ", data)
+				maxLevel = data.map(e => e.props.level).reduce((a,b) => a > b ? a : b)
+				this.story = data
 			})
 			
+			io.on("graph", (data) => {
+				console.log("Story: ", data)
+				
+				state.graph.nodes.clear()
+				state.graph.edges.clear()
+
+				state.graph.nodes.add(data.vertices.map(e => {e.label = e.id; return e}))
+				state.graph.edges.add(data.edges.map(e => {e.label = e.weight; return e}))
+
+				this.story = data
+			})
+
 			io.on("connect", (arg) => {
 				console.log("Connected: ", arg)
 				io.emit("open", {id: program.id})
@@ -203,7 +232,7 @@ export default {
 
 			state.graph = { nodes, edges }
 			state.network = new vis.Network(this.$els.visContainer, { nodes, edges }, options)
-window.s = state
+			window.s = state
 			
 		},
 		
@@ -363,34 +392,34 @@ window.s = state
 	height: 0;
 	width: 0;
 	transform: rotate(calc(360deg + 90deg));
-    border-left: 30px solid transparent;
-    border-right: 30px solid transparent;
-    border-bottom: 45px solid #3691b0;
-    margin-right: 15px;
-    transition: transform 0.2s ease-in-out;
+	border-left: 30px solid transparent;
+	border-right: 30px solid transparent;
+	border-bottom: 45px solid #3691b0;
+	margin-right: 15px;
+	transition: transform 0.2s ease-in-out;
 }
 #playpause.active{
 	height: 50px;
 	transform: none;
-    width: 10px;
-    border-right: 10px solid #3691b0;
-    border-left: 10px solid #3691b0;
-    border-bottom: none;
-    margin: 0px 30px 0px 15px;
+	width: 10px;
+	border-right: 10px solid #3691b0;
+	border-left: 10px solid #3691b0;
+	border-bottom: none;
+	margin: 0px 30px 0px 15px;
 }
 #stepforward {
 	margin-left: auto;
 	border-right: 10px solid #3691b0; 
-    border-bottom: 10px solid #3691b0;
-    width: 30px; height: 30px;
-    transform: rotate(-45deg);
+	border-bottom: 10px solid #3691b0;
+	width: 30px; height: 30px;
+	transform: rotate(-45deg);
 }
 #stepbackward {
 	margin-left: auto;
 	border-right: 10px solid #3691b0; 
-    border-bottom: 10px solid #3691b0;
-    width: 30px; height: 30px;
-    transform: rotate(135deg);
+	border-bottom: 10px solid #3691b0;
+	width: 30px; height: 30px;
+	transform: rotate(135deg);
 
 }
 #stepforward, #stepbackward {

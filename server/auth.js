@@ -14,8 +14,38 @@ router.use(function *(next) {
 })
 
 router.get('/user/program/:id/graph', function *() {
+	
+	let {representation} = this.query
+	if(representation == null){
+		representation = 1
+	}
+
 	let program = yield Program.findById(this.params.id)
-	this.body = program.graph
+	let graph
+
+	switch(representation){
+		case 1:  // List nodes/edges
+			graph = program.graphs[program.graphs.length - 1]
+		break
+		case 2: // Children
+			graph = program.graphs[program.graphs.length - 1]
+			let res = graph.nodes
+			graph.edges.forEach(edge => {
+				if(res[edge.from].children == null){
+					res[edge.from].children = []
+				}
+
+				res[edge.from].children.push(edge.to)
+			})
+
+			graph = res 
+		break
+		case 3: //Matrix 
+			//TODO: implement
+		break
+	}
+
+	this.body = graph
 })
 
 router.post('/user/program/:id/graph', function *() {

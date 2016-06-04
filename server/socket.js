@@ -42,29 +42,39 @@ module.exports = function(io) {
 
 		})
 
-		socket.on('vertex', function (data, fn) {
+		socket.on('vertex', function (data, fn) { //Depricated - Do Not Use
 			prog.graphs[prog.graphs.length - 1].story.push({
 				id: data.id,
 				props: data.props
 			})
 
 			// console.log(data)
-			
 
-
-			for(let key in io.sockets.in(room).sockets){
-				let sock = io.sockets.in(room).sockets[key]
-		//		console.log(sock)
-				console.log("sock: ", key)
-
-				if(sock.program == client){
-
-					console.log("Send to: ", key)
-					sock.emit("vertex", data)
-				}
-			}
+			sendOthers(io, room, client, "verex", data)
 
 			//console.log(prog.graphs[prog.graphs.length - 1].story)
+		})
+
+		socket.on("story", (data) => { //TODO: don't send the whole array just the diff
+			prog.graphs[prog.graphs.length - 1].story = data
+			prog.save()
+
+			sendOthers(io, room, client,"story", data)
+
+		})
+
+		socket.on("getGraph", (data, fn) => {
+			Program.findById(prog.id).exec().then(function(program) {
+				prog = program
+				fn(prog.graphs[prog.graphs.length - 1])
+			})
+		})
+
+		socket.on("graph", (data) => {
+			let graph = prog.graphs.push(data)
+			prog.save()
+
+			sendOthers(io, room, client, "graph", graph)
 		})
 
 		socket.on("disconnect", (data) => {
@@ -72,4 +82,18 @@ module.exports = function(io) {
 
 		})
 	})
+}
+
+function sendOthers(io, room, client, event, data){ //TODO: curry
+	for(let key in io.sockets.in(room).sockets){
+		let sock = io.sockets.in(room).sockets[key]
+//		console.log(sock)
+		console.log("sock: ", key)
+
+		if(sock.program == client){
+
+			console.log("Send to: (" +event +") ", key)
+			sock.emit(event, data)
+		}
+	}
 }

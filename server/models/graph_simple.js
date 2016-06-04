@@ -7,7 +7,8 @@ var GraphSchema = new Schema({
 		{ 
 			_id: false,
 			from: Number, 
-			to: Number 
+			to: Number,
+			weight: Number
 		} 
 	],
 	vertices: [ 
@@ -17,7 +18,7 @@ var GraphSchema = new Schema({
 			props: [ Schema.Types.Mixed ] 
 		}
 	],
-	story: [ { _id:false, id: Number, props: [ Schema.Types.Mixed ] } ]
+	story: [ { _id:false, id: Number, props: Schema.Types.Mixed } ]
 })
 
 /*

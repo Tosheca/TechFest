@@ -81,7 +81,9 @@
 	cursor: pointer;
 	width: 20%;
 	text-align: center;
-	}
+    line-height: 33.8px;
+}
+
 .buttonss:hover{
 	background-color: white;
 	color: #666;

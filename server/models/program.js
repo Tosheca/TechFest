@@ -8,7 +8,8 @@ var ProgramSchema = new Schema({
 	name: { type: String, required: true },
 	created: { type: Date, default: Date.now },
 	modified: { type: Date, default: Date.now },
-	status: { type: String, enum: ["private", "public", "shared"], default: "private" }
+	status: { type: String, enum: ["private", "public", "shared"], default: "private" },
+	props:  Schema.Types.Mixed
 })
 
 ProgramSchema.pre('save', function(next) {

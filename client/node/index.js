@@ -11,15 +11,28 @@ io.on("connect", () => {
 		
 		io.emit("clear", {}, (res) => {
 			console.log("cleared")
-			io.emit("vertex", { id: 1, props: { level: 1 } })
+			// io.emit("vertex", { id: 1, props: { level: 1 } })
 
-			io.emit("vertex", { id: 2, props: { level: 1 } })
+			// io.emit("vertex", { id: 2, props: { level: 1 } })
 
-			io.emit("vertex", { id: 3, props: { level: 2 } })
+			// io.emit("vertex", { id: 3, props: { level: 2 } })
 
-			io.emit("vertex", { id: 4, props: { level: 2 } })
+			// io.emit("vertex", { id: 4, props: { level: 2 } })
 
-			io.emit("save")
+			// io.emit("vertex", { id: 5, props: { level: 3 } })
+
+			// io.emit("vertex", { id: 6, props: { level: 3 } })
+
+			// io.emit("save")
+
+			io.emit("story", [
+				 { id: 1, props: { level: 1 } },
+				 { id: 2, props: { level: 1 } },
+				 { id: 3, props: { level: 2 } },
+				 { id: 4, props: { level: 2 } },
+				 { id: 5, props: { level: 3 } },
+				 { id: 6, props: { level: 3 } }
+			])
 		})
 
 
