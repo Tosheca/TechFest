@@ -22,7 +22,7 @@
 <div id="network"  v-el:vis-container></div>
 
 <nav id="controls">
-	<div id="playpause" v-on:click="play"></div>
+	<div id="playpause" v-on:click="pp" v-bind:class="play"></div>
 	<div id="step" v-on:click="step"></div>
 </nav>
 
@@ -132,11 +132,8 @@ export default {
 			}
 			this.program.addGraph(graph)
 		},
-		play(){
-
-		},
-		pause(){
-
+		pp(){
+			this.play.active = !this.play.active
 		},
 		step(){
 
@@ -204,7 +201,9 @@ window.s = state
 	},
 	data() {
 		return {
-
+			play: {
+				'active': false
+			},
  			program: {
  				name: "",
  				graphs: [
@@ -314,28 +313,36 @@ window.s = state
 	transition: all 0.2s ease-in;
 }
 #controls {
-position: absolute;
-left: 45%;
-bottom: 5%;
-display: flex;
+	position: fixed;
+	left: calc(50% - 200px);
+	width: 200px;
+	bottom: 10px;
+	display: flex;
 
 }
+
+#controls > * {
+	display: inline-block;
+	/*width: 60px;*/
+}
+
 #playpause {
-	transform: rotate(-270deg);
-	width: 0;
-    height: 0;
+	transform: rotate(calc((360deg * 3) + 90deg));
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
     border-bottom: 45px solid #3691b0;
-    transition: all 0.2s ease-in-out;
+    transition: border 0.5s ease-in-out, transform 0.5s ease-in;
 }
-#playpause:active {
+#playpause.active {
 	transform: none;
-	width: 30px;
-	border-right: 10px solid #3691b0;
-	border-left: 10px solid #3691b0;
+    width: 10px;
+    border-right: 10px solid #3691b0;
+    border-left: 10px solid #3691b0;
+    border-bottom: none;
+    margin: 0px 15px 0px 15px;
 
 }
+
 #playpause:focus{
 	outline: none;
 	background-color: none;
