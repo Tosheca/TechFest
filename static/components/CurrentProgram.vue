@@ -6,16 +6,16 @@
 </nav>
 <nav id="hud2">
 	<!-- <a class="button" id="submit" v-on:click="submit">Submit</a> -->
-	<a class="button" id="clear" v-on:click="clear">Clear</a>
-	<a class="button" id="save" v-on:click="save">Save</a>
+	<a class="button" id="clear" @click="clear">Clear</a>
+	<a class="button" id="save" @click="save">Save</a>
 <!-- 	<a class="button" id="order" v-on:click="order">Order</a>
 	<a class="button" id="step" v-on:click="step">Step</a>
 	<a class="button" id="continue" v-on:click="continue">Continue</a>
  -->	
-	<a class="button" id="addedge" v-on:click="addEdge">Add Edge</a>
-	<a class="button" id="addvertex" v-on:click="addVertex">Add Vertex</a>
-	<a class="button" id="remove" v-on:click="remove">Remove</a>
-	<a class="button" id="curve" v-on:click="smooth">Curve</a>
+	<a class="button" id="addedge" @click="addEdge">Add Edge</a>
+	<a class="button" id="addvertex" @click="addVertex">Add Vertex</a>
+	<a class="button" id="remove" @click="remove">Remove</a>
+	<a class="button" id="curve" @click="smooth">Curve</a>
 	
 </nav>
 
@@ -130,16 +130,25 @@ export default {
 			this.play.active = !this.play.active
 		},
 		step_backword(){
-			
-			
+			let story = this.program.graphs[this.program.graphs.length - 1].story
+			if(this.step != 0){
+				this.step -= 1
+			}			
+
+
+			let step = story[this.step]
+			step.color = "#97C2FC"
+			state.graph.nodes.update(step)
 		},
 		step_forward(){
-			console.log(this)
+			let story = this.program.graphs[this.program.graphs.length - 1].story
 
-			let step = this.program.story[this.step]
+			let step = story[this.step]
 			step.color = "red"
 			state.graph.nodes.update(step)
-			this.step += 1
+			if(this.step != story.length){
+				this.step += 1
+			}
 		}
 
 	},
