@@ -3,18 +3,16 @@
 <div id="home">
 
 <div id="pics">
-
 	<img id="logo" src="/logo.png"></img>
+	<img id="pic1" src="/csharp.png"></img>
+	<img id="pic2" src="/graph.png"></img>
+
 
 </div>
 
 <div id="content">
-	<p id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	<p id="text">Visurithm e Интернет приложение създадено, с цел да улесни работата на ученици, студенти, преподаватели, програмисти и др. при решаване на теоретични и практически задачи, свързани с различни видове алгоритми. 
+	</p>
 	<div id="button_div">
 	<a class="buttonss" id="signin" v-link="{ path: '/user/register' }">Sign Up</a>		
 	<a class="buttonss" id="signup" v-link="{ path: '/user/' }">Sign In</a>
@@ -28,6 +26,41 @@
 </template>
 
 <style>
+@keyframes slideshow {
+	0% {opacity: 1;}
+	10%{opacity: 1;}
+	20%{opacity: 1;}
+	30%{opacity: 0;}
+	40%{opacity: 0;}
+	60%{opacity: 0;}
+	70%{opacity: 0;}
+	80%{opacity: 1;}
+	90%{opacity: 1;}
+	100%{opacity: 1;}
+}
+#pic1{
+	width: auto;
+	height: 99vh;
+	max-width: 101vw;
+	max-height: 100vh;
+	z-index: 0;
+	position: fixed;
+	top: 0;
+	opacity: 1;
+	}
+#pic2{
+	width: auto;
+	height: 100vh;
+	max-width: 102vw;
+	max-height: 100vh;
+	z-index: 0;
+	position: fixed;
+	top: 0;
+	animation: slideshow 12s infinite;
+}
+#logo {
+	z-index: 1;
+}
 #button_div{
 	display: flex;
 	justify-content: center;
@@ -60,17 +93,19 @@
 	transition: all 0.2s ease-in;
 }
 #signin, #signup {
+
 	margin-top: 10px;
 	display:block;
 	text-align: center;
 }
 #logo {
+	position: fixed;
 	padding-top: 0;
-	display: flex;
+	display: block;
 	height: auto; 
     width: auto; 
-    margin-left: auto;
-    margin-right: auto;
+    left: 21%;
+    right: 21%;
     margin-top: -5vh;
     max-width: calc(192px * 4); 
     max-height: calc(108px * 4);

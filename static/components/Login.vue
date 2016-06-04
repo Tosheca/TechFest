@@ -1,4 +1,5 @@
 <template>
+
 	<fieldset class="form">
 		<legend>Login</legend>
 		<input type="text" v-model="user.name" placeholder="Username">
