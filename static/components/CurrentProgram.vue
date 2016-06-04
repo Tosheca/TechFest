@@ -5,7 +5,7 @@
 <button id="logout2" class="button" v-on:click="back">My programs</button>
 </nav>
 <nav id="hud2">
-	<a class="button" id="submit" v-on:click="submit">Submit</a>
+	<!-- <a class="button" id="submit" v-on:click="submit">Submit</a> -->
 	<a class="button" id="clear" v-on:click="clear">Clear</a>
 	<a class="button" id="save" v-on:click="save">Save</a>
 <!-- 	<a class="button" id="order" v-on:click="order">Order</a>
@@ -20,11 +20,14 @@
 </nav>
 
 <div id="network"  v-el:vis-container></div>
-
+<div id="controls_bg">
 <nav id="controls">
 	<div id="playpause" v-on:click="pp" v-bind:class="play"></div>
-	<div id="step" v-on:click="step"></div>
+	<div id="stepbackward" v-on:click=""></div>
+	<div id="stepforward" v-on:click="step"></div>
+	
 </nav>
+</div>
 
 </template>
 
@@ -229,11 +232,12 @@ window.s = state
 #logout2{
 	padding: 0px;
 	margin-left: auto;
-	width: 15%;
+	width: 140px;
 	color: lightblue;
-	font-size: 150%;
+	font-size: 140%;
 	background-color: #63b4cf;
 	transition: all 0.2s ease-in;
+
 
 }
 #logout2:hover{
@@ -256,8 +260,10 @@ window.s = state
 	display: flex;
     align-content: center;
     transition: all 0.2s ease-in;
+    white-space: nowrap;
 }
 #currentl{
+	display: flex;
 	margin-top: auto;
 	margin-bottom: auto;
     text-shadow: 0 0 5px #666;
@@ -306,6 +312,7 @@ window.s = state
 	line-height: 30px;
 	flex: 0 0 8vw;
 	margin-left: 10px;
+	white-space: nowrap;
 }
 
 #hud2 .button:hover{
@@ -318,25 +325,29 @@ window.s = state
 	transition: all 0.2s ease-in;
 }
 #controls {
+	transform: scale(0.7);
+	padding-left: 50px;
 	position: fixed;
-	left: calc(50% - 200px);
-	width: 200px;
-	bottom: 10px;
+	left: calc(50% - 100px);
+	width: auto;
+	bottom: 30px;
 	display: flex;
+	margin: auto;
 
 }
 
 #controls > * {
-	display: inline-block;
-	/*width: 60px;*/
+	/*display: inline-block;*/
 }
 
 #playpause {
-	transform: rotate(calc((360deg * 3) + 90deg));
+
+	transform: rotate(calc(360deg + 90deg));
     border-left: 30px solid transparent;
     border-right: 30px solid transparent;
     border-bottom: 45px solid #3691b0;
-    transition: border 0.5s ease-in-out, transform 0.5s ease-in;
+    margin-right: 15px;
+    transition: all 0.2s ease-in-out;
 }
 #playpause.active {
 	transform: none;
@@ -344,19 +355,61 @@ window.s = state
     border-right: 10px solid #3691b0;
     border-left: 10px solid #3691b0;
     border-bottom: none;
-    margin: 0px 15px 0px 15px;
+    margin: 0px 30px 0px 15px;
+}
+#playpause:hover{
 
 }
-
-#playpause:focus{
-	outline: none;
-	background-color: none;
-}
-#step {
+#stepforward {
+	margin-left: auto;
 	border-right: 10px solid #3691b0; 
     border-bottom: 10px solid #3691b0;
     width: 30px; height: 30px;
     transform: rotate(-45deg);
 }
-
+#stepbackward {
+	margin-left: auto;
+	border-right: 10px solid #3691b0; 
+    border-bottom: 10px solid #3691b0;
+    width: 30px; height: 30px;
+    transform: rotate(135deg);
+}
+#stepforward, #stepbackward {
+	transition: all 0.2s ease-in-out;
+	height: 31.5px;
+}
+#stepforward:active {
+transform: rotate(315deg);
+}
+#stepbackward:active{
+transform: rotate(calc(315deg + 180deg));
+}
+										@media screen and (max-width: 750px) {
+											#hud2 .button{
+		background-color: #3691b0;
+		text-align: center;
+		color: white;
+		font-size: 110%;
+		transition: all 0.2s ease-in;
+		line-height: 30px;
+		flex: 0 0 5vw;
+		margin-left: 10px;
+		white-space: nowrap;
+	}
+		#currentl{
+		display: flex;
+		margin-top: auto;
+		margin-bottom: auto;
+	    text-shadow: 0 0 5px #666;
+	    padding-top: 0;
+	    padding-bottom: 0; 
+	    padding-left: 2vw;
+	    font-size: 160%;
+	    color: white;
+	    font-weight: bold;
+	    line-height: 64px;
+	    text-align: left;
+	    transition: all 0.2s ease-in;
+}
+}
 </style>
