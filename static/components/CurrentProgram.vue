@@ -20,13 +20,13 @@
 
 <div id="network"  v-el:vis-container></div>
 
-<nav id="ctrls">
-	<div v-on:click="play">play</div>
-	<div v-on:click="pause">pause</div>
-	<div v-on:click="step">step</div>
+<nav id="controls">
+	<div id="playpause" v-on:click="play"></div>
+	<div id="step" v-on:click="step"></div>
 </nav>
 
 </template>
+
 
 
 <script>
@@ -224,7 +224,7 @@ window.s = state
 #logout2{
 	padding: 0px;
 	margin-left: auto;
-	width: 16%;
+	width: 15%;
 	color: lightblue;
 	font-size: 150%;
 	background-color: #63b4cf;
@@ -311,6 +311,39 @@ window.s = state
 #hud2 .button:active{
 	box-shadow: inset 0 0 10px #666;
 	transition: all 0.2s ease-in;
+}
+#controls {
+position: absolute;
+left: 45%;
+bottom: 5%;
+display: flex;
+
+}
+#playpause {
+	transform: rotate(-270deg);
+	width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 45px solid #3691b0;
+    transition: all 0.2s ease-in-out;
+}
+#playpause:active {
+	transform: none;
+	width: 30px;
+	border-right: 10px solid #3691b0;
+	border-left: 10px solid #3691b0;
+
+}
+#playpause:focus{
+	outline: none;
+	background-color: none;
+}
+#step {
+	border-right: 10px solid #3691b0; 
+    border-bottom: 10px solid #3691b0;
+    width: 30px; height: 30px;
+    transform: rotate(-45deg);
 }
 
 </style>
