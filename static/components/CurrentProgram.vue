@@ -368,7 +368,7 @@ window.s = state
     border-right: 30px solid transparent;
     border-bottom: 45px solid #3691b0;
     margin-right: 15px;
-    transition: all 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out;
 }
 #playpause.active{
 	height: 50px;
@@ -394,11 +394,15 @@ window.s = state
     transform: rotate(135deg);
 
 }
-#stepbackward:active{
-
+#stepforward, #stepbackward {
+	transition: all 0.2s ease-in-out;
+	height: 31.5px;
 }
-#stepforward:active{
-
+#stepforward:active {
+	transform: rotate(315deg);
+}
+#stepbackward:active{
+	transform: rotate(calc(315deg + 180deg));
 }
 
 
