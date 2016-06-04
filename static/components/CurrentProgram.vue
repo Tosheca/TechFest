@@ -35,10 +35,10 @@
 import vis from "vis"
 import socket from "socket.io-client"
 
-var io = socket("/")
 
 
 
+var io
 window.io = io
 
 let state = {
@@ -46,10 +46,7 @@ let state = {
 }
 
 
-io.on("vertex", (data) => {
-	console.log(data)
-	state.graph.nodes.update(data)
-})
+
 
 var options = {
     nodes: {
@@ -111,7 +108,10 @@ export default {
 		},
 		remove(){
 			let node = state.network.getSelectedNodes()[0]
+			let selectedEdges = state.network.getSelectedEdges()
+
 			state.graph.nodes.remove(node)
+			selectedEdges.forEach((edge) => state.graph.edges.remove(edge))
 		},
 		smooth(){
 			options.edges.smooth = !options.edges.smooth
@@ -123,7 +123,6 @@ export default {
 		clear(){
 			state.graph.edges.clear()
 			state.graph.nodes.clear()
-
 		},
 		save(){
 			let graph = {
@@ -155,6 +154,12 @@ export default {
 					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges)
 				}
 			}
+			io = socket("/")
+			window.io = io
+			io.on("vertex", (data) => {
+				console.log(data)
+				state.graph.nodes.update(data)
+			})
 			
 			io.on("connect", (arg) => {
 				console.log("Connected: ", arg)

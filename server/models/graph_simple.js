@@ -17,7 +17,7 @@ var GraphSchema = new Schema({
 			props: [ Schema.Types.Mixed ] 
 		}
 	],
-	story: [ Number ]
+	story: [ { _id:false, id: Number, props: [ Schema.Types.Mixed ] } ]
 })
 
 /*
@@ -28,7 +28,7 @@ GraphSchema.pre('save', function(next) {
 */
 
 GraphSchema.methods.addEdge = function(edge){
-	this.edges.push({left: edge[0],right: edge[1]})
+	this.edges.push({ left: edge[0], right: edge[1] })
 }
 
 GraphSchema.methods.addVertex = function(props, id){

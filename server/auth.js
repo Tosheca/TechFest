@@ -74,7 +74,7 @@ router.post('/user/programs', function *() {
 		yield program.save()
 		yield user.save()
 	}catch(error){
-		console.log(error.message)
+		console.log(error)
 		this.body = { state: "fucked up", message: error.message}
 		return -1
 	}
