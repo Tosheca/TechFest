@@ -168,7 +168,6 @@ export default {
 			console.log("maxlvl: ", maxLevel)
 			if(program.graphs.length != 0){
 				if(program.graphs[program.graphs.length - 1].edges.length > 0 && program.graphs[program.graphs.length-1].vertices.length > 0){
-					maxLevel = program.graphs[program.graphs.length - 1].story.map(e => e.props.level).reduce((a,b) => a > b ? a : b)
 
 
 					console.log(program.graphs)
@@ -178,7 +177,8 @@ export default {
 					state.graph.nodes.add(program.graphs[program.graphs.length - 1].vertices.map(e => {e.label = e.id; return e}))
 					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges.map(e => {e.label = e.weight; return e}))
 
-					console.log(program.graphs[program.graphs.length - 1].vertices)
+					maxLevel = program.graphs[program.graphs.length - 1].story.map(e => e.props.level).reduce((a,b) => a > b ? a : b)
+					
 				}
 			}
 			io = socket("/")
@@ -215,9 +215,9 @@ export default {
 			state = {} // needed because had problems with the tracked vue state. //TODO: find a way to fix it
 
 			let nodes = new vis.DataSet([
-				{id:1, value: 1},
-				{id:2, value: 12, color: "#FF0000"},
-				{id:3, value: 3, shape: 'star'}
+				{id:1, value: 1, label: 1},
+				{id:2, value: 1, label: 2},
+				{id:3, value: 3, label: 3}
 			])
 
 			let edges = new vis.DataSet([

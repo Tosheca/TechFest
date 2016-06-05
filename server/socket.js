@@ -55,36 +55,43 @@ module.exports = function(io) {
 			//console.log(prog.graphs[prog.graphs.length - 1].story)
 		})
 
-		socket.on("story", (data) => { //TODO: don't send the whole array just the diff
+		socket.on("story", (data, fn) => { //TODO: don't send the whole array just the diff
 			prog.graphs[prog.graphs.length - 1].story = data
-			prog.save()
+			prog.save(() => {
+				fn("saved")
+			})
 
 			sendOthers(io, room, client,"story", data)
-
 		})
 
 		socket.on("getGraph", (data, fn) => {
+			console.log("getGraph")
 			Program.findById(prog.id).exec().then(function(program) {
+
 				prog = program
-				//console.log(program)
 				switch(data.type){
 					case 1: //Array for nodes and edges
 						fn(prog.graphs[prog.graphs.length - 1])
 
-					break;
+					break
 					case 2: //Children array
-						let {verices, story} = prog.graphs[prog.graphs.length - 1]
-						let  = graph.vertices
-						graph.edges.forEach(edge => {
-							if(verices[edge.from].children == null){
-								verices[edge.from].children = []
-							}
+						console.log("prog: ", program, data)
 
-							verices[edge.from].children.push(edge.to)
+						let {vertices ,edges, story} = prog.graphs[prog.graphs.length - 1]
+						//console.log(vertices ,edges, story)
+						let res = vertices.map(e => e.toObject())
+
+						edges.forEach(edge => {
+							let idx = edge.from - 1
+							if(res[idx].children == null){
+								res[idx].children = []
+							}
+							res[idx].children.push(edge)
 
 						})
-						console.log("vert: ", vertices)
-						fn({ vertices, story })
+
+						console.log("vert: ", res)
+						fn({ vertices : res, story: story })
 					break
 				}
 			})
