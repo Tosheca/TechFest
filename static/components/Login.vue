@@ -4,7 +4,7 @@
 		<legend>Login</legend>
 		<input type="text" v-model="user.name" placeholder="Username">
 		<input type="password" v-model="user.pass" placeholder="Password">
-		<div v-if="!success">
+		<div class="validation" id="wrong" v-if="!success">
 			Wrong username or password.
 		</div>
 		<div class="row inline">
@@ -45,6 +45,9 @@ export default {
 </script>
 
 <style>
+#wrong{
+	padding-bottom: 10px;
+}
 .row {
 	display: flex;
 	justify-content: space-around;
