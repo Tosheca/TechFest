@@ -143,9 +143,6 @@
 	#text{
 		font-size: 100%;
 	}
-	#pic1, #pic2 {
-
-	}
 }
 @media screen and (max-height: 700px){
 	#text{
