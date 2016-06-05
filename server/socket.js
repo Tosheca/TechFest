@@ -12,9 +12,9 @@ module.exports = function(io) {
 		let prog
 
 		socket.on('open', function (data, fn) {
-
+			console.log("open")
 			Program.findById(data.id).exec().then(function(program) {
-
+				console.log("open (" + socket.id + "):", program.id)
 				if(data.program){
 					socket.program = true
 				}else{
@@ -66,7 +66,27 @@ module.exports = function(io) {
 		socket.on("getGraph", (data, fn) => {
 			Program.findById(prog.id).exec().then(function(program) {
 				prog = program
-				fn(prog.graphs[prog.graphs.length - 1])
+				//console.log(program)
+				switch(data.type){
+					case 1: //Array for nodes and edges
+						fn(prog.graphs[prog.graphs.length - 1])
+
+					break;
+					case 2: //Children array
+						let {verices, story} = prog.graphs[prog.graphs.length - 1]
+						let  = graph.vertices
+						graph.edges.forEach(edge => {
+							if(verices[edge.from].children == null){
+								verices[edge.from].children = []
+							}
+
+							verices[edge.from].children.push(edge.to)
+
+						})
+						console.log("vert: ", vertices)
+						fn({ vertices, story })
+					break
+				}
 			})
 		})
 

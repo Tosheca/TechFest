@@ -29,7 +29,7 @@ router.get('/user/program/:id/graph', function *() {
 		break
 		case 2: // Children
 			graph = program.graphs[program.graphs.length - 1]
-			let res = graph.nodes
+			let res = graph.vertices
 			graph.edges.forEach(edge => {
 				if(res[edge.from].children == null){
 					res[edge.from].children = []
