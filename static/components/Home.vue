@@ -1,4 +1,4 @@
-<template>
+<template> c
 
 <div id="home">
 
@@ -11,7 +11,7 @@
 </div>
 
 <div id="content">
-	<p id="text">Visurithm e Интернет приложение създадено, с цел да улесни работата на ученици, студенти, преподаватели, програмисти и др. при решаване на теоретични и практически задачи, свързани с различни видове алгоритми. 
+	<p id="text">Visurithm is a Web application created in order to facilitate the workflow of students, teachers and programmers, in solving theoretical and practical problems associated with different types of algorithms. It connects with the user's algorithm using, provided by us, a C# Library for example and visualises it.
 	</p>
 	<div id="button_div">
 	<a class="buttonss" id="signin" v-link="{ path: '/user/register' }">Sign Up</a>		
@@ -58,9 +58,6 @@
 	top: 0;
 	animation: slideshow 12s infinite;
 }
-#logo {
-	z-index: 1;
-}
 #button_div{
 	display: flex;
 	justify-content: center;
@@ -68,10 +65,10 @@
 .buttonss {
 	font-family: arial;
 	display: block;
-	font-size: 150%;
-	height: 5vh;
+	font-size: 200%;
+	height: 15%;
 	border: none;
-	margin-left: 10px;
+	margin-left: 20px;
 	background-color: white;
 	padding: 5px 5px;
 	text-decoration: none;
@@ -79,9 +76,9 @@
 	transition: all 0.2s ease-in;
 	box-shadow: 0 0 0px #666;
 	cursor: pointer;
-	width: 20%;
+	width: 25%;
 	text-align: center;
-    line-height: 33.8px;
+	white-space: nowrap;
 }
 
 .buttonss:hover{
@@ -102,15 +99,18 @@
 }
 #logo {
 	position: fixed;
-	padding-top: 0;
 	display: block;
 	height: auto; 
     width: auto; 
-    left: 21%;
-    right: 21%;
+    left: calc(50% - (192px*2.5));
+    right: calc(50% - (192px*2.5));
+    top: calc(35% - (108px*2.5));
+    top: calc(35% - (108px*2.5));
     margin-top: -5vh;
-    max-width: calc(192px * 4); 
-    max-height: calc(108px * 4);
+    max-width: calc(192px * 5); 
+    max-height: calc(108px * 5);
+    z-index: 1;
+
 }
 #home {
 	width: auto;
@@ -123,18 +123,33 @@
 #content {
 	position: fixed;
 	background-color: #76bdd5;
-	height: 35vh;
+	height: 315px;
 	width: auto;
+	margin-top: -5vh;
 }
 #text{
-	text-shadow: 0 0 1px #666;
-	font-size: 1.3em;
+	text-shadow: 0 0 5px #666;
+	font-size: 130%;
 	display: block;
 	color: white;
 	padding-top: 1vw;
-	padding-right: 10vw;
-	padding-left: 10vw;
+	padding-right: 15vw;
+	padding-left: 15vw;
+	overflow: inherit;
+	transition: all 0.3s ease-in-out;
+}
+@media screen and (max-width: 750px){
+	#text{
+		font-size: 100%;
+	}
+	#pic1, #pic2 {
 
+	}
+}
+@media screen and (max-height: 700px){
+	#text{
+		font-size: 100%;
+	}
 }
 </style>
 <script>
