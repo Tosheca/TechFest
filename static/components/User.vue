@@ -150,7 +150,7 @@ export default {
 	}
 } 
 
-@media screen and (max-width: 999px){
+@media screen and (max-width: 1099px){
 	#logon {
 		position: fixed;
 		height: auto;;
@@ -159,7 +159,7 @@ export default {
 	    max-width: 0;
 	    max-height: 0;
 	    z-index: -1;
-	    transition: all 0.3s ease-in-out;
+	    transition: all 0.2s ease-in-out;
 	}
 	#right {
 		border-left: 65vh solid transparent;
