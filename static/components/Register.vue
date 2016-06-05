@@ -4,17 +4,18 @@
 		<validator name="validation">
 		 
 			<input type="text" v-model="user.name" placeholder="Username" @modified="onUsernameModified" v-validate:usernamevalidation="{ minlength: 8 , maxlength: 16}">
-			<div v-if="usernameModified == true">
+			<div v-if="this.user.name != ''">
     			<span class="validation" v-if="$validation.usernamevalidation.minlength">Your username is too short.</span>
     			<span class="validation" v-if="$validation.usernamevalidation.maxlength">Your username is too long.</span>
     		</div>
 			<input type="text" v-model="user.email" placeholder="E-mail">
 			<input type="password" v-model="user.pass" placeholder="Password" @modified="onPasswordModified" v-validate:passwordvalidation="{ minlength: 8 , maxlength: 16}">
-			<div v-if="passwordModified == true">
+			<div v-if="this.user.pass != ''">
 				<span class="validation" v-if="$validation.passwordvalidation.minlength">Your password is too short.</span>
     			<span class="validation" v-if="$validation.passwordvalidation.maxlength">Your password is too long.</span>
     		</div>
-			<input type="password" v-model="user.passrep" placeholder="Confirm Password"
+			<input type="password" v-model="user.passrep" @modified="onPasswordMatch" placeholder="Confirm Password" v-validate:passwordrepvalidation="{ minlength: 8 , maxlength: 16}">
+				<span class="validation" v-if="this.user.pass != this.user.passrep">Passwords don't match.</span>
 			
 		</validator>
 		<div class="row inline">
@@ -30,14 +31,6 @@
 		methods: {  
 			submit(){
 				this.$user.register(this.user)
-			},
-			onUsernameModified(){
-				console.log("modified")
-				this.usernameModified = true
-			},
-			onPasswordModified(){
-				console.log("modified")
-				this.passwordModified = true
 			}
 		},
 		data() {
@@ -47,9 +40,7 @@
 	 				email: "",
 	 				pass: "",
 	 				passrep: ""
-	 			},
-	 			usernameModified: false,
-	 			passwordModified: false 
+	 			}
 	 			
 			}
 		}
