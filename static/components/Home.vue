@@ -11,7 +11,7 @@
 </div>
 
 <div id="content">
-	<p id="text">Visurithm is a Web application created in order to facilitate the workflow of students, teachers and programmers, in solving theoretical and practical problems associated with different types of algorithms. It connects with the user's algorithm using, provided by us, a C# Library for example and visualises it.
+	<p id="text">Visurithm is a Web application created in order to facilitate the workflow of students, teachers and programmers, in solving theoretical and practical problems associated with different types of algorithms. It connects with the user's algorithm using, provided by us, a C# Library (for now) and visualises it.
 	</p>
 	<div id="button_div">
 	<a class="buttonss" id="signin" v-link="{ path: '/user/register' }">Sign Up</a>		
@@ -106,6 +106,7 @@
     right: calc(50% - (192px*2.5));
     top: calc(35% - (108px*2.5));
     top: calc(35% - (108px*2.5));
+    /*Design made by Viktor Velev.*/
     margin-top: -5vh;
     max-width: calc(192px * 5); 
     max-height: calc(108px * 5);

@@ -1,7 +1,9 @@
 <template>
 <div>
 	<div id="left"><!-- logo -->
-		<img id="logon" src="/logo.png"></img>
+		<a v-link="{ path: '/' }">
+		<img id="logon" src="/logo2.png"/>
+		</a>
 	</div>
 	<div id="right">
 		<div class="content">
@@ -65,11 +67,12 @@ export default {
 		position: fixed;
 		height: auto;;
 	    width: auto;
-	    margin-top: -5vh;
-	    max-width: 120vh; 
-	    max-height: 120vw;
-	    z-index: -1;
+	    margin-top:8vh;
+	    margin-left: 3vw;
+	    max-width: 100vh; 
+	    max-height: 100vw;
 	    transition: all 0.3s ease-in-out;
+	    z-index: 2;
 	}
 	#right {
 		border-left: 65vh solid transparent;
@@ -147,7 +150,7 @@ export default {
 	}
 } 
 
-@media screen and (max-width: 999px){
+@media screen and (max-width: 1099px){
 	#logon {
 		position: fixed;
 		height: auto;;
@@ -156,7 +159,7 @@ export default {
 	    max-width: 0;
 	    max-height: 0;
 	    z-index: -1;
-	    transition: all 0.3s ease-in-out;
+	    transition: all 0.2s ease-in-out;
 	}
 	#right {
 		border-left: 65vh solid transparent;

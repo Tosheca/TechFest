@@ -369,7 +369,7 @@ export default {
 	position: fixed;
 	left: calc(50% - 100px);
 	width: auto;
-	bottom: 30px;
+	bottom: 10px;
 	display: flex;
 	margin: auto;
 
