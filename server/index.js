@@ -49,7 +49,7 @@ router.post('/login', function *() {
 
 	if (user != null) {
 		if(user.checkPassword(pass)){
-			resp = { message: "You are logged in successfully.", token: jwt.sign({ name: name, id: user.id }, secret, { expiresIn: "2 hours" }) }
+			resp = { message: "You are logged in successfully.", token: jwt.sign({ name: name, id: user.id }, secret, { expiresIn: "24 hours" }) }
 		}
 
 	}
@@ -63,7 +63,7 @@ router.post('/reauth', function*(){
 	let resp = { message: "Can't reauth!" }
 
 	if(user != null){
-		resp = { message: "You cheked successfully.", token: jwt.sign({ name: name, id: user.id }, secret, secret, { expiresIn: "2 hours" }) }
+		resp = { message: "You cheked successfully.", token: jwt.sign({ name: name, id: user.id }, secret, secret, { expiresIn: "24 hours" }) }
 	}
 
 	this.body = resp

@@ -55,12 +55,13 @@ module.exports = function(io) {
 			//console.log(prog.graphs[prog.graphs.length - 1].story)
 		})
 
-		socket.on("story", (data) => { //TODO: don't send the whole array just the diff
+		socket.on("story", (data, fn) => { //TODO: don't send the whole array just the diff
 			prog.graphs[prog.graphs.length - 1].story = data
-			prog.save()
+			prog.save(() => {
+				fn("saved")
+			})
 
 			sendOthers(io, room, client,"story", data)
-
 		})
 
 		socket.on("getGraph", (data, fn) => {
@@ -78,16 +79,14 @@ module.exports = function(io) {
 
 						let {vertices ,edges, story} = prog.graphs[prog.graphs.length - 1]
 						//console.log(vertices ,edges, story)
-						let res = vertices
+						let res = vertices.map(e => e.toObject())
 
 						edges.forEach(edge => {
-							console.log(edge)
 							let idx = edge.from - 1
 							if(res[idx].children == null){
 								res[idx].children = []
 							}
-							res[idx].children.push(edge.to)
-							console.log(res[idx])
+							res[idx].children.push(edge)
 
 						})
 
