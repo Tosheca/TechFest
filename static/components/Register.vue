@@ -45,9 +45,11 @@
 
 <style>
 .validation{
-font-family: arial;
-color: red;
-text-shadow: 0 0 1px #666;
+	padding-left: 10px;
+	font-size: 90%;
+	font-family: arial;
+	color: red;
+	text-shadow: 0 0 1px #666;
 
 }
 </style>
