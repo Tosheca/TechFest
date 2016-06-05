@@ -3,18 +3,18 @@
 		<legend>Register</legend>
 		<validator name="validation">
 		 
-			<input type="text" v-model="user.name" placeholder="Username" @modified="onUsernameModified" v-validate:usernamevalidation="{ minlength: 8 , maxlength: 16}">
+			<input type="text" v-model="user.name" placeholder="Username" v-validate:usernamevalidation="{ minlength: 8 , maxlength: 16}">
 			<div v-if="this.user.name != ''">
     			<span class="validation" v-if="$validation.usernamevalidation.minlength">Your username is too short.</span>
     			<span class="validation" v-if="$validation.usernamevalidation.maxlength">Your username is too long.</span>
     		</div>
 			<input type="text" v-model="user.email" placeholder="E-mail">
-			<input type="password" v-model="user.pass" placeholder="Password" @modified="onPasswordModified" v-validate:passwordvalidation="{ minlength: 8 , maxlength: 16}">
+			<input type="password" v-model="user.pass" placeholder="Password" v-validate:passwordvalidation="{ minlength: 8 , maxlength: 16}">
 			<div v-if="this.user.pass != ''">
 				<span class="validation" v-if="$validation.passwordvalidation.minlength">Your password is too short.</span>
     			<span class="validation" v-if="$validation.passwordvalidation.maxlength">Your password is too long.</span>
     		</div>
-			<input type="password" v-model="user.passrep" @modified="onPasswordMatch" placeholder="Confirm Password" v-validate:passwordrepvalidation="{ minlength: 8 , maxlength: 16}">
+			<input type="password" v-model="user.passrep" placeholder="Confirm Password" v-validate:passwordrepvalidation="{ minlength: 8 , maxlength: 16}">
 				<span class="validation" v-if="this.user.pass != this.user.passrep">Passwords don't match.</span>
 			
 		</validator>
