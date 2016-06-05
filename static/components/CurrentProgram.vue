@@ -15,7 +15,7 @@
 	<a class="button" id="addedge" @click="addEdge">Add Edge</a>
 	<a class="button" id="addvertex" @click="addVertex">Add Vertex</a>
 	<a class="button" id="remove" @click="remove">Remove</a>
-	<a class="button" id="curve" @click="smooth">Curve</a>
+	<a class="button" id="curve" v-bind:class="curve" @click="smooth">Curve</a>
 	
 </nav>
 
@@ -110,6 +110,8 @@ export default {
 		},
 		smooth(){
 			options.edges.smooth = !options.edges.smooth
+			this.curve.active = !this.curve.active
+
 			state.network.setOptions(options)
 		},
 		back(){
@@ -128,6 +130,33 @@ export default {
 		},
 		pp(){
 			this.play.active = !this.play.active
+			if(this.play.active == true){
+				this.tim = setInterval(() => {
+					let story = this.program.graphs[this.program.graphs.length - 1].story
+					//let maxLevel = 4
+					console.log("maxlvl: ", maxLevel)
+					let step = story[this.step]
+					console.log(step)
+					if(maxLevel != undefined){
+						let color = ( (step.props.level) / maxLevel )
+						console.log(color, maxLevel)
+						step.color = "#"+ pad((color * 255).toString(16), 2) + "2255"
+						console.log(step.color)
+					}else{
+						step.color = "red"
+					}
+					state.graph.nodes.update(step)
+					if(this.step != story.length){
+						this.step += 1;
+						
+					}else{
+						clearInterval(this.tim)
+						this.play.active = false
+					}
+				}, 800)
+			}else{
+				clearInterval(this.tim)
+			}
 		},
 		step_backword(){
 			let story = this.program.graphs[this.program.graphs.length - 1].story
@@ -178,7 +207,7 @@ export default {
 					state.graph.edges.add(program.graphs[program.graphs.length - 1].edges.map(e => {e.label = e.weight; return e}))
 
 					maxLevel = program.graphs[program.graphs.length - 1].story.map(e => e.props.level).reduce((a,b) => a > b ? a : b)
-					
+
 				}
 			}
 			io = socket("/")
@@ -247,6 +276,9 @@ export default {
 	data() {
 		return {
 			play: {
+				'active': false
+			},
+			curve: {
 				'active': false
 			},
 			program: {
@@ -360,6 +392,11 @@ export default {
 }
 
 #hud2 .button:active{
+	box-shadow: inset 0 0 10px #666;
+	transition: all 0.2s ease-in;
+}
+
+#hud2 .button.active{
 	box-shadow: inset 0 0 10px #666;
 	transition: all 0.2s ease-in;
 }

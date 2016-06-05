@@ -82,11 +82,18 @@ module.exports = function(io) {
 						let res = vertices.map(e => e.toObject())
 
 						edges.forEach(edge => {
-							let idx = edge.from - 1
-							if(res[idx].children == null){
-								res[idx].children = []
+							let idx_from = edge.from - 1
+							let idx_to = edge.to - 1
+
+							if(res[idx_from].children == null){
+								res[idx_from].children = []
 							}
-							res[idx].children.push(edge)
+							res[idx_from].children.push(edge)
+
+							if(res[idx_to].children == null){
+								res[idx_to].children = []
+							}
+							res[idx_to].children.push(edge)
 
 						})
 
