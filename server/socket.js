@@ -57,6 +57,7 @@ module.exports = function(io) {
 
 		socket.on("story", (data, fn) => { //TODO: don't send the whole array just the diff
 			prog.graphs[prog.graphs.length - 1].story = data
+			console.log(data)
 			prog.save(() => {
 				fn("saved")
 			})
